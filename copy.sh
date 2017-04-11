@@ -1,0 +1,1 @@
+rsync -r . ubuntu:~/crosswordsio

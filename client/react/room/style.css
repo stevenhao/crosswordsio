@@ -1,0 +1,165 @@
+.game {
+  font-family: nyt-franklin;
+  height: 100%;
+  padding: 20px 20px 20px 20px;
+}
+
+.game--title {
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.game--main {
+  margin-top: 20px;
+  display: flex;
+}
+
+.game--main--left {
+}
+
+.game--main--clue-bar {
+  background-color: #DCEFFF;
+  padding: 27px 20px 27px 20px;
+  font-size: 15px;
+}
+
+.game--main--clue-bar--number {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.game--main--clue-bar--text {
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.game--main--left--grid {
+  margin-top: 10px;
+  position: relative;
+  border: 4px solid black;
+}
+
+.game--main--left--grid--cell {
+  position: absolute;
+}
+
+.game--main--clues {
+  display: flex;
+  margin-left: 30px;
+}
+
+.game--main--clues--list {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.game--main--clues--list--title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.game--main--clues--list--scroll {
+  height: 595px;
+  overflow-y: scroll;
+  border-top: 1px solid #e2e2e2;
+  margin-top: 5px;
+}
+
+.game--main--clues--list--scroll--clue {
+  display: flex;
+  flex-direction: row;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-left: 5px solid transparent;
+  cursor: pointer;
+}
+
+.game--main--clues--list--scroll--clue.selected {
+  background-color: #A7D8FF;
+}
+
+.game--main--clues--list--scroll--clue.half-selected {
+  border-left: 5px solid #A7D8FF;
+}
+
+
+.game--main--clues--list--scroll--clue--number {
+  margin-left: 5px;
+  font-weight: 400;
+  line-height: 19px;
+  font-weight: bold;
+}
+
+.game--main--clues--list--scroll--clue--text {
+  margin-left: 10px;
+}
+
+/* Cell Styling */
+
+.cell {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #333;
+  z-index: -1;
+}
+
+.cell.black {
+  background-color: black;
+  color: black;
+}
+
+.cell.selected {
+  background-color: #FFDA00;
+}
+
+.cell.highlighted {
+  background-color: #A7D8FF;
+}
+
+.cell--number {
+  position: absolute;
+  font-size: 150%;
+  left: 4px;
+  top: 4px;
+}
+
+.cell--tag {
+  position: absolute;
+  right: 0px;
+  top: 1px;
+  width: 10px;
+  height: 10px;
+  /*background-color: green;*/
+}
+
+
+.cell--edits {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70%;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 350%;
+}
+
+/* toolbar styles */
+
+.game--toolbar {
+  height: 20px;
+  border: 1px solid black;
+  display: flex;
+  position: relative;
+}
+
+.game--toolbar--timer {
+  position: absolute;
+  left: 10px;
+}
+
+.game--toolbar--players {
+  position: absolute;
+  right: 10px;
+}

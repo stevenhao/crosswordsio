@@ -1,0 +1,86 @@
+.welcome {
+  height: 99%;
+  width: 99%;
+  padding: 5px 5px 5px 5px;
+  background-color: #FAFAFA;
+  color: #333;
+}
+
+.welcome--join {
+  border: 2px solid #333;
+  padding: 15px 15px 15px 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome--join--title {
+  text-align: center;
+  font-size: 30px;
+}
+
+.welcome--join--gamelist {
+  font-size: 20px;
+}
+
+.welcome--join--gamelist--game {
+  font-family: nyt-franklin;
+  font-size: 20px;
+  background-color: #EEE;
+  box-shadow: 2px 2px silver;
+  margin-top: 10px;
+  padding: 20px 20px 20px 20px;
+  cursor: pointer;
+}
+
+.welcome--join--gamelist--game:hover {
+  background-color: #FFF;
+}
+
+
+.welcome--create {
+  margin-top: 2px;
+  border: 2px solid #333;
+  padding: 15px 15px 15px 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome--create--title {
+  text-align: center;
+  font-size: 30px;
+}
+
+.welcome--create--options {
+  margin-top: 10px;
+}
+
+.welcome--create--options--option {
+  font-size: 20px;
+}
+
+.welcome--create--options--option input {
+  font-size: 90%;
+  width: 300px;
+  padding: 1px;
+}
+
+.welcome--create--options--option select {
+  font-size: 90%;
+  font-color: #666;
+  width: 300px;
+  padding: 1px;
+}
+
+
+.welcome--create--options--option .emoji {
+  font-size: 120%;
+  cursor: pointer;
+}
+
+.welcome--create button {
+  margin-top: 10px;
+  padding: 5px 5px 5px 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
