@@ -170,7 +170,9 @@ export default class Game extends Component {
 
   scrollToClue(dir, num, el) {
     if (el) {
-      el.scrollTop = el.scrolLHeight;
+      const parent = el.offsetParent;
+      console.log('setting parent scroll', parent, el.offsetTop);
+      parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
     }
   }
 
@@ -219,8 +221,8 @@ export default class Game extends Component {
                 </div>
 
                 <div
-                  ref={this.scrollToClue.bind(this, dir)}
-                  className={'game--main--clues--list--scroll ' + dir}>
+                  className={'game--main--clues--list--scroll ' + dir}
+                  ref={'clues--list--'+dir}>
                   {
                     this.props.clues[dir].map((clue, i) => clue && (
                       <div key={i}
@@ -235,6 +237,10 @@ export default class Game extends Component {
                               ? 'complete '
                               : ' ')
                             + 'game--main--clues--list--scroll--clue'}
+                            ref={
+                              (this.isWordSelected(dir, i) || this.isWordHalfSelected(dir, i))
+                                ? this.scrollToClue.bind(this, dir, i) 
+                                : null}
                           onClick={this.selectClue.bind(this, dir, i)}>
                             <div className='game--main--clues--list--scroll--clue--number'>
                               {i}
