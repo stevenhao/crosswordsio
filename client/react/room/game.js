@@ -36,6 +36,7 @@ export default class Game extends Component {
       const nextCell = getNextCell(this.props.grid, r, c, this.state.direction);
       if (nextCell) {
         this.setSelected(nextCell);
+        return nextCell;
       }
     }
   }
@@ -69,6 +70,7 @@ export default class Game extends Component {
     }
     if (ok()) {
       this.setSelected({ r, c });
+      return { r, c };
     }
   }
 
@@ -82,10 +84,18 @@ export default class Game extends Component {
   }
 
   backspace(shouldStay) {
-    const { r, c } = this.state.selected;
-    this.props.updateGrid(r, c, '');
-    if (!shouldStay) {
-      this.goToPreviousCell();
+    let { r, c } = this.state.selected;
+    if (this.props.grid[r][c].edits && this.props.grid[r][c].edits.value !== '') {
+      console.log('if', this.props.grid[r][c]);
+      this.props.updateGrid(r, c, '');
+    } else {
+      console.log('else');
+      if (!shouldStay) {
+        const cell = this.goToPreviousCell();
+        if (cell) {
+          this.props.updateGrid(cell.r, cell.c, '');
+        }
+      }
     }
   }
 
