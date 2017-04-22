@@ -11,6 +11,11 @@ export default class Chat extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('did mount');
+    console.log(this.refs.messages);
+  }
+
   onKeyPress(ev) {
     if (ev.key === 'Enter') {
       ev.stopPropagation();
@@ -44,17 +49,26 @@ export default class Chat extends Component {
           </div>
         </div>
 
-        <div className='chat--messages'>
-        {
-          this.props.chat.messages.map((message, i) => (
-            <div key={i} className='chat--message'>
-              <div className='chat--message--sender'>{message.sender}</div>
-              {':'}
-              <div className='chat--message--text'>{message.text}</div>
-            </div>
-          ))
-        }
-      </div>
+        <div
+          ref={
+            el => {
+              console.log(el);
+              if (el) {
+                el.scrollTop = el.scrollHeight;
+              }
+            }
+          }
+          className='chat--messages'>
+          {
+            this.props.chat.messages.map((message, i) => (
+              <div key={i} className='chat--message'>
+                <span className='chat--message--sender'>{message.sender}</span>
+                {':'}
+                <span className='chat--message--text'>{message.text}</span>
+              </div>
+            ))
+          }
+        </div>
 
         <div className='chat--bar'>
           <input

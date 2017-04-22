@@ -168,6 +168,12 @@ export default class Game extends Component {
     return this.props.clues[this.state.direction][this.getSelectedClueNumber()];
   }
 
+  scrollToClue(dir, num, el) {
+    if (el) {
+      el.scrollTop = el.scrolLHeight;
+    }
+  }
+
   render() {
     return (
       <div className='game--main'>
@@ -213,6 +219,7 @@ export default class Game extends Component {
                 </div>
 
                 <div
+                  ref={this.scrollToClue.bind(this, dir)}
                   className={'game--main--clues--list--scroll ' + dir}>
                   {
                     this.props.clues[dir].map((clue, i) => clue && (

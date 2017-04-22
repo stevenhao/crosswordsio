@@ -175,7 +175,7 @@
   margin-top: 10px;
   margin-left: 10px;
   width: 400px;
-  height: 600px;
+  height: 650px;
   display: flex;
   flex-direction: column;
 }
@@ -202,15 +202,26 @@
 
 .chat--message {
   font-size: 15px;
-  display: flex;
-  flex-direction: row;
+  display: block;
+  margin-left: 20px;
 }
 
 .chat--message--sender {
   font-weight: bold;
-  margin-left: 5px;
+  margin-left: -15px;
 }
 
+
+/* hacky indentation of line-continuation of chat messages */
+/*.chat--message {
+  padding-left: 10px;
+}
+
+.chat--message--sender {
+  position: relative;
+  left: -10px;
+}
+*/
 .chat--message--text {
   margin-left: 5px;
 }
