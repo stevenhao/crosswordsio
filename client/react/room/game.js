@@ -89,6 +89,10 @@ export default class Game extends Component {
     }
   }
 
+  changeDirection() {
+    this.setDirection(getOppositeDirection(this.state.direction));
+  }
+
   getSelectedClueNumber() {
     return getParent(this.props.grid, this.state.selected.r, this.state.selected.c, this.state.direction);
   }
@@ -184,6 +188,7 @@ export default class Game extends Component {
               typeLetter={this.typeLetter.bind(this)}
               backspace={this.backspace.bind(this)}
               selectNextClue={this.selectNextClue.bind(this)}
+              changeDirection={this.changeDirection.bind(this)}
             >
             </Grid>
           </div>

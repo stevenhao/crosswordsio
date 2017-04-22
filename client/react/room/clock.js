@@ -33,7 +33,7 @@ export default class Clock extends Component {
     secs = secs % 60;
     let hrs = Math.floor(mins / 60);
     mins = mins % 60;
-    const str = (hrs ? (hrs + ':'):'') + pad2(mins) + ':' + pad2(secs);
+    const str = start ? (hrs ? (hrs + ':'):'') + pad2(mins) + ':' + pad2(secs) : '00:00';
     this.setState({
       clock: str
     });

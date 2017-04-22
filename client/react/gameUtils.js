@@ -130,6 +130,11 @@ function makeGame(gid, name, puzzle) {
       }))
     ),
     createTime: new Date().getTime(),
+    startTime: null,
+    chat: {
+      users: [],
+      messages: []
+    },
   };
 
   // assign numbers and parents

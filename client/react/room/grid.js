@@ -120,6 +120,14 @@ export default class Grid extends Component {
     this.setState({ focus: false });
   }
 
+  handleClick(r, c) {
+    if (this.isSelected(r, c)) {
+      this.props.changeDirection();
+    } else {
+      this.props.setSelected({r, c});
+    }
+  }
+
   render() {
     const size = this.props.size;
     return (
@@ -145,7 +153,7 @@ export default class Grid extends Component {
               >
                 <Cell
                   {...cell}
-                  onClick={this.props.setSelected.bind(this, {r, c})}
+                  onClick={this.handleClick.bind(this, r, c)}
                   selected={this.isSelected(r, c)}
                   highlighted={this.isHighlighted(r, c)}
                 />

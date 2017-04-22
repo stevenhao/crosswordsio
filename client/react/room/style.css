@@ -4,6 +4,11 @@
   padding: 20px 20px 20px 20px;
 }
 
+.game-and-chat-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
 .game--title {
   font-size: 30px;
   font-weight: 300;
@@ -162,4 +167,58 @@
 .game--toolbar--players {
   position: absolute;
   right: 10px;
+}
+
+
+/* chat style */
+.chat {
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 400px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat--header {
+  height: 50px;
+  border-bottom: 1px solid #E2E2E2;
+  padding-bottom: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat--title {
+  font-size: 25px;
+  line-height: 25px;
+}
+
+.chat--messages {
+  overflow-y: scroll;
+}
+
+.chat--message {
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.chat--message--sender {
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.chat--message--text {
+  margin-left: 5px;
+}
+
+.chat--bar {
+  width: 100%;
+  padding: 20px 0px 20px 0px;
+}
+
+.chat--bar--input {
+  width: 100%;
 }
