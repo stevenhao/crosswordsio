@@ -46,9 +46,6 @@ class Cell extends Component {
 export default class Grid extends Component {
   constructor() {
     super();
-    this.state = {
-      focused: false
-    };
   }
 
   isSelected(r, c) {
@@ -63,63 +60,6 @@ export default class Grid extends Component {
       === getParent(grid, r, c, direction));
   }
 
-  handleKeyDown(ev) {
-    const moveSelectedBy = (dr, dc) => () => {
-      const { grid, selected, direction } = this.props;
-      let { r, c } = selected;
-      const step = () => {
-        r += dr;
-        c += dc;
-      };
-      step();
-      while (isInBounds(grid, r, c)
-        && !isWhite(grid, r, c)) {
-          step();
-      }
-      if (isInBounds(grid, r, c)) {
-        this.props.setSelected({ r, c });
-      }
-    };
-
-    const setDirection = (direction, cbk) => () => {
-      if (this.props.direction !== direction) {
-        this.props.setDirection(direction);
-      } else {
-        cbk();
-      }
-    }
-
-    const movement = {
-      'ArrowLeft': setDirection('across', moveSelectedBy(0, -1)),
-      'ArrowUp': setDirection('down', moveSelectedBy(-1, 0)),
-      'ArrowDown': setDirection('down', moveSelectedBy(1, 0)),
-      'ArrowRight': setDirection('across', moveSelectedBy(0, 1)),
-      'Backspace': this.props.backspace,
-      'Tab': this.props.selectNextClue,
-    };
-
-    if (ev.key in movement) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      movement[ev.key](ev.shiftKey);
-    } else {
-      const letter = ev.key.toUpperCase();
-      if (!ev.metaKey && !ev.ctrlKey && letter.match(/^[A-Z0-9]$/)) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.props.typeLetter(letter, ev.shiftKey);
-      }
-    }
-  }
-
-  handleFocus(ev) {
-    this.setState({ focus: true });
-  }
-
-  handleBlur(ev) {
-    this.setState({ focus: false });
-  }
-
   handleClick(r, c) {
     if (this.isSelected(r, c)) {
       this.props.changeDirection();
@@ -131,18 +71,13 @@ export default class Grid extends Component {
   render() {
     const size = this.props.size;
     return (
-      <div
-        className='grid'
-        tabIndex='1'
-        onKeyDown={this.handleKeyDown.bind(this)}
-        onFocus={this.handleFocus.bind(this)}
-        onBlur={this.handleBlur.bind(this)}>
+      <div className='grid'>
         {
           this.props.grid.map((row, r) => (
             row.map((cell, c) => (
               <div
                 key={r+'_'+c}
-                className='game--main--left--grid--cell'
+                className='grid--cell'
                 style={{
                   top: r * size,
                   left: c * size,

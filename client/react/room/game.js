@@ -171,90 +171,142 @@ export default class Game extends Component {
   scrollToClue(dir, num, el) {
     if (el) {
       const parent = el.offsetParent;
-      console.log('setting parent scroll', parent, el.offsetTop);
       parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
+    }
+  }
+
+  handleKeyDown(ev) {
+    const moveSelectedBy = (dr, dc) => () => {
+      const { grid } = this.props;
+      const { selected, direction } = this.state;
+      let { r, c } = selected;
+      const step = () => {
+        r += dr;
+        c += dc;
+      };
+      step();
+      while (isInBounds(grid, r, c)
+        && !isWhite(grid, r, c)) {
+          step();
+      }
+      if (isInBounds(grid, r, c)) {
+        this.setSelected({ r, c });
+      }
+    };
+
+    const setDirection = (direction, cbk) => () => {
+      if (this.state.direction !== direction) {
+        this.setDirection(direction);
+      } else {
+        cbk();
+      }
+    }
+
+    const movement = {
+      'ArrowLeft': setDirection('across', moveSelectedBy(0, -1)),
+      'ArrowUp': setDirection('down', moveSelectedBy(-1, 0)),
+      'ArrowDown': setDirection('down', moveSelectedBy(1, 0)),
+      'ArrowRight': setDirection('across', moveSelectedBy(0, 1)),
+      'Backspace': this.backspace.bind(this),
+      'Tab': this.selectNextClue.bind(this),
+    };
+
+    if (ev.key in movement) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      movement[ev.key](ev.shiftKey);
+    } else {
+      const letter = ev.key.toUpperCase();
+      if (!ev.metaKey && !ev.ctrlKey && letter.match(/^[A-Z0-9]$/)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.typeLetter(letter, ev.shiftKey);
+      }
     }
   }
 
   render() {
     return (
-      <div className='game--main'>
-        <div className='game--main--left'>
-          <div className='game--main--clue-bar'>
-            <div className='game--main--clue-bar--number'>
-              { this.getClueBarAbbreviation() }
-            </div>
-            <div className='game--main--clue-bar--text'>
-              { this.getClueBarText() }
-            </div>
-          </div>
-
-          <div
-            className='game--main--left--grid'
-            style={{
-              width: this.props.grid.length * this.props.size,
-              height: this.props.grid[0].length * this.props.size
-            }}
-          >
-            <Grid
-              size={this.props.size}
-              grid={this.props.grid}
-              selected={this.state.selected}
-              direction={this.state.direction}
-              setDirection={this.setDirection.bind(this)}
-              setSelected={this.setSelected.bind(this)}
-              typeLetter={this.typeLetter.bind(this)}
-              backspace={this.backspace.bind(this)}
-              selectNextClue={this.selectNextClue.bind(this)}
-              changeDirection={this.changeDirection.bind(this)}
-            >
-            </Grid>
-          </div>
+      <div className='game--main--wrapper'
+        tabIndex='1'
+        onKeyDown={this.handleKeyDown.bind(this)} >
+        <div className='game--main--cover'>
+          = game paused =
         </div>
-
-        <div className='game--main--clues'>
-          {
-            ['across', 'down'].map((dir, i) => (
-              <div key={i} className='game--main--clues--list'>
-                <div className='game--main--clues--list--title'>
-                  {dir.toUpperCase()}
-                </div>
-
-                <div
-                  className={'game--main--clues--list--scroll ' + dir}
-                  ref={'clues--list--'+dir}>
-                  {
-                    this.props.clues[dir].map((clue, i) => clue && (
-                      <div key={i}
-                        className= {
-                          (this.isWordSelected(dir, i) ?
-                            'selected '
-                            : ' ')
-                            + (this.isWordHalfSelected(dir, i) ?
-                              'half-selected '
-                              : ' ')
-                            + (this.isWordFilled(dir, i)
-                              ? 'complete '
-                              : ' ')
-                            + 'game--main--clues--list--scroll--clue'}
-                            ref={
-                              (this.isWordSelected(dir, i) || this.isWordHalfSelected(dir, i))
-                                ? this.scrollToClue.bind(this, dir, i) 
-                                : null}
-                          onClick={this.selectClue.bind(this, dir, i)}>
-                            <div className='game--main--clues--list--scroll--clue--number'>
-                              {i}
-                            </div>
-                            <div className='game--main--clues--list--scroll--clue--text'>
-                              {clue}
-                            </div>
-                          </div>
-                    ))
-                  }
-                </div>
+        <div className='game--main'>
+          <div className='game--main--left'>
+            <div className='game--main--clue-bar'>
+              <div className='game--main--clue-bar--number'>
+                { this.getClueBarAbbreviation() }
               </div>
-            ))
-          }
+              <div className='game--main--clue-bar--text'>
+                { this.getClueBarText() }
+              </div>
+            </div>
+
+            <div
+              className='game--main--left--grid'
+              style={{
+                width: this.props.grid.length * this.props.size,
+                height: this.props.grid[0].length * this.props.size
+              }}
+            >
+              <Grid
+                size={this.props.size}
+                grid={this.props.grid}
+                selected={this.state.selected}
+                direction={this.state.direction}
+                setSelected={this.setSelected.bind(this)}
+                changeDirection={this.changeDirection.bind(this)}
+              >
+              </Grid>
+            </div>
+          </div>
+
+          <div className='game--main--clues'>
+            {
+              ['across', 'down'].map((dir, i) => (
+                <div key={i} className='game--main--clues--list'>
+                  <div className='game--main--clues--list--title'>
+                    {dir.toUpperCase()}
+                  </div>
+
+                  <div
+                    className={'game--main--clues--list--scroll ' + dir}
+                    ref={'clues--list--'+dir}>
+                    {
+                      this.props.clues[dir].map((clue, i) => clue && (
+                        <div key={i}
+                          className= {
+                            (this.isWordSelected(dir, i) ?
+                              'selected '
+                              : ' ')
+                              + (this.isWordHalfSelected(dir, i) ?
+                                'half-selected '
+                                : ' ')
+                              + (this.isWordFilled(dir, i)
+                                ? 'complete '
+                                : ' ')
+                              + 'game--main--clues--list--scroll--clue'}
+                              ref={
+                                (this.isWordSelected(dir, i) || this.isWordHalfSelected(dir, i))
+                                  ? this.scrollToClue.bind(this, dir, i) 
+                                  : null}
+                                  onClick={this.selectClue.bind(this, dir, i)}>
+                                  <div className='game--main--clues--list--scroll--clue--number'>
+                                    {i}
+                                  </div>
+                                  <div className='game--main--clues--list--scroll--clue--text'>
+                                    {clue}
+                                  </div>
+                                </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     );
