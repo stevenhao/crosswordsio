@@ -150,7 +150,7 @@ export default class Game extends Component {
       }
     };
     const ok = () => {
-      return this.isGridFilled() || this.props.clues[direction][clueNumber] && !this.isWordFilled(direction, clueNumber);
+      return this.props.clues[direction][clueNumber] && (this.isGridFilled() || !this.isWordFilled(direction, clueNumber));
     };
     step();
     while (!ok()) {
