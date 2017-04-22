@@ -1,15 +1,58 @@
-.game {
+.room {
   font-family: nyt-franklin;
   height: 100%;
+}
+
+.room--info {
+  border-top: 1px solid #E2E2E2;
+  border-left: 1px solid #E2E2E2;
+  border-right: 1px solid #E2E2E2;
+  border-bottom: 1px solid #E2E2E2;
   padding: 20px 20px 20px 20px;
 }
 
-.game-and-chat-wrapper {
+.room--info--title {
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.room--info--subtitle {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+
+.room--toolbar {
+  height: 20px;
+  border-top: 1px solid #E2E2E2;
+  border-left: 1px solid #E2E2E2;
+  border-right: 1px solid #E2E2E2;
+  border-bottom: 1px solid #E2E2E2;
+  padding: 20px 20px 20px 20px;
+  display: flex;
+  position: relative;
+  text-align: center;
+}
+
+.room--toolbar--timer {
+  width: 100%;
+  text-align: center;
+}
+
+.room--game-and-chat-wrapper {
+  border-top: 1px solid #E2E2E2;
+  border-left: 1px solid #E2E2E2;
+  border-right: 1px solid #E2E2E2;
+  border-bottom: 1px solid #E2E2E2;
+  padding: 5px 20px 5px 20px;
   display: flex;
   flex-direction: row;
 }
 
 .game--main--wrapper {
+  border-right: 1px solid #E2E2E2;
+  margin-right: 2px;
   outline: none;
   position: relative;
 }
@@ -19,32 +62,30 @@
 }
 
 .game--main--wrapper:focus .game--main--cover {
+  display: none;
+  /* just to be safe */
+  z-index: -3;
+  font-size: 1px;
   opacity: 0;
-}
-.game--title {
-  font-size: 30px;
-  font-weight: 300;
 }
 
 .game--main {
   margin-top: 20px;
   display: flex;
-  opacity: 0.05;
+  opacity: 0.5;
 }
 
 .game--main--cover {
   z-index: 3;
   opacity: 1;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  width: 100%;
-  color: #666;
-  font-size: 80px;
+  bottom: 0;
+  right: 0;
+  padding: 10px 10px 0px 10px;
+  color: #444;
   font-weight: bold;
+  font-size: 12px;
   cursor: pointer;
-  text-align: center;
 }
 
 .game--main--clue-bar {
@@ -79,7 +120,7 @@
 
 .game--main--clues {
   display: flex;
-  margin-left: 30px;
+  padding: 0px 20px 0px 20px;
 }
 
 .game--main--clues--list {
@@ -180,30 +221,11 @@
   font-size: 350%;
 }
 
-/* toolbar styles */
-
-.game--toolbar {
-  height: 20px;
-  border: 1px solid black;
-  display: flex;
-  position: relative;
-}
-
-.game--toolbar--timer {
-  position: absolute;
-  left: 10px;
-}
-
-.game--toolbar--players {
-  position: absolute;
-  right: 10px;
-}
-
-
 /* chat style */
 .chat {
-  margin-top: 10px;
-  margin-left: 30px;
+  padding-top: 10px;
+  padding-left: 30px;
+  border-left: 1px solid #E2E2E2;
   min-width: 400px;
   height: 650px;
   display: flex;

@@ -74,20 +74,30 @@ export default class Room extends Component {
   render() {
     const size = 35 * 15 / this.state.game.grid.length;
     return (
-      <div className='game'>
-        <div className='game--title'>
-          {
-            this.state.game.info && this.state.game.info.title
-          }
+      <div className='room'>
+        <div className='room--info'>
+          <div className='room--info--title'>
+            {
+              this.state.game.info && this.state.game.info.title
+            }
+          </div>
+          <div className='room--info--subtitle'>
+            {
+              this.state.game.info && (
+                this.state.game.info.type + ' | '
+                + 'By ' + this.state.game.info.author
+              )
+            }
+          </div>
         </div>
 
-        <div className='game--toolbar'>
-          <div className='game--toolbar--timer'>
+        <div className='room--toolbar'>
+          <div className='room--toolbar--timer'>
             <Clock startTime={this.state.game.startTime} />
           </div>
         </div>
 
-        <div className='game-and-chat-wrapper'>
+        <div className='room--game-and-chat-wrapper'>
           <Game
             size={size}
             grid={this.state.game.grid}
