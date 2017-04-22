@@ -12,6 +12,6 @@ This is under active development!
 - `/game/:gid`: game page. link to friends and play
 
 # Converting .puz to .json
-- e.g. run the bash script `./puzzles/convert.py puzzles/puz/Apr0117.puz`, and paste the output in /admin
+- e.g. run the bash script `./convert.py puzzles/puz/Apr0117.puz`, and paste the output in /admin
 
 Hosted [here](crosswordsio.stevenhao.com)
