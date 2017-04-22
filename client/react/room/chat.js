@@ -11,11 +11,6 @@ export default class Chat extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log('did mount');
-    console.log(this.refs.messages);
-  }
-
   onKeyPress(ev) {
     if (ev.key === 'Enter') {
       ev.stopPropagation();
@@ -52,7 +47,6 @@ export default class Chat extends Component {
         <div
           ref={
             el => {
-              console.log(el);
               if (el) {
                 el.scrollTop = el.scrollHeight;
               }

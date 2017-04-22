@@ -173,8 +173,8 @@
 /* chat style */
 .chat {
   margin-top: 10px;
-  margin-left: 10px;
-  width: 400px;
+  margin-left: 30px;
+  min-width: 400px;
   height: 650px;
   display: flex;
   flex-direction: column;
@@ -197,13 +197,14 @@
 
 .chat--messages {
   overflow-y: scroll;
+  height: 100%;
   padding-bottom: 20px;
 }
 
 .chat--message {
   font-size: 15px;
   display: block;
-  margin-left: 20px;
+  padding-left: 20px;
 }
 
 .chat--message--sender {

@@ -37,8 +37,6 @@ export default class Clock extends Component {
     this.setState({
       clock: str
     });
-    console.log(now, start);
-    console.log(str);
   }
 
   render() {
