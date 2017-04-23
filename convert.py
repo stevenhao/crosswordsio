@@ -1,36 +1,31 @@
 #!/usr/bin/env python
-
-from unidecode import unidecode
+from __future__ import print_function
 import puz
 import json
 import sys
 p = puz.read(sys.argv[1])
 
-grid = map(lambda i:
-        map(lambda j:
-            unidecode(p.solution[i * p.height + j]),
-            range(p.width)),
-        range(p.height))
+grid = [[p.solution[i * p.height + j] for j in range(p.width)] for i in range(p.height)]
 
 
-print json.dumps({
+obj = {
     'info': {
-        'title': unidecode(p.title),
+        'title': p.title,
         'type': 'Daily Puzzle' if p.width > 10 else 'Mini Puzzle',
-        'author': unidecode(p.author)
+        'author': p.author
         },
     'grid': grid,
     'clues': {
         'across': {
-            clue['num']: unidecode(clue['clue'])
+            clue['num']: clue['clue']
             for clue in p.clue_numbering().across
             },
         'down': {
-            clue['num']: unidecode(clue['clue'])
+            clue['num']: clue['clue']
             for clue in p.clue_numbering().down
             }
         }
-    })
+    }
 
-
+print (json.dumps(obj));
 
