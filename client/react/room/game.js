@@ -15,6 +15,21 @@ export default class Game extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    let { r, c } = this.state.selected;
+    if (!isWhite(props.grid, r, c)) {
+    while (!isWhite(props.grid, r, c)) {
+      if (c < props.grid[0].length) {
+        c += 1;
+      } else {
+        r += 1;
+        c = 0;
+      }
+    }
+    this.setSelected({r, c});
+    }
+  }
+
   setDirection(direction) {
     this.setState({
       direction: direction

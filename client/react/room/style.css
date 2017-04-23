@@ -22,7 +22,6 @@
   font-weight: 300;
 }
 
-
 .room--toolbar {
   height: 20px;
   border-top: 1px solid #E2E2E2;
@@ -91,6 +90,7 @@
 .game--main--clue-bar {
   background-color: #DCEFFF;
   padding: 27px 20px 27px 20px;
+  display: flex;
   font-size: 15px;
 }
 
@@ -137,6 +137,7 @@
   display: flex;
   flex-direction: column;
   margin-left: 5px;
+  padding-right: 10px;
 }
 
 .game--main--clues--list--title {
@@ -150,6 +151,7 @@
   overflow-y: scroll;
   border-top: 1px solid #e2e2e2;
   margin-top: 5px;
+  padding-right: 10px;
 }
 
 .game--main--clues--list--scroll--clue {
@@ -289,17 +291,6 @@
   margin-left: -15px;
 }
 
-
-/* hacky indentation of line-continuation of chat messages */
-/*.chat--message {
-  padding-left: 10px;
-}
-
-.chat--message--sender {
-  position: relative;
-  left: -10px;
-}
-*/
 .chat--message--text {
   margin-left: 5px;
 }

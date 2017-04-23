@@ -6,6 +6,15 @@ import Clock from './clock';
 import { countMistakes } from '../gameUtils';
 import React, { Component } from 'react';
 
+function toArr(a) {
+  if (Array.isArray(a)) return a;
+  const ret = [];
+  Object.keys(a).forEach(i => {
+    ret[i] = a[i];
+  });
+  return ret;
+}
+
 export default class Room extends Component {
   constructor() {
     super();
@@ -64,8 +73,13 @@ export default class Room extends Component {
   }
 
   updateGrid(r, c, value) {
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}/value`)
-      .set(value);
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`).transaction(cell => ( Object.assign(cell, {
+      edits: [...(cell.edits || []), {
+        time: new Date().getTime(),
+        value: value
+      }],
+      value: value
+    })));
     this.startClock();
     this.checkIfSolved();
   }
@@ -114,16 +128,19 @@ export default class Room extends Component {
           <Game
             size={size}
             grid={this.state.game.grid}
-            clues={this.state.game.clues}
+            clues={{
+              across: toArr(this.state.game.clues.across),
+              down: toArr(this.state.game.clues.down)
+            }}
             frozen={this.state.game.solved}
             updateGrid={this.updateGrid.bind(this)}
           />
 
-          <Chat
-            chat={this.state.game.chat}
-            sendChatMessage={this.sendChatMessage.bind(this)} />
-        </div>
+        <Chat
+          chat={this.state.game.chat}
+          sendChatMessage={this.sendChatMessage.bind(this)} />
       </div>
+    </div>
     );
   }
 };

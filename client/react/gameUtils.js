@@ -78,6 +78,9 @@ function hasEmptyCells(grid, r, c, direction) {
 function getCellByNumber(grid, number) {
   for (var r = 0; r < grid.length; r += 1) {
     for (var c = 0; c < grid[r].length; c += 1) {
+      if (isWhite(grid, r, c) && !grid[r][c].parents) {
+        console.log({r, c}, 'blank');
+      }
       if (grid[r][c].number === number) {
         return { r, c };
       }
