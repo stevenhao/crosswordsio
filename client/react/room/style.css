@@ -108,6 +108,14 @@
   margin-top: 10px;
   position: relative;
   border: 4px solid black;
+  color: #444;
+}
+
+.game--main--left--grid.frozen {
+  margin-top: 10px;
+  position: relative;
+  border: 4px solid black;
+  color: black;
 }
 
 .grid {
@@ -115,6 +123,7 @@
 
 
 .grid--cell {
+  outline: 1px solid #333;
   position: absolute;
 }
 
@@ -152,6 +161,10 @@
   cursor: pointer;
 }
 
+.game--main--clues--list--scroll--clue.complete {
+  color: #888;
+}
+
 .game--main--clues--list--scroll--clue.selected {
   background-color: #A7D8FF;
 }
@@ -177,13 +190,21 @@
 .cell {
   width: 100%;
   height: 100%;
-  border: 1px solid #333;
   z-index: -1;
+  transition: background-color .12s ease;
 }
 
 .cell.black {
   background-color: black;
   color: black;
+}
+
+.frozen .cell.selected {
+  background-color: #FFDA00;
+}
+
+.frozen .cell.highlighted {
+  background-color: #1FFF3D;
 }
 
 .cell.selected {
@@ -211,7 +232,7 @@
 }
 
 
-.cell--edits {
+.cell--value {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -287,3 +308,4 @@
 .chat--bar--input {
   width: 100%;
 }
+

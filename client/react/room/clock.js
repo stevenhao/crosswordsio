@@ -25,7 +25,8 @@ export default class Clock extends Component {
       s = s.substr(s.length - 2);
       return s;
     }
-    const now = new Date().getTime();
+    const stopTime = this.props.stopTime;
+    const now = stopTime || new Date().getTime();
     const start = this.props.startTime;
     const duration = moment.duration(now - start, 'ms')
     let secs = Math.floor(duration / 1000);

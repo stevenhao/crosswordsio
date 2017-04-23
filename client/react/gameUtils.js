@@ -1,10 +1,19 @@
+function countMistakes(grid, solution) {
+  let ans = 0;
+  for (let r = 0; r < grid.length; r += 1) {
+    for (let c = 0; c < grid[r].length; c += 1) {
+      if (solution[r][c] !== '.' && grid[r][c].value !== solution[r][c]) {
+        ans += 1;
+      }
+    }
+  }
+  return ans;
+}
+
 function isGridFilled(grid) {
   for (var r = 0; r < grid.length; r += 1) {
     for (var c = 0; c < grid[r].length; c += 1) {
-      if (!grid[r][c].black && (
-        !grid[r][c].edits ||
-        grid[r][c].edits.value === ''
-      )) {
+      if (!grid[r][c].black && grid[r][c].value === '') {
         return false;
       }
     }
@@ -97,7 +106,7 @@ function isInBounds(grid, r, c) {
 };
 
 function isFilled(grid, r, c) {
-  return grid[r][c].edits && grid[r][c].edits.value && grid[r][c].edits.value !== '';
+  return grid[r][c].value !== '';
 }
 
 function isWhite(grid, r, c) {
@@ -125,7 +134,8 @@ function makeGame(gid, name, puzzle) {
     grid: puzzle.grid.map(row =>
       row.map(cell => ({
         black: cell === '.',
-        edits: {},
+        edits: [],
+        value: '',
         number: null
       }))
     ),
@@ -158,5 +168,5 @@ function makeGame(gid, name, puzzle) {
   return game;
 }
 
-export { isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame };
+export { countMistakes, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame };
 

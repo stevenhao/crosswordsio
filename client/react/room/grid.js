@@ -10,11 +10,17 @@ class Cell extends Component {
       );
     }
 
-    let l = 1;
-    if (this.props.edits && this.props.edits.value) {
-      l = Math.max(1, this.props.edits.value.length);
+    let val = this.props.value;
+    // TODO remove backwards compat
+    if (val === undefined) {
+      if (this.props.edits && this.props.edits.value) { // backwards compat.
+        val = this.props.edits.value;
+      } else {
+        val = '';
+      }
     }
-    l = Math.sqrt(l);
+
+    let l = Math.max(1, val.length);
     return (
       <div
         className={this.props.selected
@@ -31,12 +37,12 @@ class Cell extends Component {
           title='Hello'
         >
         </div>
-        <div className='cell--edits'
+        <div className='cell--value'
           style={{
-            fontSize: 350 / l + '%'
+            fontSize: 350 / Math.sqrt(l) + '%'
           }}
         >
-          { (this.props.edits && this.props.edits.value) || '' }
+          { val }
         </div>
       </div>
     );

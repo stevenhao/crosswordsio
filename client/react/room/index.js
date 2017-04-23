@@ -3,7 +3,7 @@ import actions, { db } from '../actions';
 import Game from './game';
 import Chat from './chat';
 import Clock from './clock';
-
+import { countMistakes } from '../gameUtils';
 import React, { Component } from 'react';
 
 export default class Room extends Component {
@@ -23,7 +23,8 @@ export default class Room extends Component {
         grid: [[{
           black: false,
           number: 1,
-          edits: null,
+          edits: [],
+          value: '',
           parents: {
             across: 1,
             down: 1
@@ -51,13 +52,22 @@ export default class Room extends Component {
     db.ref(`game/${this.state.game.gid}/startTime`).transaction(startTime => startTime ? startTime : new Date().getTime());
   }
 
+  stopClock() {
+    db.ref(`game/${this.state.game.gid}/stopTime`).set(new Date().getTime());
+  }
+
+  checkIfSolved() {
+    if (countMistakes(this.state.game.grid, this.state.game.solution) === 0) {
+      this.stopClock();
+      db.ref(`game/${this.state.game.gid}/solved`).set(true);
+    }
+  }
+
   updateGrid(r, c, value) {
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}/edits`)
-      .transaction(edits => ({
-        value: value,
-        user: this.state.uid
-      }));
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}/value`)
+      .set(value);
     this.startClock();
+    this.checkIfSolved();
   }
 
   sendChatMessage(sender, text) {
@@ -93,7 +103,10 @@ export default class Room extends Component {
 
         <div className='room--toolbar'>
           <div className='room--toolbar--timer'>
-            <Clock startTime={this.state.game.startTime} />
+            <Clock
+              startTime={this.state.game.startTime}
+              stopTime={this.state.game.stopTime}
+            />
           </div>
         </div>
 
@@ -102,7 +115,9 @@ export default class Room extends Component {
             size={size}
             grid={this.state.game.grid}
             clues={this.state.game.clues}
-            updateGrid={this.updateGrid.bind(this)} />
+            frozen={this.state.game.solved}
+            updateGrid={this.updateGrid.bind(this)}
+          />
 
           <Chat
             chat={this.state.game.chat}

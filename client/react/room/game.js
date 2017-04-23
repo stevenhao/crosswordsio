@@ -11,7 +11,7 @@ export default class Game extends Component {
         r: 0,
         c: 0
       },
-      direction: 'across'
+      direction: 'across',
     };
   }
 
@@ -76,8 +76,8 @@ export default class Game extends Component {
 
   typeLetter(letter, isRebus) {
     const { r, c } = this.state.selected;
-    const edits = this.props.grid[r][c].edits;
-    this.props.updateGrid(r, c, isRebus ? (((edits && edits.value) || '') + letter) : letter);
+    const value = this.props.grid[r][c].value;
+    this.props.updateGrid(r, c, isRebus ? ((value || '') + letter) : letter);
     if (!isRebus) {
       this.goToNextEmptyCell();
     }
@@ -85,11 +85,9 @@ export default class Game extends Component {
 
   backspace(shouldStay) {
     let { r, c } = this.state.selected;
-    if (this.props.grid[r][c].edits && this.props.grid[r][c].edits.value !== '') {
-      console.log('if', this.props.grid[r][c]);
+    if (this.props.grid[r][c].value !== '') {
       this.props.updateGrid(r, c, '');
     } else {
-      console.log('else');
       if (!shouldStay) {
         const cell = this.goToPreviousCell();
         if (cell) {
@@ -220,7 +218,9 @@ export default class Game extends Component {
       if (!ev.metaKey && !ev.ctrlKey && letter.match(/^[A-Z0-9]$/)) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.typeLetter(letter, ev.shiftKey);
+        if (!this.props.frozen) {
+          this.typeLetter(letter, ev.shiftKey);
+        }
       }
     }
   }
@@ -245,7 +245,7 @@ export default class Game extends Component {
             </div>
 
             <div
-              className='game--main--left--grid'
+              className={'game--main--left--grid' + (this.props.frozen ? ' frozen' : '')}
               style={{
                 width: this.props.grid.length * this.props.size,
                 height: this.props.grid[0].length * this.props.size
@@ -290,7 +290,7 @@ export default class Game extends Component {
                               + 'game--main--clues--list--scroll--clue'}
                               ref={
                                 (this.isWordSelected(dir, i) || this.isWordHalfSelected(dir, i))
-                                  ? this.scrollToClue.bind(this, dir, i) 
+                                  ? this.scrollToClue.bind(this, dir, i)
                                   : null}
                                   onClick={this.selectClue.bind(this, dir, i)}>
                                   <div className='game--main--clues--list--scroll--clue--number'>
