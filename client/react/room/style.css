@@ -246,8 +246,10 @@
 .chat {
   padding-top: 10px;
   padding-left: 30px;
+  padding-right: 30px;
   border-left: 1px solid #E2E2E2;
-  min-width: 400px;
+  min-width: 300px;
+  max-width: 350px;
   height: 650px;
   display: flex;
   flex-direction: column;
@@ -269,7 +271,9 @@
 }
 
 .chat--messages {
+  overflow-x: scroll;
   overflow-y: scroll;
+  width: 100%;
   height: 100%;
   padding-bottom: 20px;
 }

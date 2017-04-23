@@ -231,7 +231,7 @@ export default class Game extends Component {
         tabIndex='1'
         onKeyDown={this.handleKeyDown.bind(this)} >
         <div className='game--main--cover'>
-          paused
+          out of focus
         </div>
         <div className='game--main'>
           <div className='game--main--left'>
