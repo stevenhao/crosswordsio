@@ -5,7 +5,7 @@ import json
 import sys
 p = puz.read(sys.argv[1])
 
-grid = [[p.solution[i * p.height + j] for j in range(p.width)] for i in range(p.height)]
+grid = [[p.solution[i * p.width + j] for j in range(p.width)] for i in range(p.height)]
 
 
 obj = {
