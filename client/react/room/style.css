@@ -119,12 +119,15 @@
 }
 
 .grid {
+  border-collapse: collapse;
 }
 
 
 .grid--cell {
-  outline: 1px solid #333;
-  position: absolute;
+  position: relative;
+  border: 1px solid #aaaaaa;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .game--main--clues {
@@ -223,7 +226,6 @@
 }
 
 .cell--tag {
-  position: absolute;
   right: 0px;
   top: 1px;
   width: 10px;
@@ -233,7 +235,6 @@
 
 
 .cell--value {
-  position: absolute;
   bottom: 0;
   width: 100%;
   height: 70%;
