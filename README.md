@@ -14,4 +14,4 @@ This is under active development!
 # Converting .puz to .json
 - e.g. run the bash script `./convert.py puzzles/puz/Apr0117.puz`, and paste the output in /admin
 
-Hosted [here](crosswordsio.stevenhao.com)
+Hosted [here](http://www.crosswordsio.stevenhao.com)
