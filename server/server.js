@@ -4,6 +4,10 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var exec = require('child_process').exec;
+var uuid = require('uuid');
+var fs = require('fs');
+var multer = require('multer');
 var app = express();
 
 var webpackMiddleware = require('webpack-dev-middleware');
@@ -25,6 +29,8 @@ var webpackConfiguration = {
 var currentWebpackMiddleware = webpackMiddleware(compiler, webpackConfiguration);
 app.use(currentWebpackMiddleware);
 
+const upload = multer({dest: '/tmp/uploads'});
+
 
 function renderFile(res, relPath) {
   return res.sendFile(path.resolve('./client/html/' + relPath));
@@ -41,6 +47,45 @@ app.get('/game/:id', function (req, res) {
 app.get('/admin', function (req, res) {
   renderFile(res, 'index.html');
 })
+
+app.get('/admin/upload', function (req, res) {
+  renderFile(res, 'index.html');
+})
+
+let convertPuzFile = (puzPath, callerCb) => {
+  exec(`python ./convert.py ${puzPath}`, (err, stdout, stderr) => {
+    if (err) {
+      return callerCb(err);
+    }
+    return callerCb(null, stdout);
+  });
+};
+
+let convertPuzBuffer = (puzBuffer, callerCb) => {
+  const path = `/tmp/${uuid.v4()}`;
+  fs.writeFile(path, puzBuffer, (err) => {
+    if (err) {
+      return callerCb(err);
+    }
+    convertPuzFile(path, (err, result) => {
+      fs.unlink(path);
+      return callerCb(err, result);
+    });
+  });
+};
+
+app.post('/upload', upload.single('puz'), function (req, res) {
+  convertPuzFile(req.file.path, (error, puzzle) => {
+    fs.unlink(req.file.path);
+    if (error) {
+      console.log(error.message);
+      res.json({error: "Could not convert file"});
+    } else {
+      res.json({puzzle: JSON.parse(puzzle)});
+    }
+    res.end();
+  });
+});
 
 app.use('/assets', express.static(path.join(__dirname, '/../client/assets')));
 
