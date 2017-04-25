@@ -81,7 +81,7 @@ export default class Grid extends Component {
         <tbody>
           {
             this.props.grid.map((row, r) => (
-              <tr>
+              <tr key={r}>
               {
                 row.map((cell, c) => (
                   <td
