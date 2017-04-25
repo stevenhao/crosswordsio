@@ -26,7 +26,7 @@ class Cell extends Component {
         className={this.props.selected
             ? 'cell selected'
             : (this.props.highlighted
-              ? 'cell highlighted' 
+              ? 'cell highlighted'
               : 'cell')}
         onClick={this.props.onClick}>
         <div className='cell--number'>
@@ -77,32 +77,36 @@ export default class Grid extends Component {
   render() {
     const size = this.props.size;
     return (
-      <div className='grid'>
-        {
-          this.props.grid.map((row, r) => (
-            row.map((cell, c) => (
-              <div
-                key={r+'_'+c}
-                className='grid--cell'
-                style={{
-                  top: r * size,
-                  left: c * size,
-                  width: size,
-                  height: size,
-                  fontSize: size * .15 + 'px',
-                }}
-              >
-                <Cell
-                  {...cell}
-                  onClick={this.handleClick.bind(this, r, c)}
-                  selected={this.isSelected(r, c)}
-                  highlighted={this.isHighlighted(r, c)}
-                />
-              </div>
+      <table className='grid'>
+        <tbody>
+          {
+            this.props.grid.map((row, r) => (
+              <tr>
+              {
+                row.map((cell, c) => (
+                  <td
+                    key={r+'_'+c}
+                    className='grid--cell'
+                    style={{
+                      width: size,
+                      height: size,
+                      fontSize: size * .15 + 'px',
+                    }}
+                  >
+                    <Cell
+                      {...cell}
+                      onClick={this.handleClick.bind(this, r, c)}
+                      selected={this.isSelected(r, c)}
+                      highlighted={this.isHighlighted(r, c)}
+                    />
+                  </td>
+                ))
+              }
+              </tr>
             ))
-          ))
-        }
-      </div>
+          }
+        </tbody>
+      </table>
     )
   }
 }
