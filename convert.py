@@ -4,8 +4,16 @@ import puz
 import json
 import sys
 p = puz.read(sys.argv[1])
+r = p.rebus()
 
-grid = [[p.solution[i * p.width + j] for j in range(p.width)] for i in range(p.height)]
+def get_sol(i, j):
+    sq = i * p.width + j
+    if r.has_rebus() and r.is_rebus_square(sq):
+        return r.get_rebus_solution(sq)
+    else:
+        return p.solution[sq]
+
+grid = [[get_sol(i, j) for j in range(p.width)] for i in range(p.height)]
 
 
 obj = {
