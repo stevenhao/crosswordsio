@@ -261,10 +261,6 @@ export default class Game extends Component {
 
             <div
               className={'game--main--left--grid' + (this.props.frozen ? ' frozen' : '')}
-              style={{
-                width: this.props.grid.length * this.props.size,
-                height: this.props.grid[0].length * this.props.size
-              }}
             >
               <Grid
                 size={this.props.size}

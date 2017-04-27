@@ -77,7 +77,12 @@ export default class Grid extends Component {
   render() {
     const size = this.props.size;
     return (
-      <table className='grid'>
+      <table
+        style={{
+          width: this.props.grid[0].length * this.props.size,
+          height: this.props.grid.length * this.props.size
+        }}
+        className='grid'>
         <tbody>
           {
             this.props.grid.map((row, r) => (
