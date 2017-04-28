@@ -87,7 +87,7 @@ export default class Welcome extends Component {
                 <Link key={i} to={'/puzzle/' + entry.pid} style={{ textDecoration: 'none', color: 'black' }}>
                   <div className='welcome--browse--puzzlelist--entry'>
                     <div>
-                      {entry.title}
+                      {entry.title + (entry.author ? (' by ' + entry.author) : '') }
                     </div>
                   </div>
                 </Link>

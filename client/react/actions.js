@@ -10,9 +10,11 @@ const actions = {
     db.ref('counters').transaction(counters => {
       const pid = ((counters && counters.pid) || 0) + 1;
       const title = puzzle.info.title;
+      const author = puzzle.info.author;
       db.ref('puzzlelist/' + pid).set({
         pid: pid,
-        title: title
+        title: title,
+        author: author
       });
       db.ref('puzzle/' + pid).set(puzzle);
       return {...counters, pid: pid}
