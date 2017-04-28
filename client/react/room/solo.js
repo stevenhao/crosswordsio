@@ -63,7 +63,7 @@ export default class SoloGame extends Component {
   }
 
   startClock() {
-    if (!this.state.startTime) {
+    if (!this.state.game.startTime) {
       this.setState({game: Object.assign(this.state.game, {
         startTime: new Date().getTime()
       })});
