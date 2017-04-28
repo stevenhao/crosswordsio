@@ -20,7 +20,7 @@ const actions = {
     });
   },
 
-  createGame({ name, pid }) {
+  createGame({ name, pid }, callback) {
     db.ref('counters').transaction(counters => {
       const gid = ((counters && counters.gid) || 0) + 1;
       return {...counters, gid: gid}
@@ -37,6 +37,7 @@ const actions = {
       db.ref('puzzle/' + pid).once('value', puzzle => {
         const game = makeGame(gid, name, puzzle.val());
         db.ref('game/' + gid).set(game);
+        callback(gid);
       });
     });
   }

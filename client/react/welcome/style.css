@@ -19,6 +19,8 @@
 }
 
 .welcome--join--gamelist {
+  overflow-y: scroll;
+  max-height: 200px;
   font-size: 20px;
 }
 

@@ -61,9 +61,11 @@ export default class Welcome extends Component {
 
   handleStartClick(ev) {
     if (!this.state.pid) return;
-    actions.createGame({
+    const gid = actions.createGame({
       name: this.state.name,
       pid: this.state.pid
+    }, gid => {
+      this.props.history.push(`/game/${gid}`);
     });
   }
 
