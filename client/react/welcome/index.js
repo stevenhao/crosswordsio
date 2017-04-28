@@ -70,7 +70,6 @@ export default class Welcome extends Component {
   }
 
   handleSelectChange(ev) {
-    console.log(ev.target.value);
     this.setState({ pid: ev.target.value });
   }
 
@@ -81,15 +80,14 @@ export default class Welcome extends Component {
           <div className='welcome--join--title'>
             Join a Game
           </div>
-          <div className='welcome--join--gamelist'>
+          <div className='welcome--join--puzzlelist'>
             {
-              this.state.gameList.map((game, i) =>
-                <Link key={i} to={'/game/' + game.gid} style={{ textDecoration: 'none', color: 'black' }}>
-                  <div className='welcome--join--gamelist--game'>
+              this.state.puzzleList.map((entry, i) =>
+                <Link key={i} to={'/puzzle/' + entry.pid} style={{ textDecoration: 'none', color: 'black' }}>
+                  <div className='welcome--join--puzzlelist--entry'>
                     <div>
-                      {game.name}
+                      {entry.title}
                     </div>
-                    <span> </span>
                   </div>
                 </Link>
               )

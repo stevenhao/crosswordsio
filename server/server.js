@@ -46,6 +46,15 @@ app.get('/game/:id', function (req, res) {
   renderFile(res, 'index.html');
 });
 
+app.get('/game/solo/:id', function (req, res) {
+  renderFile(res, 'index.html');
+});
+
+
+app.get('/puzzle/:id', function (req, res) {
+  renderFile(res, 'index.html');
+});
+
 app.get('/upload', function (req, res) {
   renderFile(res, 'index.html');
 });

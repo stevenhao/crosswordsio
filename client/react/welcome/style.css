@@ -18,13 +18,13 @@
   font-size: 30px;
 }
 
-.welcome--join--gamelist {
+.welcome--join--puzzlelist {
   overflow-y: scroll;
   max-height: 200px;
   font-size: 20px;
 }
 
-.welcome--join--gamelist--game {
+.welcome--join--puzzlelist--entry {
   font-family: nyt-franklin;
   font-size: 20px;
   background-color: #EEE;
@@ -34,10 +34,9 @@
   cursor: pointer;
 }
 
-.welcome--join--gamelist--game:hover {
+.welcome--join--puzzlelist--entry:hover {
   background-color: #FFF;
 }
-
 
 .welcome--create {
   margin-top: 2px;
