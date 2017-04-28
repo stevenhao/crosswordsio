@@ -21,12 +21,10 @@ export default class FileUploader extends Component {
     req.attach('puz', acceptedFiles[0]);
     req.end((err, res) => {
       if (res.body.error) {
-        this.setState({
-          puzzle: null
-        });
-        return;
+        this.props.failUpload();
+      } else {
+        this.props.setPuzzle(res.body.puzzle);
       }
-      this.props.setPuzzle(res.body.puzzle);
       window.URL.revokeObjectURL(acceptedFiles[0].preview);
     });
   }

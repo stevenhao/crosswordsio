@@ -7,16 +7,14 @@ import React, { Component } from 'react';
 
 
 
-export default class Admin extends Component {
+export default class Upload extends Component {
   constructor() {
     super();
     this.state = {
+      uploaded: false,
       textbox: '',
-      puzzleList: []
+      puzzle: null
     };
-    db.ref('puzzlelist').on('value', puzzleList => {
-      this.setState({ puzzleList: puzzleList.val() || [] });
-    });
   }
 
   prevent(ev) {
@@ -52,7 +50,16 @@ export default class Admin extends Component {
   }
 
   setPuzzle(puzzle) {
-    this.setState({puzzle, puzzle});
+    this.setState({
+      puzzle: puzzle,
+      uploaded: true
+    });
+  }
+
+  failUpload() {
+    this.setState({
+      uploaded: true
+    });
   }
 
   handleGoClick(ev) {
@@ -60,8 +67,10 @@ export default class Admin extends Component {
     ev.stopPropagation();
 
     if (this.puzzleIsValid()) {
-      console.log(this.getPuzzle());
-      actions.createPuzzle(this.getPuzzle());
+      actions.createPuzzle(this.getPuzzle(), pid => {
+        this.props.history.push(`/puzzle/${pid}`);
+
+      });
     }
   }
 
@@ -75,6 +84,7 @@ export default class Admin extends Component {
                 Upload a .puz file here...
               </div>
               <FileUploader
+                failUpload={this.failUpload.bind(this)}
                 setPuzzle={this.setPuzzle.bind(this)}
               />
             </div>
@@ -91,14 +101,18 @@ export default class Admin extends Component {
             </div>
           </div>
 
+          {
+            (this.state.textbox || this.state.uploaded)
+              ? (<div className='admin--create--preview'>
+                Uploaded puzzle is <b>{this.puzzleIsValid() ? 'valid!' : 'invalid'}</b>
+              </div>)
+              : null
+          }
           <button
             className='admin--create--go'
             onClick={this.handleGoClick.bind(this)}>
-            Go!
+            Create Puzzle
           </button>
-          <div className='admin--create--preview'>
-            {this.puzzleIsValid() ? 'Valid!' : 'Invalid'}
-          </div>
         </div>
       </div>
     );

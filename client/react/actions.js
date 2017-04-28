@@ -6,7 +6,7 @@ const db = firebase.database();
 const actions = {
 
   // puzzle: { title, type, grid, clues }
-  createPuzzle: function createPuzzle(puzzle) {
+  createPuzzle: function createPuzzle(puzzle, cbk) {
     db.ref('counters').transaction(counters => {
       const pid = ((counters && counters.pid) || 0) + 1;
       const title = puzzle.info.title;
@@ -17,10 +17,11 @@ const actions = {
       db.ref('puzzle/' + pid).set(puzzle);
       return {...counters, pid: pid}
     }, (err, success, snapshot) => {
+      cbk && cbk(snapshot.val().pid);
     });
   },
 
-  createGame({ name, pid }, callback) {
+  createGame({ name, pid }, cbk) {
     db.ref('counters').transaction(counters => {
       const gid = ((counters && counters.gid) || 0) + 1;
       return {...counters, gid: gid}
@@ -37,8 +38,8 @@ const actions = {
       db.ref('puzzle/' + pid).once('value', puzzle => {
         const game = makeGame(gid, name, puzzle.val());
         db.ref('game/' + gid).set(game);
-        callback(gid);
       });
+      cbk && cbk(gid);
     });
   }
 };

@@ -6,25 +6,27 @@
   color: #333;
 }
 
-.welcome--join {
+.welcome--browse {
   border: 2px solid #333;
   padding: 15px 15px 15px 15px;
   display: flex;
+  height: 70%;
   flex-direction: column;
 }
 
-.welcome--join--title {
+.welcome--browse--title {
   text-align: center;
   font-size: 30px;
 }
 
-.welcome--join--puzzlelist {
+.welcome--browse--puzzlelist {
   overflow-y: scroll;
-  max-height: 200px;
+  margin-top: 10px;
+  max-height: 100%;
   font-size: 20px;
 }
 
-.welcome--join--puzzlelist--entry {
+.welcome--browse--puzzlelist--entry {
   font-family: nyt-franklin;
   font-size: 20px;
   background-color: #EEE;
@@ -34,17 +36,24 @@
   cursor: pointer;
 }
 
-.welcome--join--puzzlelist--entry:hover {
+.welcome--browse--puzzlelist--entry:hover {
   background-color: #FFF;
 }
 
-.welcome--create {
-  margin-top: 2px;
+.welcome--upload {
+  margin-top: 10px;
   border: 2px solid #333;
   padding: 15px 15px 15px 15px;
   display: flex;
   flex-direction: column;
 }
+
+.welcome--upload--title {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
 
 .welcome--create--title {
   text-align: center;

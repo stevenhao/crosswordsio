@@ -1,4 +1,5 @@
 import './style.css';
+import Admin from '../upload/index'
 import nameGenerator from './nameGenerator';
 
 import React, { Component } from 'react';
@@ -76,15 +77,15 @@ export default class Welcome extends Component {
   render() {
     return (
       <div className='welcome'>
-        <div className='welcome--join'>
-          <div className='welcome--join--title'>
-            Join a Game
+        <div className='welcome--browse'>
+          <div className='welcome--browse--title'>
+            Browse Puzzles
           </div>
-          <div className='welcome--join--puzzlelist'>
+          <div className='welcome--browse--puzzlelist'>
             {
-              this.state.puzzleList.map((entry, i) =>
+              this.state.puzzleList.slice().reverse().map((entry, i) =>
                 <Link key={i} to={'/puzzle/' + entry.pid} style={{ textDecoration: 'none', color: 'black' }}>
-                  <div className='welcome--join--puzzlelist--entry'>
+                  <div className='welcome--browse--puzzlelist--entry'>
                     <div>
                       {entry.title}
                     </div>
@@ -94,50 +95,11 @@ export default class Welcome extends Component {
             }
           </div>
         </div>
-        <div className='welcome--create'>
-          <div className='welcome--create--title'>
-            Start a Game
+        <div className='welcome--upload'>
+          <div className='welcome--upload--title'>
+            Upload Puzzles
           </div>
-
-          <div className='welcome--create--options'>
-
-            <div className='welcome--create--options--option'>
-              <label>
-                Select a puzzle {' '}
-              </label>
-              <select
-                value={this.state.pid}
-                onChange={this.handleSelectChange.bind(this)}>
-                {
-                  this.state.puzzleList.map((puzzle, i) => (
-                    <option key={i} value={puzzle.pid}>
-                      {puzzle.title}
-                    </option>
-                  ))
-                }
-              </select>
-            </div>
-
-            <div className='welcome--create--options--option'>
-              <label>
-                Game name {' '}
-              </label>
-              <input
-                className='welcome--create--options--option--name'
-                value={this.state.name}
-                onChange={this.handleNameChange.bind(this)}
-              />
-              <span
-                className='emoji'
-                onClick={this.handleEmojiClick.bind(this)}
-                onMouseDown={this.prevent}>
-                🔄
-              </span>
-            </div>
-          </div>
-          <button onClick={this.handleStartClick.bind(this)}>
-            Go!
-          </button>
+          <Admin history={this.props.history}/>
         </div>
       </div>
     );
