@@ -8,6 +8,7 @@ var exec = require('child_process').exec;
 var uuid = require('uuid');
 var fs = require('fs');
 var multer = require('multer');
+var favicon = require('serve-favicon');
 var app = express();
 
 var webpackMiddleware = require('webpack-dev-middleware');
@@ -31,26 +32,40 @@ app.use(currentWebpackMiddleware);
 
 const upload = multer({dest: '/tmp/uploads'});
 
-
 function renderFile(res, relPath) {
   return res.sendFile(path.resolve('./client/html/' + relPath));
 }
 
+app.use(favicon(path.resolve('./client/favicon.ico')));
+
 app.get('/', function (req, res) {
   renderFile(res, 'index.html');
-})
+});
 
 app.get('/game/:id', function (req, res) {
   renderFile(res, 'index.html');
-})
+});
 
-app.get('/admin', function (req, res) {
+app.get('/upload', function (req, res) {
   renderFile(res, 'index.html');
-})
+});
+
+app.get('/compose', function (req, res) {
+  renderFile(res, 'index.html');
+});
+
+
+// Redirects
+//
+app.get('/admin', function (req, res) {
+  res.redirect('/upload');
+});
 
 app.get('/admin/upload', function (req, res) {
-  renderFile(res, 'index.html');
-})
+  res.redirect('/upload');
+});
+
+// Convert puz file
 
 let convertPuzFile = (puzPath, callerCb) => {
   exec(`python ./convert.py ${puzPath}`, (err, stdout, stderr) => {

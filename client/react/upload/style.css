@@ -1,0 +1,91 @@
+.admin {
+  width: 99%;
+  padding: 5px 5px 5px 5px;
+}
+
+.admin--create {
+  border: 2px solid #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin--create--main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: middle;
+}
+
+.admin--create--main--upload {
+  width: 50%;
+  padding: 30px 30px 30px 30px;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin--create--main--upload--title {
+  font-size: 30px;
+}
+
+.admin--create--main--paste {
+  width: 50%;
+  padding: 30px 30px 30px 30px;
+  border-left: 1px solid black;
+  border-bottom: 2px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin--create--main--paste--title {
+  font-size: 30px;
+  text-align: right;
+}
+
+.admin--create--main--paste--textbox {
+  border: 10px solid #EEE;
+  margin-top: 10px;
+  font-family: Andale Mono;
+  height: 228px;
+  resize: none;
+  font-color: black;
+  outline: none;
+}
+
+.admin--create--go {
+  margin-top: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+  font-size: 25px;
+}
+
+.admin--create--preview {
+  height: 40px;
+  padding: 15px 15px 15px 15px;
+}
+
+.file-uploader {
+  margin-top: 10px;
+}
+
+.file-uploader--wrapper {
+  background-color: #EEE;
+  outline: 2px dashed #AAA;
+  outline-offset: -10px;
+  padding: 80px 20px 80px 20px;
+}
+
+.file-uploader--box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.file-uploader--box--icon {
+  fill: #AAA;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 30px;
+}
