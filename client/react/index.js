@@ -1,7 +1,7 @@
 import Welcome from './welcome/index';
-import Admin from './admin/index';
 import Room from './room/index';
-import Upload from './admin/upload';
+import Compose from './compose/index';
+import Upload from './upload/index';
 
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -18,9 +18,9 @@ ReactDOM.render(
   <Router>
     <div className='router-wrapper'>
       <Route exact path="/" component={Welcome}/>
-      <Route exact path="/admin" component={Admin}/>
       <Route path="/game/:gid" component={Room}/>
-      <Route exact path="/admin/upload" component={Upload}/>
+      <Route exact path="/upload" component={Upload}/>
+      <Route exact path="/compose" component={Compose}/>
     </div>
   </Router>,
   document.getElementById('root')

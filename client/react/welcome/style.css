@@ -69,10 +69,9 @@
 .welcome--create--options--option select {
   font-size: 90%;
   font-color: #666;
-  width: 300px;
+  width: 350px;
   padding: 1px;
 }
-
 
 .welcome--create--options--option .emoji {
   font-size: 120%;

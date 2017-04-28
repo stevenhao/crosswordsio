@@ -1,5 +1,8 @@
+import './game.css';
+
 import Grid from './grid';
 import React, { Component } from 'react';
+
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
 
