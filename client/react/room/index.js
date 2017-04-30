@@ -1,6 +1,7 @@
 import './style.css';
 import actions, { db } from '../actions';
 import Game from './game';
+import ActionMenu from '../components/ActionMenu';
 import Chat from './chat';
 import Clock from './clock';
 import { countMistakes } from '../gameUtils';
@@ -73,13 +74,19 @@ export default class Room extends Component {
   }
 
   updateGrid(r, c, value) {
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`).transaction(cell => ( Object.assign(cell, {
-      edits: [...(cell.edits || []), {
-        time: new Date().getTime(),
-        value: value
-      }],
-      value: value
-    })));
+    db.ref(`game/${this.state.game.gid}`).transaction(game => {
+      if (!(game.solved || game.grid[r][c].good)) {
+        game.grid[r][c].edits = [
+          ...(game.grid[r][c].edits || []), {
+            time: new Date().getTime(),
+            value: value
+          }];
+        game.grid[r][c].value = value;
+        game.grid[r][c].bad = false;
+        game.grid[r][c].good = false;
+      }
+      return game;
+    });
     this.startClock();
     this.checkIfSolved();
   }
@@ -92,6 +99,97 @@ export default class Room extends Component {
         text: text
       });
       return messages;
+    });
+  }
+
+  pauseClock() {
+  }
+
+  isMistake(r, c) {
+    return this.props.game.grid[r][c].value !== this.props.game.solution[r][c];
+  }
+
+  getAllSquares() {
+    let result = [];
+    this.state.game.grid.forEach((row, r) => {
+      result = result.concat(row.map((cell, c) => ({
+        r: r,
+        c: c
+      })));
+    });
+    return result;
+  }
+
+  getSelectedSquares() {
+    return this.getAllSquares().filter(({r, c}) => this.refs.game.isSelected(r, c));
+  }
+
+  getSelectedAndHighlightedSquares() {
+    return this.getAllSquares().filter(({r, c}) => this.refs.game.isSelected(r, c) || this.refs.game.isHighlighted(r, c));
+  }
+
+  _checkSquare(r, c) {
+    const solution = this.state.game.solution;
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
+      .transaction(sq => {
+        if (sq.value !== '') {
+          if (sq.value === solution[r][c]) {
+            sq.good = true;
+          } else {
+            sq.bad = true;
+            sq.helped = true;
+          }
+        }
+        return sq;
+      });
+  }
+
+  checkSquare() {
+    this.getSelectedSquares().forEach(({r, c}) => {
+      this._checkSquare(r, c);
+    });
+  }
+
+  checkWord() {
+    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
+      this._checkSquare(r, c);
+    });
+  }
+
+  checkPuzzle() {
+    this.getAllSquares().forEach(({r, c}) => {
+      this._checkSquare(r, c);
+    });
+  }
+
+  _revealSquare(r, c) {
+    const solution = this.state.game.solution;
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
+      .transaction(sq => {
+        if (sq.value !== solution[r][c]) {
+          sq.value = solution[r][c];
+          sq.helped = true;
+        }
+        sq.good = true;
+        return sq;
+      });
+  }
+
+  revealSquare() {
+    this.getSelectedSquares().forEach(({r, c}) => {
+      this._revealSquare(r, c);
+    });
+  }
+
+  revealWord() {
+    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
+      this._revealSquare(r, c);
+    });
+  }
+
+  revealPuzzle() {
+    this.getAllSquares().forEach(({r, c}) => {
+      this._revealSquare(r, c);
     });
   }
 
@@ -122,12 +220,38 @@ export default class Room extends Component {
               stopTime={this.state.game.stopTime}
             />
           </div>
+          <button
+            className='room--toolbar--btn pause'
+            onClick={this.pauseClock.bind(this)} >
+            Pause Clock
+          </button>
+          <div className='room--toolbar--menu check'>
+            <ActionMenu
+              label='Check'
+              actions={{
+                'Square': this.checkSquare.bind(this),
+                'Word': this.checkWord.bind(this),
+                'Puzzle': this.checkPuzzle.bind(this)
+              }} />
+
+          </div>
+          <div className='room--toolbar--menu reveal'>
+            <ActionMenu
+              label='Reveal'
+              actions={{
+                'Square': this.revealSquare.bind(this),
+                'Word': this.revealWord.bind(this),
+                'Puzzle': this.revealPuzzle.bind(this)
+              }} />
+          </div>
         </div>
 
         <div className='room--game-and-chat-wrapper'>
           <Game
+            ref='game'
             size={size}
             grid={this.state.game.grid}
+            solution={this.state.game.solution}
             clues={{
               across: toArr(this.state.game.clues.across),
               down: toArr(this.state.game.clues.down)

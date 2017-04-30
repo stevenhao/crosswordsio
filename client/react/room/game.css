@@ -160,6 +160,15 @@
   background-color: #FFDA00;
 }
 
+.cell.bad .cell--value {
+  color: red;
+}
+
+.cell.good .cell--value {
+  color: blue;
+}
+
+
 .cell.highlighted {
   background-color: #A7D8FF;
 }
@@ -167,18 +176,23 @@
 .cell--number {
   position: absolute;
   font-size: 150%;
-  left: 4px;
-  top: 4px;
+  left: 10%;
+  top: 10%;
 }
 
 .cell--tag {
+  position: absolute;
   right: 0px;
-  top: 1px;
-  width: 10px;
-  height: 10px;
-  /*background-color: green;*/
+  top: 0px;
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
 }
 
+.cell.helped .cell--tag {
+  /*background-color: red;*/
+  /* TODO: styling ? */
+}
 
 .cell--value {
   position: absolute;

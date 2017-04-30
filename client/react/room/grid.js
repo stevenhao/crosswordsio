@@ -23,11 +23,24 @@ class Cell extends Component {
     let l = Math.max(1, val.length);
     return (
       <div
-        className={this.props.selected
-            ? 'cell selected'
-            : (this.props.highlighted
-              ? 'cell highlighted'
-              : 'cell')}
+        className={
+          (this.props.selected
+            ? 'selected '
+            : ''
+          ) + (this.props.highlighted
+            ? 'highlighted '
+            : ''
+          ) + (this.props.bad
+            ? 'bad '
+            : ''
+          ) + (this.props.good
+            ? 'good '
+            : ''
+          ) + (this.props.helped
+            ? 'helped '
+            : ''
+          ) + 'cell'
+        }
         onClick={this.props.onClick}>
         <div className='cell--number'>
           { this.props.number }
@@ -39,7 +52,8 @@ class Cell extends Component {
         </div>
         <div className='cell--value'
           style={{
-            fontSize: 350 / Math.sqrt(l) + '%'
+            fontSize: 350 / Math.sqrt(l) + '%',
+            lineHeight: Math.sqrt(l) * 100 + '%'
           }}
         >
           { val }
@@ -61,7 +75,7 @@ export default class Grid extends Component {
 
   isHighlighted(r, c) {
     const { grid, selected, direction } = this.props;
-    return isWhite(grid, r, c) && (
+    return !this.isSelected(r, c) && isWhite(grid, r, c) && (
       getParent(grid, selected.r, selected.c, direction)
       === getParent(grid, r, c, direction));
   }
@@ -87,26 +101,26 @@ export default class Grid extends Component {
           {
             this.props.grid.map((row, r) => (
               <tr key={r}>
-              {
-                row.map((cell, c) => (
-                  <td
-                    key={r+'_'+c}
-                    className='grid--cell'
-                    style={{
-                      width: size,
-                      height: size,
-                      fontSize: size * .15 + 'px',
-                    }}
-                  >
-                    <Cell
-                      {...cell}
-                      onClick={this.handleClick.bind(this, r, c)}
-                      selected={this.isSelected(r, c)}
-                      highlighted={this.isHighlighted(r, c)}
-                    />
-                  </td>
-                ))
-              }
+                {
+                  row.map((cell, c) => (
+                    <td
+                      key={r+'_'+c}
+                      className='grid--cell'
+                      style={{
+                        width: size,
+                        height: size,
+                        fontSize: size * .15 + 'px',
+                      }}
+                    >
+                      <Cell
+                        {...cell}
+                        onClick={this.handleClick.bind(this, r, c)}
+                        selected={this.isSelected(r, c)}
+                        highlighted={this.isHighlighted(r, c)}
+                      />
+                    </td>
+                  ))
+                }
               </tr>
             ))
           }

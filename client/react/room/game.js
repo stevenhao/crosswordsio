@@ -243,6 +243,14 @@ export default class Game extends Component {
     }
   }
 
+  isHighlighted(r, c) {
+    return this.refs.grid.isHighlighted(r, c);
+  }
+
+  isSelected(r, c) {
+    return this.refs.grid.isSelected(r, c);
+  }
+
   render() {
     return (
       <div className='game--main--wrapper'
@@ -266,14 +274,13 @@ export default class Game extends Component {
               className={'game--main--left--grid' + (this.props.frozen ? ' frozen' : '')}
             >
               <Grid
+                ref='grid'
                 size={this.props.size}
                 grid={this.props.grid}
                 selected={this.state.selected}
                 direction={this.state.direction}
                 setSelected={this.setSelected.bind(this)}
-                changeDirection={this.changeDirection.bind(this)}
-              >
-              </Grid>
+                changeDirection={this.changeDirection.bind(this)}/>
             </div>
           </div>
 
