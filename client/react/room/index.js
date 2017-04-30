@@ -58,12 +58,18 @@ export default class Room extends Component {
     });
   }
 
-  startClock() {
-    db.ref(`game/${this.state.game.gid}/startTime`).transaction(startTime => startTime ? startTime : new Date().getTime());
-  }
-
   stopClock() {
     db.ref(`game/${this.state.game.gid}/stopTime`).set(new Date().getTime());
+  }
+
+  checkIsSolved(game) {
+    if (countMistakes(game.grid, game.solution) === 0) {
+      game.solved = true;
+      if (!game.stopTime) {
+        game.stopTime = new Date().getTime();
+      }
+    }
+    return game;
   }
 
   updateGrid(r, c, value) {
@@ -79,10 +85,7 @@ export default class Room extends Component {
         game.grid[r][c].good = false;
       }
 
-      if (countMistakes(game.grid, this.state.game.solution) === 0) {
-        game.solved = true;
-        this.stopClock();
-      }
+      this.checkIsSolved(game);
       return game;
     });
     this.startClock();
@@ -102,7 +105,6 @@ export default class Room extends Component {
   pauseClock() {
     db.ref(`game/${this.state.game.gid}`).transaction(game => {
       if (game.stopTime) {
-        console.log('game ended already');
         return;
       }
       if (game.startTime) {
@@ -117,7 +119,6 @@ export default class Room extends Component {
   startClock() {
     db.ref(`game/${this.state.game.gid}`).transaction(game => {
       if (game.stopTime) {
-        console.log('game ended already');
         return;
       }
       if (!game.startTime) {
@@ -192,6 +193,7 @@ export default class Room extends Component {
         if (sq.value !== solution[r][c]) {
           sq.value = solution[r][c];
           sq.helped = true;
+          this.checkIsSolved(game);
         }
         sq.good = true;
         return sq;

@@ -236,9 +236,7 @@ export default class Game extends Component {
       if (!ev.metaKey && !ev.ctrlKey && letter.match(/^[A-Z0-9]$/)) {
         ev.preventDefault();
         ev.stopPropagation();
-        if (!this.props.frozen) {
-          this.typeLetter(letter, ev.shiftKey);
-        }
+        this.typeLetter(letter, ev.shiftKey);
       }
     }
   }
