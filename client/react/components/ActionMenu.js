@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './actionMenu.css';
 
 export default class ActionMenu extends Component {
   constructor() {
