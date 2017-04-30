@@ -134,6 +134,7 @@ function makeGame(gid, name, puzzle) {
     info: puzzle.info,
     clues: puzzle.clues,
     solution: puzzle.grid,
+    pid: puzzle.pid || null,
     grid: puzzle.grid.map(row =>
       row.map(cell => ({
         black: cell === '.',

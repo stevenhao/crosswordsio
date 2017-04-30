@@ -69,7 +69,6 @@ export default class Upload extends Component {
     if (this.puzzleIsValid()) {
       actions.createPuzzle(this.getPuzzle(), pid => {
         this.props.history.push(`/puzzle/${pid}`);
-
       });
     }
   }

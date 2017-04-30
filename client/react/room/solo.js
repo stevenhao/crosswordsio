@@ -105,11 +105,26 @@ export default class SoloGame extends Component {
     return (
       <div className='room'>
         <div className='room--info'>
-          <div className='room--info--title'>
-            {
-              this.state.game.info && this.state.game.info.title
-            }
-          </div>
+          {
+            this.state.game.pid
+              ? (
+                <a
+                  href={`/puzzle/${this.state.game.pid}`}
+                  className='room--info--title'>
+                  {
+                    this.state.game.info && this.state.game.info.title
+                  }
+                </a>
+              )
+              : (
+                <div
+                  className='room--info--title'>
+                  {
+                    this.state.game.info && this.state.game.info.title
+                  }
+                </div>
+              )
+          }
           <div className='room--info--subtitle'>
             {
               this.state.game.info && (

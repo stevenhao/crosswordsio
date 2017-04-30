@@ -9,11 +9,14 @@
   border-right: 1px solid #E2E2E2;
   border-bottom: 1px solid #E2E2E2;
   padding: 20px 20px 20px 20px;
+  color: #333;
 }
 
 .room--info--title {
   font-size: 30px;
   font-weight: 300;
+  color: #333;
+  text-decoration: none;
 }
 
 .room--info--subtitle {

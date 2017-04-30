@@ -11,8 +11,10 @@ const actions = {
       const pid = ((counters && counters.pid) || 0) + 1;
       const title = puzzle.info.title;
       const author = puzzle.info.author;
+      puzzle.pid = pid;
       db.ref('puzzlelist/' + pid).set({
         pid: pid,
+        info: puzzle.info,
         title: title,
         author: author
       });
