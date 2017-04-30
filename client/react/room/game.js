@@ -21,15 +21,15 @@ export default class Game extends Component {
   componentWillReceiveProps(props) {
     let { r, c } = this.state.selected;
     if (!isWhite(props.grid, r, c)) {
-    while (!isWhite(props.grid, r, c)) {
-      if (c < props.grid[0].length) {
-        c += 1;
-      } else {
-        r += 1;
-        c = 0;
+      while (!isWhite(props.grid, r, c)) {
+        if (c < props.grid[0].length) {
+          c += 1;
+        } else {
+          r += 1;
+          c = 0;
+        }
       }
-    }
-    this.setSelected({r, c});
+      this.setSelected({r, c});
     }
   }
 
@@ -247,6 +247,25 @@ export default class Game extends Component {
 
   isSelected(r, c) {
     return this.refs.grid.isSelected(r, c);
+  }
+
+  getAllSquares() {
+    let result = [];
+    this.props.grid.forEach((row, r) => {
+      result = result.concat(row.map((cell, c) => ({
+        r: r,
+        c: c
+      })));
+    });
+    return result;
+  }
+
+  getSelectedAndHighlightedSquares() {
+    return this.getAllSquares().filter(({r, c}) => this.isSelected(r, c) || this.isHighlighted(r, c));
+  }
+
+  getSelectedSquares() {
+    return this.getAllSquares().filter(({r, c}) => this.isSelected(r, c));
   }
 
   render() {

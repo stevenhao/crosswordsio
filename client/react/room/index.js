@@ -104,6 +104,18 @@ export default class Room extends Component {
     });
   }
 
+  startClock() {
+    db.ref(`game/${this.state.game.gid}`).transaction(game => {
+      if (game.stopTime) {
+        return;
+      }
+      if (!game.startTime) {
+        game.startTime = new Date().getTime();
+      }
+      return game;
+    });
+  }
+
   pauseClock() {
     db.ref(`game/${this.state.game.gid}`).transaction(game => {
       if (game.stopTime) {
@@ -118,40 +130,12 @@ export default class Room extends Component {
     });
   }
 
-  startClock() {
-    db.ref(`game/${this.state.game.gid}`).transaction(game => {
-      if (game.stopTime) {
-        return;
-      }
-      if (!game.startTime) {
-        game.startTime = new Date().getTime();
-      }
-      return game;
-    });
-  }
-
-
-  isMistake(r, c) {
-    return this.props.game.grid[r][c].value !== this.props.game.solution[r][c];
-  }
-
-  getAllSquares() {
-    let result = [];
-    this.state.game.grid.forEach((row, r) => {
-      result = result.concat(row.map((cell, c) => ({
-        r: r,
-        c: c
-      })));
-    });
-    return result;
-  }
-
-  getSelectedSquares() {
-    return this.getAllSquares().filter(({r, c}) => this.refs.game.isSelected(r, c));
-  }
-
-  getSelectedAndHighlightedSquares() {
-    return this.getAllSquares().filter(({r, c}) => this.refs.game.isSelected(r, c) || this.refs.game.isHighlighted(r, c));
+  scope(s) {
+    return {
+      'square': () => this.refs.game.getSelectedSquares(),
+      'word': () => this.refs.game.getSelectedAndHighlightedSquares(),
+      'puzzle': () => this.refs.game.getAllSquares()
+    }[s];
   }
 
   _checkSquare(r, c) {
@@ -170,20 +154,8 @@ export default class Room extends Component {
       });
   }
 
-  checkSquare() {
-    this.getSelectedSquares().forEach(({r, c}) => {
-      this._checkSquare(r, c);
-    });
-  }
-
-  checkWord() {
-    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
-      this._checkSquare(r, c);
-    });
-  }
-
-  checkPuzzle() {
-    this.getAllSquares().forEach(({r, c}) => {
+  check(scope) {
+    scope().forEach(({r, c}) => {
       this._checkSquare(r, c);
     });
   }
@@ -201,24 +173,8 @@ export default class Room extends Component {
       });
   }
 
-  revealSquare() {
-    this.getSelectedSquares().forEach(({r, c}) => {
-      this._revealSquare(r, c);
-    });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
-  }
-
-  revealWord() {
-    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
-      this._revealSquare(r, c);
-    });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
-  }
-
-  revealPuzzle() {
-    this.getAllSquares().forEach(({r, c}) => {
+  reveal(scope) {
+    scope().forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
     db.ref(`game/${this.state.game.gid}`)
@@ -236,24 +192,8 @@ export default class Room extends Component {
       });
   }
 
-  resetSquare() {
-    this.getSelectedSquares().forEach(({r, c}) => {
-      this._resetSquare(r, c);
-    });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
-  }
-
-  resetWord() {
-    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
-      this._resetSquare(r, c);
-    });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
-  }
-
-  resetPuzzle() {
-    this.getAllSquares().forEach(({r, c}) => {
+  reset(scope) {
+    scope().forEach(({r, c}) => {
       this._resetSquare(r, c);
     });
     db.ref(`game/${this.state.game.gid}`)
@@ -271,7 +211,7 @@ export default class Room extends Component {
   }
 
   resetPuzzleAndTimer() {
-    this.resetPuzzle();
+    this.reset(this.scope('puzzle'));
     this.resetClock();
   }
 
@@ -346,9 +286,9 @@ export default class Room extends Component {
                   <ActionMenu
                     label='Check'
                     actions={{
-                      'Square': this.checkSquare.bind(this),
-                      'Word': this.checkWord.bind(this),
-                      'Puzzle': this.checkPuzzle.bind(this)
+                      'Square': this.check.bind(this, this.scope('square')),
+                      'Word': this.check.bind(this, this.scope('word')),
+                      'Puzzle': this.check.bind(this, this.scope('puzzle')),
                     }} />
 
                 </div>
@@ -362,20 +302,20 @@ export default class Room extends Component {
                   <ActionMenu
                     label='Reveal'
                     actions={{
-                      'Square': this.revealSquare.bind(this),
-                      'Word': this.revealWord.bind(this),
-                      'Puzzle': this.revealPuzzle.bind(this)
+                      'Square': this.reveal.bind(this, this.scope('square')),
+                      'Word': this.reveal.bind(this, this.scope('word')),
+                      'Puzzle': this.reveal.bind(this, this.scope('puzzle')),
                     }} />
                 </div>
               )
           }
-          <div className='room--toolbar--menu reveal'>
+          <div className='room--toolbar--menu reset'>
             <ActionMenu
               label='Reset'
               actions={{
-                'Square': this.resetSquare.bind(this),
-                'Word': this.resetWord.bind(this),
-                'Puzzle': this.resetPuzzle.bind(this),
+                'Square': this.reset.bind(this, this.scope('square')),
+                'Word': this.reset.bind(this, this.scope('word')),
+                'Puzzle': this.reset.bind(this, this.scope('puzzle')),
                 'Puzzle and Timer': this.resetPuzzleAndTimer.bind(this)
               }} />
           </div>
@@ -386,7 +326,6 @@ export default class Room extends Component {
             ref='game'
             size={size}
             grid={this.state.game.grid}
-            solution={this.state.game.solution}
             clues={{
               across: toArr(this.state.game.clues.across),
               down: toArr(this.state.game.clues.down)
