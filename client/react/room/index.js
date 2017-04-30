@@ -53,7 +53,7 @@ export default class Room extends Component {
   componentDidMount() {
     db.ref('game/' + this.props.match.params.gid).on('value', game => {
       this.setState({
-        game: Object.assign(this.state.game, game.val())
+        game: game.val()
       });
     });
   }
@@ -64,13 +64,6 @@ export default class Room extends Component {
 
   stopClock() {
     db.ref(`game/${this.state.game.gid}/stopTime`).set(new Date().getTime());
-  }
-
-  checkIfSolved() {
-    if (countMistakes(this.state.game.grid, this.state.game.solution) === 0) {
-      this.stopClock();
-      db.ref(`game/${this.state.game.gid}/solved`).set(true);
-    }
   }
 
   updateGrid(r, c, value) {
@@ -85,10 +78,14 @@ export default class Room extends Component {
         game.grid[r][c].bad = false;
         game.grid[r][c].good = false;
       }
+
+      if (countMistakes(game.grid, this.state.game.solution) === 0) {
+        game.solved = true;
+        this.stopClock();
+      }
       return game;
     });
     this.startClock();
-    this.checkIfSolved();
   }
 
   sendChatMessage(sender, text) {
@@ -103,7 +100,33 @@ export default class Room extends Component {
   }
 
   pauseClock() {
+    db.ref(`game/${this.state.game.gid}`).transaction(game => {
+      if (game.stopTime) {
+        console.log('game ended already');
+        return;
+      }
+      if (game.startTime) {
+        game.pausedTime = game.pausedTime || 0;
+        game.pausedTime += new Date().getTime() - game.startTime;
+        game.startTime = null;
+      }
+      return game;
+    });
   }
+
+  startClock() {
+    db.ref(`game/${this.state.game.gid}`).transaction(game => {
+      if (game.stopTime) {
+        console.log('game ended already');
+        return;
+      }
+      if (!game.startTime) {
+        game.startTime = new Date().getTime();
+      }
+      return game;
+    });
+  }
+
 
   isMistake(r, c) {
     return this.props.game.grid[r][c].value !== this.props.game.solution[r][c];
@@ -218,13 +241,29 @@ export default class Room extends Component {
             <Clock
               startTime={this.state.game.startTime}
               stopTime={this.state.game.stopTime}
+              pausedTime={this.state.game.pausedTime}
             />
           </div>
-          <button
-            className='room--toolbar--btn pause'
-            onClick={this.pauseClock.bind(this)} >
-            Pause Clock
-          </button>
+          {
+            this.state.game.solved
+              ? null
+              : ( this.state.game.startTime
+                ?(
+                  <button
+                    className='room--toolbar--btn pause'
+                    onClick={this.pauseClock.bind(this)} >
+                    Pause Clock
+                  </button>
+                )
+                :(
+                  <button
+                    className='room--toolbar--btn start'
+                    onClick={this.startClock.bind(this)} >
+                    Start Clock
+                  </button>
+                )
+              )
+          }
           <div className='room--toolbar--menu check'>
             <ActionMenu
               label='Check'
