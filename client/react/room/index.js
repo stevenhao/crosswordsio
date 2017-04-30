@@ -68,6 +68,8 @@ export default class Room extends Component {
       if (!game.stopTime) {
         game.stopTime = new Date().getTime();
       }
+    } else {
+      game.solved = false;
     }
     return game;
   }
@@ -193,7 +195,6 @@ export default class Room extends Component {
         if (sq.value !== solution[r][c]) {
           sq.value = solution[r][c];
           sq.helped = true;
-          this.checkIsSolved(game);
         }
         sq.good = true;
         return sq;
@@ -204,18 +205,74 @@ export default class Room extends Component {
     this.getSelectedSquares().forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
   }
 
   revealWord() {
     this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
   }
 
   revealPuzzle() {
     this.getAllSquares().forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
+  }
+
+  _resetSquare(r, c) {
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
+      .transaction(sq => {
+        sq.value = '';
+        sq.good = false;
+        sq.bad = false;
+        sq.helped = false;
+        return sq;
+      });
+  }
+
+  resetSquare() {
+    this.getSelectedSquares().forEach(({r, c}) => {
+      this._resetSquare(r, c);
+    });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
+  }
+
+  resetWord() {
+    this.getSelectedAndHighlightedSquares().forEach(({r, c}) => {
+      this._resetSquare(r, c);
+    });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
+  }
+
+  resetPuzzle() {
+    this.getAllSquares().forEach(({r, c}) => {
+      this._resetSquare(r, c);
+    });
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => this.checkIsSolved(game));
+  }
+
+  resetClock() {
+    db.ref(`game/${this.state.game.gid}`)
+      .transaction(game => {
+        game.startTime = null;
+        game.stopTime = null;
+        game.pausedTime = null;
+        return game;
+      });
+  }
+
+  resetPuzzleAndTimer() {
+    this.resetPuzzle();
+    this.resetClock();
   }
 
   render() {
@@ -266,23 +323,45 @@ export default class Room extends Component {
                 )
               )
           }
-          <div className='room--toolbar--menu check'>
-            <ActionMenu
-              label='Check'
-              actions={{
-                'Square': this.checkSquare.bind(this),
-                'Word': this.checkWord.bind(this),
-                'Puzzle': this.checkPuzzle.bind(this)
-              }} />
+          {
+            this.state.game.solved
+              ? null
+              : (
+                <div className='room--toolbar--menu check'>
+                  <ActionMenu
+                    label='Check'
+                    actions={{
+                      'Square': this.checkSquare.bind(this),
+                      'Word': this.checkWord.bind(this),
+                      'Puzzle': this.checkPuzzle.bind(this)
+                    }} />
 
-          </div>
+                </div>
+              )
+          }
+          {
+            this.state.game.solved
+              ? null
+              : (
+                <div className='room--toolbar--menu reveal'>
+                  <ActionMenu
+                    label='Reveal'
+                    actions={{
+                      'Square': this.revealSquare.bind(this),
+                      'Word': this.revealWord.bind(this),
+                      'Puzzle': this.revealPuzzle.bind(this)
+                    }} />
+                </div>
+              )
+          }
           <div className='room--toolbar--menu reveal'>
             <ActionMenu
-              label='Reveal'
+              label='Reset'
               actions={{
-                'Square': this.revealSquare.bind(this),
-                'Word': this.revealWord.bind(this),
-                'Puzzle': this.revealPuzzle.bind(this)
+                'Square': this.resetSquare.bind(this),
+                'Word': this.resetWord.bind(this),
+                'Puzzle': this.resetPuzzle.bind(this),
+                'Puzzle and Timer': this.resetPuzzleAndTimer.bind(this)
               }} />
           </div>
         </div>
