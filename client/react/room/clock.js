@@ -1,5 +1,3 @@
-import moment from 'moment'
-import 'moment-duration-format'
 import React, { Component } from 'react';
 
 export default class Clock extends Component {
@@ -28,7 +26,7 @@ export default class Clock extends Component {
     const stopTime = this.props.stopTime;
     const now = stopTime || new Date().getTime();
     const start = this.props.startTime;
-    const duration = moment.duration(now - start, 'ms')
+    const duration = now - start;
     let secs = Math.floor(duration / 1000);
     let mins = Math.floor(secs / 60);
     secs = secs % 60;
