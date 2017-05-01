@@ -142,7 +142,7 @@
   height: 100%;
   z-index: -1;
   transition: background-color .12s ease;
-  border: 5px solid transparent;
+  border: 2px solid transparent;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -154,7 +154,8 @@
 }
 
 .frozen .cell.selected {
-  background-color: #FFDA00;
+  background-color: #1FFF3D;
+  border: 2px solid #003300;
 }
 
 .frozen .cell.highlighted {
@@ -162,13 +163,12 @@
 }
 
 .cell.highlighted {
-  background-color: #fdd835;
+  background-color: #A7D8FF;
 }
 
 .cell.selected {
-  /*background-color: #FFDA00;*/
-  background-color: #fdd835;
-  border: 5px solid #c68400;
+  background-color: #A7D8FF;
+  border: 2px solid #001064;
 }
 
 .cell.bad .cell--value {
