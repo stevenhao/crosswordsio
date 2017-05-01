@@ -1,1 +1,1 @@
-rsync -r . ubuntu:~/crosswordsio
+rsync -r . ubuntu:~/crosswordsio --exclude node_modules
