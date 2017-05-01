@@ -1,6 +1,5 @@
 import './style.css';
 import Admin from '../upload/index'
-import nameGenerator from './nameGenerator';
 
 import React, { Component } from 'react';
 import {
@@ -11,13 +10,16 @@ import {
 
 import actions, { db } from '../actions';
 
+function values(obj) {
+  return Object.keys(obj).map(key => obj[key]);
+}
+
 export default class Welcome extends Component {
   constructor() {
     super();
     this.state = {
       gameList: [],
       puzzleList: [],
-      name: nameGenerator(),
     };
     this.gameListRef = db.ref('gamelist');
     this.puzzleListRef = db.ref('puzzlelist');
@@ -34,11 +36,11 @@ export default class Welcome extends Component {
   }
 
   updateGameList(gameList) {
-    this.setState({ gameList: Object.values(gameList.val() || {} )});
+    this.setState({ gameList: values(gameList.val() || {} )});
   }
 
   updatePuzzleList(puzzleList) {
-    this.setState({ puzzleList: Object.values(puzzleList.val() || {}) }, () => {
+    this.setState({ puzzleList: values(puzzleList.val() || {}) }, () => {
       if (!this.state.pid && this.state.puzzleList.length > 0) {
         this.setState({ pid: this.state.puzzleList[0].pid });
       }
@@ -48,16 +50,6 @@ export default class Welcome extends Component {
   prevent(ev) {
     ev.preventDefault();
     ev.stopPropagation();
-  }
-
-  handleNameChange(ev) {
-    this.setState({ name: ev.target.value });
-  }
-
-  handleEmojiClick(ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    this.setState({ name: nameGenerator() });
   }
 
   handleStartClick(ev) {

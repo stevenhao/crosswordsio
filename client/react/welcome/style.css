@@ -35,6 +35,7 @@
 }
 
 .welcome--browse--puzzlelist--entry {
+  display: block;
   font-family: nyt-franklin;
   font-size: 20px;
   background-color: #EEE;

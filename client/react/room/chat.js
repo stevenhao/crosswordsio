@@ -1,5 +1,7 @@
 import './style.css';
 
+import nameGenerator from '../nameGenerator';
+
 import React, { Component } from 'react';
 
 export default class Chat extends Component {
@@ -7,7 +9,7 @@ export default class Chat extends Component {
     super();
     this.state = {
       message: '',
-      username: 'anonymous'
+      username: nameGenerator()
     };
   }
 
