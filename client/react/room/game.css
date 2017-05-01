@@ -63,6 +63,7 @@
 
 .grid {
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 
@@ -141,6 +142,10 @@
   height: 100%;
   z-index: -1;
   transition: background-color .12s ease;
+  border: 5px solid transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .cell.black {
@@ -156,8 +161,14 @@
   background-color: #1FFF3D;
 }
 
+.cell.highlighted {
+  background-color: #fdd835;
+}
+
 .cell.selected {
-  background-color: #FFDA00;
+  /*background-color: #FFDA00;*/
+  background-color: #fdd835;
+  border: 5px solid #c68400;
 }
 
 .cell.bad .cell--value {
@@ -169,15 +180,12 @@
 }
 
 
-.cell.highlighted {
-  background-color: #A7D8FF;
-}
-
 .cell--number {
-  position: absolute;
   font-size: 150%;
-  left: 10%;
-  top: 10%;
+  line-height: 100%;
+  margin-left: 5%;
+  margin-top: 5%;
+  flex: 3;
 }
 
 .cell--tag {
@@ -195,12 +203,11 @@
 }
 
 .cell--value {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 70%;
+  flex: 7;
+  padding: 0 5% 5% 5%;
   text-align: center;
   vertical-align: middle;
   font-size: 350%;
+  overflow-x: scroll;
 }
 
