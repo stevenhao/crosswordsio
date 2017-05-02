@@ -163,12 +163,11 @@
 }
 
 .cell.highlighted {
-  background-color: #A7D8FF;
+  background-color: #6ec6ff;
 }
 
 .cell.selected {
-  background-color: #A7D8FF;
-  border: 2px solid #001064;
+  background-color: #98ee99;
 }
 
 .cell.bad .cell--value {
