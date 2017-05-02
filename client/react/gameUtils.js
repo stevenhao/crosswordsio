@@ -1,13 +1,13 @@
-function countMistakes(grid, solution) {
+function isSolved(grid, solution) {
   let ans = 0;
   for (let r = 0; r < grid.length; r += 1) {
     for (let c = 0; c < grid[r].length; c += 1) {
       if (solution[r][c] !== '.' && grid[r][c].value !== solution[r][c]) {
-        ans += 1;
+        return false;
       }
     }
   }
-  return ans;
+  return true;
 }
 
 function isGridFilled(grid) {
@@ -172,5 +172,5 @@ function makeGame(gid, name, puzzle) {
   return game;
 }
 
-export { countMistakes, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame };
+export { isSolved, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame };
 

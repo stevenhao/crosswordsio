@@ -6,6 +6,25 @@ import React, { Component } from 'react';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
 
+/*
+ * React Component for a crossword game
+ *
+ * Renders:
+ * - grid and clues
+ *
+ * Props:
+ * - grid
+ * - clues
+ *
+ * State:
+ * - current square (state.selected)
+ * - current direction (state.direction)
+ *
+ * Functions:
+ * - isHighlighted
+ * - isSelected
+ **/
+
 export default class Game extends Component {
   constructor() {
     super();

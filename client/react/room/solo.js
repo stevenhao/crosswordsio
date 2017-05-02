@@ -2,7 +2,7 @@ import './style.css';
 import actions, { db } from '../actions';
 import Game from './game';
 import Clock from './clock';
-import { countMistakes } from '../gameUtils';
+import { isSolved } from '../gameUtils';
 import React, { Component } from 'react';
 import { makeGame } from '../gameUtils';
 
@@ -77,7 +77,7 @@ export default class SoloGame extends Component {
   }
 
   checkIfSolved() {
-    if (countMistakes(this.state.game.grid, this.state.game.solution) === 0) {
+    if (isSolved(this.state.game.grid, this.state.game.solution)) {
       this.stopClock();
       this.setState({game: Object.assign(this.state.game, {
         solved: true

@@ -4,7 +4,7 @@ import Game from './game';
 import ActionMenu from '../components/ActionMenu';
 import Chat from './chat';
 import Clock from './clock';
-import { countMistakes } from '../gameUtils';
+import { isSolved } from '../gameUtils';
 import React, { Component } from 'react';
 
 function toArr(a) {
@@ -53,7 +53,7 @@ export default class Room extends Component {
   componentDidMount() {
     db.ref('game/' + this.props.match.params.gid).on('value', game => {
       this.setState({
-        game: game.val()
+        game: Object.assign(this.state.game, game.val())
       });
     });
   }
@@ -63,7 +63,7 @@ export default class Room extends Component {
   }
 
   checkIsSolved(game) {
-    if (countMistakes(game.grid, game.solution) === 0) {
+    if (isSolved(game.grid, game.solution)) {
       game.solved = true;
       if (!game.stopTime) {
         game.stopTime = new Date().getTime();
@@ -75,21 +75,22 @@ export default class Room extends Component {
   }
 
   updateGrid(r, c, value) {
-    db.ref(`game/${this.state.game.gid}`).transaction(game => {
-      if (!(game.solved || game.grid[r][c].good)) {
-        game.grid[r][c].edits = [
-          ...(game.grid[r][c].edits || []), {
-            time: new Date().getTime(),
-            value: value
-          }];
-        game.grid[r][c].value = value;
-        game.grid[r][c].bad = false;
-        game.grid[r][c].good = false;
+    if (isSolved(this.state.game.grid, this.state.game.solution) || this.state.game.grid[r][c].good) return;
+    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`).transaction(cell => {
+      if (!cell) cell = {};
+      cell.edits = [...(cell.edits || []), {
+        time: new Date().getTime(),
+        value: value
+      }];
+      if (cell.edits.length > 10) {
+        cell.edits = cell.edits.slice(cell.edits.length - 10);
       }
-
-      this.checkIsSolved(game);
-      return game;
+      cell.value = value;
+      cell.bad = false;
+      cell.good = false;
+      return cell;
     });
+
     this.startClock();
   }
 
@@ -105,6 +106,7 @@ export default class Room extends Component {
   }
 
   startClock() {
+    if (this.state.game.startTime || this.state.game.stopTime) return;
     db.ref(`game/${this.state.game.gid}`).transaction(game => {
       if (game.stopTime) {
         return;
