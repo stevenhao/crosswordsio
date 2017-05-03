@@ -114,7 +114,7 @@ export default class Game extends Component {
   typeLetter(letter, isRebus) {
     const { r, c } = this.state.selected;
     const value = this.props.grid[r][c].value;
-    this.props.updateGrid(r, c, isRebus ? ((value || '') + letter) : letter);
+    this.props.updateGrid(r, c, isRebus ? ((value || '').substr(0, 10) + letter) : letter);
     if (!isRebus) {
       this.goToNextEmptyCell();
     }
@@ -205,8 +205,10 @@ export default class Game extends Component {
 
   scrollToClue(dir, num, el) {
     if (el) {
+      if (this.clueScroll === el.offsetTop) return;
       const parent = el.offsetParent;
       parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
+      this.clueScroll = el.offsetTop;
     }
   }
 
@@ -334,7 +336,7 @@ export default class Game extends Component {
                     {
                       this.props.clues[dir].map((clue, i) => clue && (
                         <div key={i}
-                          className= {
+                          className={
                             (this.isWordSelected(dir, i) ?
                               'selected '
                               : ' ')
@@ -346,7 +348,7 @@ export default class Game extends Component {
                                 : ' ')
                               + 'game--main--clues--list--scroll--clue'}
                               ref={
-                                (this.isWordSelected(dir, i) || this.isWordHalfSelected(dir, i))
+                                (this.isWordSelected(dir, i))
                                   ? this.scrollToClue.bind(this, dir, i)
                                   : null}
                                   onClick={this.selectClue.bind(this, dir, i)}>
