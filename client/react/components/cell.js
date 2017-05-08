@@ -16,6 +16,14 @@ import React, { Component } from 'react';
  **/
 
 export default class Cell extends Component {
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'value'].some(attr => this.props[attr] !== nextProps[attr])) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     if (this.props.black) {
       return (

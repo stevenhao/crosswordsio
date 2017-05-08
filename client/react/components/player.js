@@ -7,6 +7,26 @@ import React, { Component } from 'react';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
 
+window.requestIdleCallback =
+  window.requestIdleCallback ||
+  function (cb) {
+    var start = Date.now();
+    return setTimeout(function () {
+      cb({
+        didTimeout: false,
+        timeRemaining: function () {
+          return Math.max(0, 50 - (Date.now() - start));
+        }
+      });
+    }, 1);
+  };
+
+window.cancelIdleCallback =
+  window.cancelIdleCallback ||
+  function (id) {
+    clearTimeout(id);
+  };
+
 /*
  * Summary of Player component
  *
@@ -40,6 +60,10 @@ export default class Player extends Component {
       },
       direction: 'across',
     };
+
+    // for deferring scroll-to-clue actions
+    this.prvNum = {};
+    this.prvIdleID = {};
   }
 
   componentWillReceiveProps(props) {
@@ -144,11 +168,17 @@ export default class Player extends Component {
   // Interacts directly with the DOM
   // Very slow -- use with care
   scrollToClue(dir, num, el) {
-    if (el) {
-      if (this.clueScroll === el.offsetTop) return;
-      const parent = el.offsetParent;
-      parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
-      this.clueScroll = el.offsetTop;
+    if (el && this.prvNum[dir] !== num) {
+      this.prvNum[dir] = num;
+      if (this.prvIdleID[dir]) {
+        cancelIdleCallback(this.prvIdleID[dir]);
+      }
+      this.prvIdleID[dir] = requestIdleCallback(() => {
+        if (this.clueScroll === el.offsetTop) return;
+        const parent = el.offsetParent;
+        parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
+        this.clueScroll = el.offsetTop;
+      });
     }
   }
 
@@ -223,7 +253,8 @@ export default class Player extends Component {
                                   : ' ')
                                 + 'player--main--clues--list--scroll--clue'}
                                 ref={
-                                  (this.isClueSelected(dir, i))
+                                  (this.isClueSelected(dir, i) ||
+                                    this.isClueHalfSelected(dir, i))
                                     ? this.scrollToClue.bind(this, dir, i)
                                     : null}
                                     onClick={this.selectClue.bind(this, dir, i)}>

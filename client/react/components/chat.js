@@ -24,6 +24,10 @@ export default class Chat extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.chat.messages.length !== nextProps.chat.messages.length;
+  }
+
   onKeyPress(ev) {
     if (ev.key === 'Enter') {
       ev.stopPropagation();
