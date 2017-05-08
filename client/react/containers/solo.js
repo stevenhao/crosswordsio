@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class SoloGame extends Component {
+export default class Solo extends Component {
   render() {
     return (<div>
       'Under Construction'

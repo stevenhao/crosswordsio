@@ -1,4 +1,4 @@
-import './style.css';
+import './puzzle.css';
 import actions, { db } from '../actions';
 import React, { Component } from 'react';
 

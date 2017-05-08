@@ -1,11 +1,9 @@
-import './style.css';
+import './upload.css';
 
 import actions, { db } from '../actions';
 import FileUploader from './fileUploader';
 
 import React, { Component } from 'react';
-
-
 
 export default class Upload extends Component {
   constructor() {
@@ -75,11 +73,11 @@ export default class Upload extends Component {
 
   render() {
     return (
-      <div className='admin'>
-        <div className='admin--create'>
-          <div className='admin--create--main'>
-            <div className='admin--create--main--upload'>
-              <div className='admin--create--main--upload--title'>
+      <div className='upload'>
+        <div className='upload--create'>
+          <div className='upload--create--main'>
+            <div className='upload--create--main--upload'>
+              <div className='upload--create--main--upload--title'>
                 Upload a .puz file here...
               </div>
               <FileUploader
@@ -87,13 +85,13 @@ export default class Upload extends Component {
                 setPuzzle={this.setPuzzle.bind(this)}
               />
             </div>
-            <div className='admin--create--main--paste'>
-              <div className='admin--create--main--paste--title'>
+            <div className='upload--create--main--paste'>
+              <div className='upload--create--main--paste--title'>
                 ... or paste a JSON here
               </div>
               <textarea
                 placeholder='Type Here'
-                className='admin--create--main--paste--textbox'
+                className='upload--create--main--paste--textbox'
                 onInput={this.handleTextboxInput.bind(this)}
                 value={this.state.textbox}
               />
@@ -102,13 +100,13 @@ export default class Upload extends Component {
 
           {
             (this.state.textbox || this.state.uploaded)
-              ? (<div className='admin--create--preview'>
+              ? (<div className='upload--create--preview'>
                 Uploaded puzzle is <b>{this.puzzleIsValid() ? 'valid!' : 'invalid'}</b>
               </div>)
               : null
           }
           <button
-            className='admin--create--go'
+            className='upload--create--go'
             onClick={this.handleGoClick.bind(this)}>
             Create Puzzle
           </button>

@@ -1,7 +1,7 @@
-import './style.css';
+import './compose.css';
 import actions, { db } from '../actions';
 import React, { Component } from 'react';
-import Editor from './editor';
+import Editor from '../components/editor';
 
 export default class Compose extends Component {
   constructor() {

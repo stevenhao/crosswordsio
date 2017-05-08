@@ -1,5 +1,5 @@
-import './style.css';
-import Admin from '../upload/index'
+import './welcome.css';
+import Upload from '../components/upload'
 
 import React, { Component } from 'react';
 import {
@@ -117,7 +117,7 @@ export default class Welcome extends Component {
           <div className='welcome--upload--title'>
             Upload Puzzles
           </div>
-          <Admin history={this.props.history}/>
+          <Upload history={this.props.history}/>
         </div>
       </div>
     );

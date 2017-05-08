@@ -1,4 +1,4 @@
-import './style.css';
+import './fileUploader.css';
 import actions, { db } from '../actions';
 import request from 'superagent';
 
