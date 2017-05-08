@@ -1,6 +1,6 @@
 import Welcome from './welcome/index';
 import Room from './room/index';
-import SoloGame from './room/solo';
+import SoloGame from './solo/index';
 import Compose from './compose/index';
 import Upload from './upload/index';
 import Puzzle from './puzzle/index';

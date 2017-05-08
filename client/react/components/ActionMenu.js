@@ -1,6 +1,29 @@
 import React, { Component } from 'react';
 import './actionMenu.css';
 
+/*
+ * Summary of ActionMenu component
+ *
+ * Props: { grid, clues }
+ *
+ * State: { selected, direction }
+ *
+ * Children: [ GridControls, Grid, Clues ]
+ * - GridControls.props:
+ *   - attributes: { selected, direction, grid, clues }
+ *   - callbacks: { setSelected, setDirection }
+ * - Grid.props:
+ *   - attributes: { grid, selected, direction }
+ *   - callbacks: { setSelected, changeDirection }
+ * - Clues.props:
+ *   - attributes: { getClueList() }
+ *   - callbacks: { selectClue }
+ *
+ * Potential parents (so far):
+ * - Toolbar
+ **/
+
+
 export default class ActionMenu extends Component {
   constructor() {
     super();

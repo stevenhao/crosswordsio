@@ -26,22 +26,6 @@
 }
 
 .room--toolbar {
-  height: 20px;
-  border-top: 1px solid #E2E2E2;
-  border-left: 1px solid #E2E2E2;
-  border-right: 1px solid #E2E2E2;
-  border-bottom: 1px solid #E2E2E2;
-  padding: 10px 380px 8px 50px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-  text-align: center;
-}
-
-.room--toolbar--timer {
-  text-align: center;
 }
 
 .room--game-and-chat-wrapper {
@@ -52,13 +36,6 @@
   padding: 5px 20px 5px 20px;
   display: flex;
   flex-direction: row;
-}
-
-.game--main--wrapper {
-  border-right: 1px solid #E2E2E2;
-  margin-right: 2px;
-  outline: none;
-  position: relative;
 }
 
 /* chat style */

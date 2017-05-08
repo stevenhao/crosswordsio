@@ -1,7 +1,6 @@
 import './style.css';
 import actions, { db } from '../actions';
 import React, { Component } from 'react';
-import Game from '../room/game';
 
 export default class Puzzle extends Component {
   constructor() {

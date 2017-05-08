@@ -1,9 +1,8 @@
 import './style.css';
 import actions, { db } from '../actions';
-import Game from './game';
-import ActionMenu from '../components/ActionMenu';
-import Chat from './chat';
-import Clock from './clock';
+import Player from '../components/player';
+import Chat from '../components/chat';
+import Toolbar from '../components/toolbar';
 import { isSolved } from '../gameUtils';
 import React, { Component } from 'react';
 
@@ -53,10 +52,15 @@ export default class Room extends Component {
   componentDidMount() {
     db.ref('game/' + this.props.match.params.gid).on('value', game => {
       this.setState({
-        game: Object.assign(this.state.game, game.val())
+        game: game.val()
       });
     });
   }
+
+  componentWillUnmount() {
+    db.ref('game/' + this.props.match.params.gid).off();
+  }
+
 
   stopClock() {
     db.ref(`game/${this.state.game.gid}/stopTime`).set(new Date().getTime());
@@ -133,11 +137,15 @@ export default class Room extends Component {
   }
 
   scope(s) {
-    return {
-      'square': () => this.refs.game.getSelectedSquares(),
-      'word': () => this.refs.game.getSelectedAndHighlightedSquares(),
-      'puzzle': () => this.refs.game.getAllSquares()
-    }[s];
+    if (s === 'square') {
+      return this.refs.game.getSelectedSquares();
+    } else if (s === 'word') {
+      return this.refs.game.getSelectedAndHighlightedSquares();
+    } else if (s === 'puzzle') {
+      return this.refs.game.getAllSquares();
+    } else {
+      return [];
+    }
   }
 
   _checkSquare(r, c) {
@@ -156,8 +164,8 @@ export default class Room extends Component {
       });
   }
 
-  check(scope) {
-    scope().forEach(({r, c}) => {
+  check(scopeString) {
+    this.scope(scopeString).forEach(({r, c}) => {
       this._checkSquare(r, c);
     });
   }
@@ -175,8 +183,8 @@ export default class Room extends Component {
       });
   }
 
-  reveal(scope) {
-    scope().forEach(({r, c}) => {
+  reveal(scopeString) {
+    this.scope(scopeString).forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
     db.ref(`game/${this.state.game.gid}`)
@@ -194,8 +202,8 @@ export default class Room extends Component {
       });
   }
 
-  reset(scope) {
-    scope().forEach(({r, c}) => {
+  reset(scopeString) {
+    this.scope(scopeString).forEach(({r, c}) => {
       this._resetSquare(r, c);
     });
     db.ref(`game/${this.state.game.gid}`)
@@ -210,11 +218,6 @@ export default class Room extends Component {
         game.pausedTime = null;
         return game;
       });
-  }
-
-  resetPuzzleAndTimer() {
-    this.reset(this.scope('puzzle'));
-    this.resetClock();
   }
 
   render() {
@@ -253,78 +256,22 @@ export default class Room extends Component {
         </div>
 
         <div className='room--toolbar'>
-          <div className='room--toolbar--timer'>
-            <Clock
-              startTime={this.state.game.startTime}
-              stopTime={this.state.game.stopTime}
-              pausedTime={this.state.game.pausedTime}
-            />
-          </div>
-          {
-            this.state.game.solved
-              ? null
-              : ( this.state.game.startTime
-                ?(
-                  <button
-                    className='room--toolbar--btn pause'
-                    onClick={this.pauseClock.bind(this)} >
-                    Pause Clock
-                  </button>
-                )
-                :(
-                  <button
-                    className='room--toolbar--btn start'
-                    onClick={this.startClock.bind(this)} >
-                    Start Clock
-                  </button>
-                )
-              )
-          }
-          {
-            this.state.game.solved
-              ? null
-              : (
-                <div className='room--toolbar--menu check'>
-                  <ActionMenu
-                    label='Check'
-                    actions={{
-                      'Square': this.check.bind(this, this.scope('square')),
-                      'Word': this.check.bind(this, this.scope('word')),
-                      'Puzzle': this.check.bind(this, this.scope('puzzle')),
-                    }} />
-
-                </div>
-              )
-          }
-          {
-            this.state.game.solved
-              ? null
-              : (
-                <div className='room--toolbar--menu reveal'>
-                  <ActionMenu
-                    label='Reveal'
-                    actions={{
-                      'Square': this.reveal.bind(this, this.scope('square')),
-                      'Word': this.reveal.bind(this, this.scope('word')),
-                      'Puzzle': this.reveal.bind(this, this.scope('puzzle')),
-                    }} />
-                </div>
-              )
-          }
-          <div className='room--toolbar--menu reset'>
-            <ActionMenu
-              label='Reset'
-              actions={{
-                'Square': this.reset.bind(this, this.scope('square')),
-                'Word': this.reset.bind(this, this.scope('word')),
-                'Puzzle': this.reset.bind(this, this.scope('puzzle')),
-                'Puzzle and Timer': this.resetPuzzleAndTimer.bind(this)
-              }} />
-          </div>
+          <Toolbar
+            startTime={this.state.game.startTime}
+            stopTime={this.state.game.stopTime}
+            pausedTime={this.state.game.pausedTime}
+            solved={this.state.game.solved}
+            onPauseClock={this.pauseClock.bind(this)}
+            onStartClock={this.startClock.bind(this)}
+            onCheck={this.check.bind(this)}
+            onReveal={this.reveal.bind(this)}
+            onReset={this.reset.bind(this)}
+            onResetClock={this.resetClock.bind(this)}
+          />
         </div>
 
         <div className='room--game-and-chat-wrapper'>
-          <Game
+          <Player
             ref='game'
             size={size}
             grid={this.state.game.grid}
@@ -338,7 +285,7 @@ export default class Room extends Component {
 
         <Chat
           chat={this.state.game.chat || {messages: [], users: []}}
-          sendChatMessage={this.sendChatMessage.bind(this)} />
+          onSendChatMessage={this.sendChatMessage.bind(this)} />
       </div>
     </div>
     );

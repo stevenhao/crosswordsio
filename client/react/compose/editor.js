@@ -1,14 +1,29 @@
-import './style.css';
 import actions, { db } from '../actions';
 import React, { Component } from 'react';
-import Editor from './editor';
 
-export default class Compose extends Component {
+export default class Editor extends Component {
   constructor() {
     super();
     this.state = {
-      pid: undefined
+      puzzle: undefined
     };
+    this.puzzleRef = undefined;
+  }
+
+  setPuzzleRef(ref) {
+    if (this.puzzleRef) {
+      this.puzzleRef.off();
+    }
+    this.puzzleRef = ref;
+    this.puzzleRef.on('value', puzzle => {
+      this.setState({puzzle: puzzle.val()});
+    });
+  }
+
+  componentWillReceiveProps(props) {
+    if (!this.props || props.pid !== this.props.pid) {
+      this.setState(puzzleRef, db.ref(`/puzzle/${props.pid}`));
+    }
   }
 
   listPuzzles() {
@@ -32,6 +47,7 @@ export default class Compose extends Component {
   }
 
   render() {
+    const size = 35 * 15 / this.state.size;
     return (
       <div className='compose'>
         <div className='compose--left'>

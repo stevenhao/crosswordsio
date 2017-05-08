@@ -1,8 +1,19 @@
-import './style.css';
-
 import nameGenerator from '../nameGenerator';
 
 import React, { Component } from 'react';
+
+/*
+ * Summary of Chat component
+ *
+ * Props: { chat, onSendChatMessage }
+ *
+ * State: { message, username }
+ *
+ * Children: []
+ *
+ * Potential parents (so far):
+ * - Room
+ **/
 
 export default class Chat extends Component {
   constructor() {
@@ -17,7 +28,7 @@ export default class Chat extends Component {
     if (ev.key === 'Enter') {
       ev.stopPropagation();
       ev.preventDefault();
-      this.props.sendChatMessage(this.state.username, this.state.message);
+      this.props.onSendChatMessage(this.state.username, this.state.message);
       this.setState({message: ''});
     }
   }
