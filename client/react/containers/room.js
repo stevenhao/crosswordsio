@@ -61,77 +61,110 @@ export default class Room extends Component {
     db.ref('game/' + this.props.match.params.gid).off();
   }
 
-
-  stopClock() {
-    db.ref(`game/${this.state.game.gid}/stopTime`).set(new Date().getTime());
+  transaction(fn) {
+    db.ref('game/' + this.props.match.params.gid).transaction(fn);
   }
 
-  checkIsSolved(game) {
-    if (isSolved(game.grid, game.solution)) {
-      game.solved = true;
-      if (!game.stopTime) {
-        game.stopTime = new Date().getTime();
+  cellTransaction(r, c, fn) {
+      /*this.transaction(game => {
+      if (game && game.grid && game.grid[r] && game.grid[r][c]) {
+        game.grid[r][c] = fn(game.grid[r][c]);
       }
+      return game;
+    });*/
+    db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn);
+  }
+
+  checkIsSolved() {
+    if (isSolved(this.state.game.grid, this.state.game.solution)) {
+      this.transaction(game => (
+        Object.assign(game, {
+          solved: true,
+          stopTime: game.stopTime || new Date().getTime()
+        })
+      ));
     } else {
-      game.solved = false;
+      /*this.transaction(game => (
+        Object.assign(game, {
+          solved: false
+        })
+      ));*/
     }
-    return game;
   }
 
   updateGrid(r, c, value) {
     if (isSolved(this.state.game.grid, this.state.game.solution) || this.state.game.grid[r][c].good) return;
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`).transaction(cell => {
-      if (!cell) cell = {};
-      cell.edits = [...(cell.edits || []), {
-        time: new Date().getTime(),
-        value: value
-      }];
-      if (cell.edits.length > 10) {
-        cell.edits = cell.edits.slice(cell.edits.length - 10);
-      }
-      cell.value = value;
-      cell.bad = false;
-      cell.good = false;
-      return cell;
-    });
+
+    function takeLast(num, ar) {
+      return ar.length > num ? ar.slice(ar.length - num) : ar;
+    }
+
+    this.cellTransaction(r, c, cell => (
+      Object.assign(cell, {
+        edits: takeLast(10, [...(cell.edits || []), {
+          time: new Date().getTime(),
+          value: value
+        }]),
+        value: value,
+        bad: false,
+        good: false,
+      })
+    ));
 
     this.startClock();
+    this.checkIsSolved();
   }
 
   sendChatMessage(sender, text) {
-    db.ref(`game/${this.state.game.gid}/chat/messages`).transaction(messages => {
-      if (!messages) messages = [];
-      messages.push({
-        sender: sender,
-        text: text
-      });
-      return messages;
-    });
+    this.transaction(game => (
+      Object.assign(game, {
+        chat: Object.assign(game.chat, {
+          messages: (game.chat.messages || []).concat([
+            {
+              sender: sender,
+              text: text
+            }
+          ])
+        })
+      })
+    ));
   }
 
   startClock() {
     if (this.state.game.startTime || this.state.game.stopTime) return;
-    db.ref(`game/${this.state.game.gid}`).transaction(game => {
-      if (game.stopTime) {
-        return;
-      }
-      if (!game.startTime) {
-        game.startTime = new Date().getTime();
-      }
-      return game;
-    });
+    this.transaction(game => (
+      Object.assign(game, {
+        startTime: Math.max(game.startTime || 0,
+          new Date().getTime())
+      }))
+    );
   }
 
   pauseClock() {
-    db.ref(`game/${this.state.game.gid}`).transaction(game => {
-      if (game.stopTime) {
-        return;
-      }
-      if (game.startTime) {
-        game.pausedTime = game.pausedTime || 0;
-        game.pausedTime += new Date().getTime() - game.startTime;
-        game.startTime = null;
-      }
+    if (this.state.game.startTime || this.state.game.stopTime) return;
+    this.transaction(game => (
+      Object.assign(game, {
+        startTime: game.stopTime
+        ? null
+        : Math.max(game.startTime || 0,
+          new Date().getTime())
+      }))
+    );
+  }
+
+  stopClock() {
+    this.transaction(game => (
+      Object.assign(game, {
+        stopTime: new Date().getTime()
+      })
+    ));
+  }
+
+  resetClock() {
+    this.transaction(game => {
+      game.startTime = null;
+      game.stopTime = null;
+      game.pausedTime = null;
       return game;
     });
   }
@@ -150,18 +183,13 @@ export default class Room extends Component {
 
   _checkSquare(r, c) {
     const solution = this.state.game.solution;
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
-      .transaction(sq => {
-        if (sq.value !== '') {
-          if (sq.value === solution[r][c]) {
-            sq.good = true;
-          } else {
-            sq.bad = true;
-            sq.helped = true;
-          }
-        }
-        return sq;
-      });
+    this.cellTransaction(r, c, cell => (
+      Object.assign(cell, {
+        good: cell.value !== '' && cell.value === solution[r][c],
+        bad: cell.value !== '' && cell.value !== solution[r][c],
+        helped: cell.value !== '' && cell.vaule !== solution[r][c]
+      })
+    ));
   }
 
   check(scopeString) {
@@ -172,52 +200,38 @@ export default class Room extends Component {
 
   _revealSquare(r, c) {
     const solution = this.state.game.solution;
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
-      .transaction(sq => {
-        if (sq.value !== solution[r][c]) {
-          sq.value = solution[r][c];
-          sq.helped = true;
-        }
-        sq.good = true;
-        return sq;
-      });
+    this.cellTransaction(r, c, cell => (
+      Object.assign(cell, {
+        value: solution[r][c],
+        good: cell.value !== '',
+        helped: cell.value !== '' && cell.vaule !== solution[r][c]
+      })
+    ));
   }
 
   reveal(scopeString) {
     this.scope(scopeString).forEach(({r, c}) => {
       this._revealSquare(r, c);
     });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
+    this.checkIsSolved();
   }
 
   _resetSquare(r, c) {
-    db.ref(`game/${this.state.game.gid}/grid/${r}/${c}`)
-      .transaction(sq => {
-        sq.value = '';
-        sq.good = false;
-        sq.bad = false;
-        sq.helped = false;
-        return sq;
-      });
+    this.cellTransaction(r, c, cell => (
+      Object.assign(cell, {
+        value: '',
+        good: false,
+        bad: false,
+        helped: false
+      })
+    ));
   }
 
   reset(scopeString) {
     this.scope(scopeString).forEach(({r, c}) => {
       this._resetSquare(r, c);
     });
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => this.checkIsSolved(game));
-  }
-
-  resetClock() {
-    db.ref(`game/${this.state.game.gid}`)
-      .transaction(game => {
-        game.startTime = null;
-        game.stopTime = null;
-        game.pausedTime = null;
-        return game;
-      });
+    this.checkIsSolved();
   }
 
   render() {
