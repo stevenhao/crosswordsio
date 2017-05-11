@@ -27,18 +27,19 @@ export default class Solo extends Room {
     db.ref('puzzle/' + this.props.match.params.pid).off();
   }
 
-  transaction(fn) {
+  transaction(fn, cbk) {
     this.setState({
       game: fn(this.state.game)
     });
+    if (cbk) cbk();
   }
 
-  cellTransaction(r, c, fn) {
+  cellTransaction(r, c, fn, cbk) {
     this.transaction(game => {
       if (game && game.grid && game.grid[r] && game.grid[r][c]) {
         game.grid[r][c] = fn(game.grid[r][c]);
       }
       return game;
-    });
+    }, cbk);
   }
 };

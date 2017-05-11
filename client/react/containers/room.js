@@ -61,18 +61,18 @@ export default class Room extends Component {
     db.ref('game/' + this.props.match.params.gid).off();
   }
 
-  transaction(fn) {
-    db.ref('game/' + this.props.match.params.gid).transaction(fn);
+  transaction(fn, cbk) {
+    db.ref('game/' + this.props.match.params.gid).transaction(fn, cbk);
   }
 
-  cellTransaction(r, c, fn) {
+  cellTransaction(r, c, fn, cbk) {
       /*this.transaction(game => {
       if (game && game.grid && game.grid[r] && game.grid[r][c]) {
         game.grid[r][c] = fn(game.grid[r][c]);
       }
       return game;
     });*/
-    db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn);
+    db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn, cbk);
   }
 
   checkIsSolved() {
@@ -83,17 +83,21 @@ export default class Room extends Component {
           stopTime: game.stopTime || new Date().getTime()
         })
       ));
+      return true;
     } else {
-      /*this.transaction(game => (
+        /*this.transaction(game => (
         Object.assign(game, {
           solved: false
         })
       ));*/
+      return false;
     }
   }
 
   updateGrid(r, c, value) {
-    if (isSolved(this.state.game.grid, this.state.game.solution) || this.state.game.grid[r][c].good) return;
+    if (this.checkIsSolved()) {
+      return;
+    }
 
     function takeLast(num, ar) {
       return ar.length > num ? ar.slice(ar.length - num) : ar;
@@ -109,10 +113,11 @@ export default class Room extends Component {
         bad: false,
         good: false,
       })
-    ));
+    ), () => {
+      this.checkIsSolved();
+    });
 
     this.startClock();
-    this.checkIsSolved();
   }
 
   sendChatMessage(sender, text) {
