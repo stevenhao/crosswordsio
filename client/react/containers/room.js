@@ -4,16 +4,9 @@ import Player from '../components/player';
 import Chat from '../components/chat';
 import Toolbar from '../components/toolbar';
 import { isSolved } from '../gameUtils';
-import React, { Component } from 'react';
+import { toArr } from '../jsUtils';
 
-function toArr(a) {
-  if (Array.isArray(a)) return a;
-  const ret = [];
-  Object.keys(a).forEach(i => {
-    ret[i] = a[i];
-  });
-  return ret;
-}
+import React, { Component } from 'react';
 
 export default class Room extends Component {
   constructor() {
@@ -66,12 +59,6 @@ export default class Room extends Component {
   }
 
   cellTransaction(r, c, fn, cbk) {
-      /*this.transaction(game => {
-      if (game && game.grid && game.grid[r] && game.grid[r][c]) {
-        game.grid[r][c] = fn(game.grid[r][c]);
-      }
-      return game;
-    });*/
     db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn, cbk);
   }
 
@@ -250,17 +237,13 @@ export default class Room extends Component {
                 <a
                   href={`/puzzle/${this.state.game.pid}`}
                   className='room--info--title'>
-                  {
-                    this.state.game.info && this.state.game.info.title
-                  }
+                  { this.state.game.info && this.state.game.info.title }
                 </a>
               )
               : (
                 <div
                   className='room--info--title'>
-                  {
-                    this.state.game.info && this.state.game.info.title
-                  }
+                  { this.state.game.info && this.state.game.info.title }
                 </div>
               )
           }

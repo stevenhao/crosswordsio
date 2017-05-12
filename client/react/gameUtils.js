@@ -1,3 +1,5 @@
+import { toArr } from './jsUtils';
+
 function isSolved(grid, solution) {
   let ans = 0;
   for (let r = 0; r < grid.length; r += 1) {
@@ -88,6 +90,19 @@ function getCellByNumber(grid, number) {
   }
 }
 
+
+function fixSelect({r, c}, grid) {
+  while (!isWhite(grid, r, c)) {
+    if (c < grid[r].length) {
+      c += 1;
+    } else {
+      r += 1;
+      c = 0;
+    }
+  }
+  return {r, c};
+}
+
 function getOppositeDirection(direction) {
   return {
     'across': 'down',
@@ -127,22 +142,67 @@ function isStartOfClue(grid, r, c, dir) {
   }
 }
 
+function assignNumbers(grid) {
+  // assign numbers and parents
+  let nextNumber = 1;
+  grid.forEach((row, r) => {
+    row.forEach((cell, c) => {
+      if (!isWhite(grid, r, c)) return;
+      if (isStartOfClue(grid, r, c, 'across') ||
+        isStartOfClue(grid, r, c, 'down')) {
+          cell.number = nextNumber;
+          nextNumber += 1;
+      }
+
+      cell.parents = {
+        across: isStartOfClue(grid, r, c, 'across') ? cell.number : grid[r][c - 1].parents.across,
+        down: isStartOfClue(grid, r, c, 'down') ? cell.number : grid[r - 1][c].parents.down,
+      };
+    });
+  });
+  return grid;
+}
+
+function makeGrid(textGrid, fillWithSol) {
+  const grid = assignNumbers(textGrid.map(row =>
+    row.map(cell => ({
+      black: cell === '.',
+      edits: [],
+      value: fillWithSol ? cell :  '',
+      number: null
+    }))
+  ));
+  return grid;
+}
+
+
+function alignClues(grid, clues) {
+  const result = {
+    across: [],
+    down: []
+  };
+  grid.forEach(row => row.forEach(cell => {
+    for (let dir of ['across', 'down']) {
+      if (cell.parents && cell.parents[dir] === cell.number) {
+        result[dir][cell.number] = (clues && clues[dir] && clues[dir][cell.number]) || '';
+      }
+    }
+  }));
+
+  return result;
+}
+
 function makeGame(gid, name, puzzle) {
+  const grid = assignNumbers(makeGrid(puzzle.grid));
+  const clues = alignClues(grid, puzzle.clues);
   const game = {
     gid: gid,
     name: name,
     info: puzzle.info,
-    clues: puzzle.clues,
+    clues: clues,
     solution: puzzle.grid,
     pid: puzzle.pid || null,
-    grid: puzzle.grid.map(row =>
-      row.map(cell => ({
-        black: cell === '.',
-        edits: [],
-        value: '',
-        number: null
-      }))
-    ),
+    grid: grid,
     createTime: new Date().getTime(),
     startTime: null,
     chat: {
@@ -150,27 +210,8 @@ function makeGame(gid, name, puzzle) {
       messages: []
     },
   };
-
-  // assign numbers and parents
-  let nextNumber = 1;
-  game.grid.forEach((row, r) => {
-    row.forEach((cell, c) => {
-      if (!isWhite(game.grid, r, c)) return;
-      if (isStartOfClue(game.grid, r, c, 'across') ||
-        isStartOfClue(game.grid, r, c, 'down')) {
-          cell.number = nextNumber;
-          nextNumber += 1;
-      }
-
-      cell.parents = {
-        across: isStartOfClue(game.grid, r, c, 'across') ? cell.number : game.grid[r][c - 1].parents.across,
-        down: isStartOfClue(game.grid, r, c, 'down') ? cell.number : game.grid[r - 1][c].parents.down,
-      };
-    });
-  });
-
   return game;
 }
 
-export { isSolved, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame };
+export { isSolved, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame, assignNumbers, makeGrid, fixSelect, alignClues };
 

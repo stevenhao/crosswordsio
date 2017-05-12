@@ -1,3 +1,5 @@
+import './gridControls.css';
+
 import React, { Component } from 'react';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
@@ -82,6 +84,8 @@ export default class GridControls extends Component {
       ev.preventDefault();
       ev.stopPropagation();
       movement[ev.key](ev.shiftKey);
+    } else if (ev.key === 'Enter') {
+      this.props.onEnter && this.props.onEnter();
     } else {
       const letter = ev.key.toUpperCase();
       if (!ev.metaKey && !ev.ctrlKey && letter.match(/^[A-Z0-9]$/)) {
@@ -177,11 +181,22 @@ export default class GridControls extends Component {
     this.props.onSetSelected(selected);
   }
 
+  focus() {
+    this.refs.gridControls.focus();
+  }
+
   render() {
-    return <div className='grid-controls'
+    return <div
+      ref='gridControls'
+      className='grid-controls'
       tabIndex='1'
       onKeyDown={this.handleKeyDown.bind(this)} >
-      {this.props.children}
+      <div className='grid--cover'>
+        out of focus
+      </div>
+      <div className='grid--content'>
+        {this.props.children}
+      </div>
     </div>
   }
 }

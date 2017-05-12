@@ -1,3 +1,5 @@
+import './grid.css';
+
 import React, { Component } from 'react';
 import { isInBounds, isWhite, getParent } from '../gameUtils';
 
@@ -69,6 +71,10 @@ export default class Grid extends Component {
                       <Cell
                         {...cell}
                         onClick={this.handleClick.bind(this, r, c)}
+                        canFlipColor={this.props.canFlipColor}
+                        onFlipColor={() => {
+                          this.props.onFlipColor && this.props.onFlipColor(r, c);
+                        }}
                         selected={this.isSelected(r, c)}
                         highlighted={this.isHighlighted(r, c)}
                       />

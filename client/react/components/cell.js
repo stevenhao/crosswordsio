@@ -1,3 +1,5 @@
+import './cell.css';
+
 import React, { Component } from 'react';
 
 /*
@@ -18,16 +20,32 @@ import React, { Component } from 'react';
 export default class Cell extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'value'].some(attr => this.props[attr] !== nextProps[attr])) {
+    if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'value', 'number'].some(attr => this.props[attr] !== nextProps[attr])) {
       return true;
     }
     return false;
+  }
+
+  renderFlipButton() {
+    if (this.props.canFlipColor) {
+      return (
+        <i
+          className='cell--flip fa fa-small fa-sticky-note'
+          onClick={(e) => {
+            e.stopPropagation();
+            this.props.onFlipColor();
+          }}
+        />
+      );
+    }
+    return null;
   }
 
   render() {
     if (this.props.black) {
       return (
         <div className='cell black'>
+          { this.renderFlipButton() }
         </div>
       );
     }
@@ -67,11 +85,7 @@ export default class Cell extends Component {
         <div className='cell--number'>
           { this.props.number }
         </div>
-        <div
-          className='cell--tag'
-          title='Hello'
-        >
-        </div>
+        { this.renderFlipButton() }
         <div className='cell--value'
           style={{
             fontSize: 350 / Math.sqrt(l) + '%',

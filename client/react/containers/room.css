@@ -4,10 +4,7 @@
 }
 
 .room--info {
-  border-top: 1px solid #E2E2E2;
-  border-left: 1px solid #E2E2E2;
-  border-right: 1px solid #E2E2E2;
-  border-bottom: 1px solid #E2E2E2;
+  border: 1px solid #E2E2E2;
   padding: 20px 20px 20px 20px;
   color: #333;
 }
@@ -29,10 +26,7 @@
 }
 
 .room--game-and-chat-wrapper {
-  border-top: 1px solid #E2E2E2;
-  border-left: 1px solid #E2E2E2;
-  border-right: 1px solid #E2E2E2;
-  border-bottom: 1px solid #E2E2E2;
+  border: 1px solid #E2E2E2;
   padding: 5px 20px 5px 20px;
   display: flex;
   flex-direction: row;

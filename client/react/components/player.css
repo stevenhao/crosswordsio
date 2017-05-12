@@ -5,46 +5,19 @@
   position: relative;
 }
 
-.grid-controls {
-  outline: none;
-}
-
-.grid-controls:focus .player--main {
-  opacity: 1;
-}
-
-.grid-controls:focus .player--main--cover {
-  display: none;
-  /* just to be safe */
-  z-index: -3;
-  font-size: 1px;
-  opacity: 0;
-}
-
 .player--main {
   margin-top: 20px;
   display: flex;
-  opacity: 0.5;
-}
-
-.player--main--cover {
-  z-index: 3;
-  opacity: 1;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 10px 10px 0px 10px;
-  color: #444;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
 }
 
 .player--main--clue-bar {
   background-color: #DCEFFF;
-  padding: 27px 20px 27px 20px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   font-size: 15px;
+  width: 495px;
+  height: 70px;
+  align-items: center;
 }
 
 .player--main--clue-bar--number {
@@ -55,6 +28,8 @@
 .player--main--clue-bar--text {
   margin-left: 20px;
   display: inline-block;
+  overflow-y: scroll;
+  max-height: 100%;
 }
 
 .player--main--left--grid {
@@ -69,20 +44,6 @@
   position: relative;
   border: 4px solid black;
   color: black;
-}
-
-.grid {
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-
-.grid--cell {
-  position: relative;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #aaaaaa;
-  box-sizing: border-box;
 }
 
 .player--main--clues {
@@ -144,78 +105,3 @@
 .player--main--clues--list--scroll--clue--text {
   margin-left: 10px;
 }
-
-/* Cell Styling */
-
-.cell {
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  transition: background-color .12s ease;
-  border: 2px solid transparent;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.cell.black {
-  background-color: black;
-  color: black;
-}
-
-.frozen .cell.selected {
-  background-color: #1FFF3D;
-  border: 2px solid #003300;
-}
-
-.frozen .cell.highlighted {
-  background-color: #1FFF3D;
-}
-
-.cell.highlighted {
-  background-color: #6ec6ff;
-}
-
-.cell.selected {
-  background-color: #98ee99;
-}
-
-.cell.bad .cell--value {
-  color: red;
-}
-
-.cell.good .cell--value {
-  color: blue;
-}
-
-
-.cell--number {
-  font-size: 150%;
-  line-height: 100%;
-  margin-left: 5%;
-  margin-top: 5%;
-  flex: 3;
-}
-
-.cell--tag {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  width: 3px;
-  height: 3px;
-  border-radius: 2px;
-}
-
-.cell.helped .cell--tag {
-  /*background-color: red;*/
-  /* TODO: styling ? */
-}
-
-.cell--value {
-  flex: 7;
-  padding: 0 5% 5% 5%;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 350%;
-}
-

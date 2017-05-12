@@ -40,7 +40,7 @@ export default class Welcome extends Component {
   }
 
   updatePuzzleList(puzzleList) {
-    this.setState({ puzzleList: values(puzzleList.val() || {}) }, () => {
+    this.setState({ puzzleList: values(puzzleList.val() || {}).filter(puzzle => !puzzle.private) }, () => {
       if (!this.state.pid && this.state.puzzleList.length > 0) {
         this.setState({ pid: this.state.puzzleList[0].pid });
       }

@@ -30,7 +30,7 @@ window.cancelIdleCallback =
 /*
  * Summary of Player component
  *
- * Props: { grid, clues }
+ * Props: { grid, clues, updateGrid }
  *
  * State: { selected, direction }
  *
@@ -42,7 +42,7 @@ window.cancelIdleCallback =
  *   - attributes: { grid, selected, direction }
  *   - callbacks: { setSelected, changeDirection }
  * - Clues.props:
- *   - attributes: { getClueList() }
+ *   - attributes: { getClueList(), selected, halfSelected }
  *   - callbacks: { selectClue }
  *
  * Potential parents (so far):
@@ -198,9 +198,6 @@ export default class Player extends Component {
           grid={this.props.grid}
           clues={this.props.clues}
         >
-          <div className='player--main--cover'>
-            out of focus
-          </div>
           <div className='player--main'>
             <div className='player--main--left'>
               <div className='player--main--clue-bar'>
@@ -242,8 +239,8 @@ export default class Player extends Component {
                         this.props.clues[dir].map((clue, i) => clue && (
                           <div key={i}
                             className={
-                              (this.isClueSelected(dir, i) ?
-                                'selected '
+                              (this.isClueSelected(dir, i)
+                                ?  'selected '
                                 : ' ')
                                 + (this.isClueHalfSelected(dir, i) ?
                                   'half-selected '
