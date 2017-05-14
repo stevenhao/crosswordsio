@@ -101,6 +101,7 @@ export default class GridControls extends Component {
     const nextEmptyCell = getNextEmptyCellAfter(this.props.grid, r, c, this.props.direction);
     if (nextEmptyCell) {
       this.setSelected(nextEmptyCell);
+      return nextEmptyCell;
     } else {
       const nextCell = getNextCell(this.props.grid, r, c, this.props.direction);
       if (nextCell) {
@@ -109,7 +110,6 @@ export default class GridControls extends Component {
       }
     }
   }
-
 
   goToPreviousCell() {
     let { r, c } = this.props.selected;
@@ -148,9 +148,11 @@ export default class GridControls extends Component {
   typeLetter(letter, isRebus) {
     const { r, c } = this.props.selected;
     const value = this.props.grid[r][c].value;
+    console.log('updategrid');
     this.props.updateGrid(r, c, isRebus ? ((value || '').substr(0, 10) + letter) : letter);
     if (!isRebus) {
-      this.goToNextEmptyCell();
+      console.log('nextcell');
+      console.log(this.goToNextEmptyCell());
     }
   }
 

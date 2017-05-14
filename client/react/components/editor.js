@@ -90,11 +90,13 @@ export default class Editor extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let grid, clues, selected;
+    let grid, clues;
     if (props.pid !== this.props.pid || this.didChangePatternOrDims(this.state.grid, props.grid)) {
       grid = makeGrid(props.grid, true);
       clues = alignClues(grid, props.clues);
-      selected = fixSelect(this.state.selected, grid);
+      this.setState({
+        selected: fixSelect(this.state.selected, grid)
+      });
     } else {
       grid = this.state.grid;
       clues = this.state.clues;
@@ -110,12 +112,10 @@ export default class Editor extends Component {
       clues.down.forEach((clue, i) => {
         clues.down[i] = (props.clues && props.clues.down && props.clues.down[i]) || '';
       });
-      selected = this.state.selected;
     }
     this.setState({
       grid: grid,
       clues: clues,
-      selected: selected
     });
   }
 
