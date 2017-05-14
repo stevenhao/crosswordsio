@@ -110,8 +110,8 @@ export default class Room extends Component {
   sendChatMessage(sender, text) {
     this.transaction(game => (
       Object.assign(game, {
-        chat: Object.assign(game.chat, {
-          messages: (game.chat.messages || []).concat([
+        chat: Object.assign(game && game.chat || {}, {
+          messages: (game.chat && game.chat.messages || []).concat([
             {
               sender: sender,
               text: text

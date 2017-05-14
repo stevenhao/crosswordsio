@@ -25,7 +25,7 @@ export default class Chat extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.chat.messages.length !== nextProps.chat.messages.length;
+    return this.props.chat.messages.length !== nextProps.chat.messages.length || this.state.message !== nextState.message || this.state.username !== nextState.username;
   }
 
   onKeyPress(ev) {
@@ -38,6 +38,7 @@ export default class Chat extends Component {
   }
 
   onChange(ev) {
+    console.log('onChange', ev.target.value);
     this.setState({message: ev.target.value});
   }
 
