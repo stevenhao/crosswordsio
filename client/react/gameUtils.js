@@ -93,7 +93,7 @@ function getCellByNumber(grid, number) {
 
 function fixSelect({r, c}, grid) {
   while (!isWhite(grid, r, c)) {
-    if (c < grid[r].length) {
+    if (c + 1 < grid[r].length) {
       c += 1;
     } else {
       r += 1;

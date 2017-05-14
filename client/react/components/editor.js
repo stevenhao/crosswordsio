@@ -4,6 +4,7 @@ import Grid from './grid';
 import GridControls from './gridControls';
 import React, { Component } from 'react';
 import EditableSpan from '../components/editableSpan';
+import Hints from '../components/hints';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, assignNumbers, makeGrid, fixSelect, alignClues } from '../gameUtils';
 
@@ -169,32 +170,16 @@ export default class Editor extends Component {
   }
 
   isHighlighted(r, c) {
-    return this.refs.grid.isHighlighted(r, c);
+    const { grid, selected, direction } = this.state;
+    return !this.isSelected(r, c) && isWhite(grid, r, c) && (
+      getParent(grid, selected.r, selected.c, direction)
+      === getParent(grid, r, c, direction));
+    if (!this.refs.grid) return false;
   }
 
   isSelected(r, c) {
-    return this.refs.grid.isSelected(r, c);
-  }
-
-  /* Public functions, called by parent components */
-
-  getAllSquares() {
-    let result = [];
-    this.state.grid.forEach((row, r) => {
-      result = result.concat(row.map((cell, c) => ({
-        r: r,
-        c: c
-      })));
-    });
-    return result;
-  }
-
-  getSelectedAndHighlightedSquares() {
-    return this.getAllSquares().filter(({r, c}) => this.isSelected(r, c) || this.isHighlighted(r, c));
-  }
-
-  getSelectedSquares() {
-    return this.getAllSquares().filter(({r, c}) => this.isSelected(r, c));
+    const { grid, selected, direction } = this.state;
+    return r === selected.r && c === selected.c;
   }
 
   /* Misc functions */
@@ -300,48 +285,62 @@ export default class Editor extends Component {
               </div>
             </GridControls>
           </div>
+          <div className='editor--right'>
 
-          <div className='editor--main--clues'>
-            {
-              // Clues component
-              ['across', 'down'].map((dir, i) => (
-                <div key={i} className='editor--main--clues--list'>
-                  <div className='editor--main--clues--list--title'>
-                    {dir.toUpperCase()}
-                  </div>
+            <div className='editor--main--clues'>
+              {
+                // Clues component
+                ['across', 'down'].map((dir, i) => (
+                  <div key={i} className='editor--main--clues--list'>
+                    <div className='editor--main--clues--list--title'>
+                      {dir.toUpperCase()}
+                    </div>
 
-                  <div
-                    className={'editor--main--clues--list--scroll ' + dir}
-                    ref={'clues--list--'+dir}>
-                    {
-                      this.state.clues[dir].map((clue, i) => clue !== undefined && (
-                        <div key={i}
-                          className={
-                            (this.isClueSelected(dir, i)
-                              ? 'selected '
-                              : ' ')
-                              + 'editor--main--clues--list--scroll--clue'
-                          }
-                          ref={
-                            (this.isClueSelected(dir, i) ||
-                              this.isClueHalfSelected(dir, i))
-                              ? this.scrollToClue.bind(this, dir, i)
-                              : null
-                          }
-                          onClick={this.selectClue.bind(this, dir, i)}>
-                          <div className='editor--main--clues--list--scroll--clue--number'>
-                            {i}
+                    <div
+                      className={'editor--main--clues--list--scroll ' + dir}
+                      ref={'clues--list--'+dir}>
+                      {
+                        this.state.clues[dir].map((clue, i) => clue !== undefined && (
+                          <div key={i}
+                            className={
+                              (this.isClueSelected(dir, i)
+                                ? 'selected '
+                                : (this.isClueHalfSelected(dir, i)
+                                  ? 'half-selected '
+                                  : ' ')
+                              )
+                                + 'editor--main--clues--list--scroll--clue'
+                            }
+                            ref={
+                              (this.isClueSelected(dir, i) ||
+                                this.isClueHalfSelected(dir, i))
+                                ? this.scrollToClue.bind(this, dir, i)
+                                : null
+                            }
+                            onClick={this.selectClue.bind(this, dir, i)}>
+                            <div className='editor--main--clues--list--scroll--clue--number'>
+                              {i}
+                            </div>
+                            <div className='editor--main--clues--list--scroll--clue--text'>
+                              {clue}
+                            </div>
                           </div>
-                          <div className='editor--main--clues--list--scroll--clue--text'>
-                            {clue}
-                          </div>
-                        </div>
-                      ))
-                    }
+                        ))
+                      }
+                    </div>
                   </div>
-                </div>
-              ))
-            }
+                ))
+              }
+            </div>
+
+            <div className='editor--right--hints'>
+              <h2> Hints </h2>
+              <Hints
+                grid={this.state.grid}
+                num={this.getSelectedClueNumber()}
+                direction={this.state.direction}
+              />
+            </div>
           </div>
         </div>
       </div>

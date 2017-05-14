@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './toolbar.css';
 
 import Clock from '../components/clock';
-import ActionMenu from '../components/ActionMenu';
+import ActionMenu from '../components/actionMenu';
 
 export default class Toolbar extends Component {
   constructor() {

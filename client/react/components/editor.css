@@ -73,7 +73,13 @@
   color: #444;
 }
 
+.editor--right {
+  display: flex;
+  flex-direction: column;
+}
+
 .editor--main--clues {
+  flex: 1;
   display: flex;
   padding: 0px 20px 0px 20px;
 }
@@ -93,7 +99,7 @@
 
 .editor--main--clues--list--scroll {
   position: relative;
-  height: 595px;
+  height: 95px;
   overflow-y: scroll;
   border-top: 1px solid #e2e2e2;
   margin-top: 5px;
@@ -131,4 +137,11 @@
 
 .editor--main--clues--list--scroll--clue--text {
   margin-left: 10px;
+}
+
+.editor--right--hints {
+  flex: 3;
+  padding: 20px;
+
+  max-height: 500px;
 }

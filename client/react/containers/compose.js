@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Editor from '../components/editor';
 import Create from '../components/create';
 import EditableSpan from '../components/editableSpan';
+import Hints from '../components/hints';
 
 import me from '../localAuth'
 
@@ -173,7 +174,7 @@ export default class Compose extends Component {
         </div>
         <div className='compose--main--editor'>
           <Editor
-            ref='game'
+            ref='editor'
             size={this.getCellSize()}
             grid={this.state.puzzle.grid}
             clues={this.state.puzzle.clues}
@@ -218,28 +219,31 @@ export default class Compose extends Component {
         </div>
         { this.renderMain() }
         <div className='compose--right'>
-          <h2> Instructions </h2>
-          <div>
-            <p>Here you can browse, edit or create new puzzles.</p>
+          <div className='compose--right--top'>
+            <h2> Instructions </h2>
+            <div>
+              <p>Here you can browse, edit or create new puzzles.</p>
 
-            <p> Click on the grid, and use arrow keys to navigate the grid.</p>
+              <p> Click on the grid, and use arrow keys to navigate the grid.</p>
 
-            <p>Press Enter to edit the clue for the word that's currently selected.</p>
+              <p>Press Enter to edit the clue for the word that's currently selected.</p>
 
-            {
-              this.pid
-                ?(
-                  <p>
-                    To share your puzzle, use this link:
+              {
+                this.pid
+                  ?(
+                    <p>
+                      To share your puzzle, use this link:
 
-                    <br/>
-                    <a href={this.getLink()}>{'https://downforacross.com' + this.getLink()}</a>
-                  </p>
-                )
-                : null
-            }
+                      <br/>
+                      <a href={this.getLink()}>{'https://downforacross.com' + this.getLink()}</a>
+                    </p>
+                  )
+                  : null
+              }
+            </div>
           </div>
         </div>
+        
       </div>
     );
   }

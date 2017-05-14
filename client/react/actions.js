@@ -16,7 +16,7 @@ const actions = {
         pid: pid,
         info: puzzle.info,
         title: title,
-        private: puzzle.private,
+        private: puzzle.private || false,
         author: author
       });
       db.ref('puzzle/' + pid).set(puzzle);
