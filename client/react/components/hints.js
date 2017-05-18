@@ -3,7 +3,7 @@ import actions, { db } from '../actions';
 import React, { Component } from 'react';
 import EditableSpan from '../components/editableSpan';
 
-import { evaluate, findMatches, getPatterns } from '../hintUtils';
+import { evaluate, findMatches, getPatterns, precompute } from '../hintUtils';
 
 export default class Hints extends Component {
 
@@ -20,12 +20,17 @@ export default class Hints extends Component {
     this.startComputing();
   }
 
+  componentDidMount() {
+    precompute(3);
+    precompute(4);
+    precompute(5);
+  }
+
   startComputing2() {
     if (this.computing2) return;
     this.computing2 = true;
     const limit = 100; // don't work too hard
     const doWork = (done_cbk, more_cbk) => {
-      console.log('doWork');
       // call cbk if there's more work to be done
       let cnt = 0;
       for (let word of this.state.list) {
@@ -36,9 +41,8 @@ export default class Hints extends Component {
           break;
         }
       }
-      console.log('did', cnt, 'work');
       this.state.list.sort((a, b) => (
-        ((this.scores[a] || (-10000)) - (this.scores[b] || (-10000)))
+        -((this.scores[a] || (-10000)) - (this.scores[b] || (-10000)))
       ));
       this.forceUpdate();
       if (cnt >= limit) {
@@ -66,13 +70,15 @@ export default class Hints extends Component {
     this.computing = true;
     requestIdleCallback(() => {
       const pattern = this.getPattern();
-      this.setState({
-        pattern: pattern,
-        list: findMatches(pattern),
+      findMatches(pattern, matches => {
+        this.setState({
+          pattern: pattern,
+          list: matches,
+        });
+        this.scores = {}; // reset
+        this.startComputing2();
+        this.computing = false;
       });
-      this.scores = {}; // reset
-      this.startComputing2();
-      this.computing = false;
     });
   }
 

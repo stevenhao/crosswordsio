@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.editor--main--clue-bar {
+  opacity: 2;
+}
+
 .editor--main--clue-bar--number {
   font-weight: bold;
   display: inline-block;
@@ -25,13 +29,13 @@
   align-items: center;
 }
 
-.editor--main--clue-bar--text--edit {
+.editor--main--clue-bar--text .editable-span {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-.editor--main--clue-bar--text--edit input {
+.editor--main--clue-bar--text .on input {
   flex: 1;
   margin-left: 19px;
   display: inline-block;
@@ -43,17 +47,11 @@
   resize: none;
 }
 
-.editor--main--clue-bar--text--edit i {
+.editor--main--clue-bar--text .on i {
   margin-left: 20px;
 }
 
-.editor--main--clue-bar--text--val {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.editor--main--clue-bar--text--val span {
+.editor--main--clue-bar--text .off span {
   flex: 1;
   margin-left: 20px;
   display: inline-block;
@@ -62,7 +60,7 @@
   height: 100%;
 }
 
-.editor--main--clue-bar--text--val i {
+.editor--main--clue-bar--text .off i {
   margin-left: 20px;
 }
 

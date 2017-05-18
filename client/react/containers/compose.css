@@ -71,7 +71,7 @@
   justify-items: flex-start;
 }
 
-.compose--main--info--title .editable {
+.compose--main--info--title .text {
   display: inline-block;
   padding: 1px;
   font-family: avenir, "helvetica neue", "Helvetica", "arial", sans-serif;
@@ -85,17 +85,17 @@
   margin-left: 2px;
 }
 
-.compose--main--info--title input.editable {
+.compose--main--info--title .on .text {
   min-width: 20px;
   width: auto;
 }
 
-.compose--main--info--title span.editable {
+.compose--main--info--title .off .text {
   padding: 3px;
   margin-right: 2px;
 }
 
-.compose--main--info--subtitle .editable {
+.compose--main--info--subtitle .text {
   display: inline-block;
   width: 100px;
   padding: 1px;
@@ -106,7 +106,7 @@
   text-decoration: none;
 }
 
-.compose--main--info--subtitle span.editable {
+.compose--main--info--subtitle .off .text {
   display: inline-block;
   width: 100px;
   padding: 3px;

@@ -206,87 +206,70 @@ export default class Editor extends Component {
   }
 
   focusClue() {
-    this.refs.clue && this.refs.clue.focus();
+    this.refs.clue && this.refs.clue.startEditing();
   }
 
   /* Render */
 
+  renderHints() {
+  }
+
+  renderLeft() {
+    return (
+      <div>
+        <div className='editor--main--clue-bar'>
+          <div className='editor--main--clue-bar--number'>
+            { this.getClueBarAbbreviation() }
+          </div>
+          <div className='editor--main--clue-bar--text'>
+            <EditableSpan
+              ref='clue'
+              value={this.state.clues[this.state.direction][this.getSelectedClueNumber()]}
+              onChange={value => this.props.updateClues(this.state.direction, this.getSelectedClueNumber(), value)}
+            />
+          </div>
+        </div>
+
+
+        <div
+          className={'editor--main--left--grid blurable'}>
+          <Grid
+            ref='grid'
+            size={this.props.size}
+            grid={this.state.grid}
+            selected={this.state.selected}
+            direction={this.state.direction}
+            onSetSelected={this.setSelected.bind(this)}
+            onChangeDirection={this.changeDirection.bind(this)}
+            canFlipColor={true}
+            onFlipColor={this.props.onFlipColor.bind(this)}
+          />
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className='editor--main--wrapper'>
+        <GridControls
+          ref='gridControls'
+          ignore='input'
+          selected={this.state.selected}
+          direction={this.state.direction}
+          onSetDirection={this.setDirection.bind(this)}
+          onSetSelected={this.setSelected.bind(this)}
+          onEnter={() => this.setState({ editingClue: true }, this.focusClue.bind(this))}
+          updateGrid={this.props.updateGrid}
+          grid={this.state.grid}
+          clues={this.state.clues}
+        >
+
         <div className='editor--main'>
           <div className='editor--main--left'>
-            <div className='editor--main--clue-bar'>
-              <div className='editor--main--clue-bar--number'>
-                { this.getClueBarAbbreviation() }
-              </div>
-              <div className='editor--main--clue-bar--text'>
-                {
-                  this.state.editingClue
-                    ? (
-                      <div className='editor--main--clue-bar--text--edit'>
-                        <input
-                          ref='clue'
-                          onChange={(e) => this.props.updateClues(this.state.direction, this.getSelectedClueNumber(), e.target.value)}
-                          value={ this.state.clues[this.state.direction][this.getSelectedClueNumber()] }
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              this.setState({ editingClue: false});
-                              this.focusGrid();
-                            }
-                          }}
-                        />
-                        <i
-                          className='fa fa-check-square-o'
-                          onClick={() => this.setState({ editingClue: false })}
-                          style={{ cursor: 'pointer' }}
-                        />
-                      </div>
-                    )
-                    : (
-                      <div className='editor--main--clue-bar--text--val'>
-                        <span>{ this.state.clues[this.state.direction][this.getSelectedClueNumber()] }
-                        </span>
-                        <i
-                          className='fa fa-pencil-square-o'
-                          onClick={() => this.setState({ editingClue: true })}
-                          style={{ cursor: 'pointer' }}
-                        />
-                      </div>
-                    )
-                }
-              </div>
-            </div>
-
-            <GridControls
-              ref='gridControls'
-              selected={this.state.selected}
-              direction={this.state.direction}
-              onSetDirection={this.setDirection.bind(this)}
-              onSetSelected={this.setSelected.bind(this)}
-              onEnter={() => this.setState({ editingClue: true }, this.focusClue.bind(this))}
-              updateGrid={this.props.updateGrid}
-              grid={this.state.grid}
-              clues={this.state.clues}
-            >
-              <div
-                className={'editor--main--left--grid'}>
-                <Grid
-                  ref='grid'
-                  size={this.props.size}
-                  grid={this.state.grid}
-                  selected={this.state.selected}
-                  direction={this.state.direction}
-                  onSetSelected={this.setSelected.bind(this)}
-                  onChangeDirection={this.changeDirection.bind(this)}
-                  canFlipColor={true}
-                  onFlipColor={this.props.onFlipColor.bind(this)}
-                />
-              </div>
-            </GridControls>
+            {this.renderLeft()}
           </div>
           <div className='editor--right'>
-
             <div className='editor--main--clues'>
               {
                 // Clues component
@@ -343,7 +326,8 @@ export default class Editor extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </GridControls>
+    </div>
     );
   }
 }

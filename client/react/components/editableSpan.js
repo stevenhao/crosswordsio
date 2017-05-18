@@ -10,9 +10,6 @@ export default class EditableSpan extends Component {
     };
   }
 
-  focus() {
-  }
-
   startEditing() {
     this.setState({ editing: true}, () => {
       this.refs.input && this.refs.input.focus();
@@ -26,10 +23,10 @@ export default class EditableSpan extends Component {
   render() {
     return this.state.editing
       ? (
-        <span className='editable-span'>
+        <span className='editable-span on'>
           <input
             ref='input'
-            className='editable'
+            className='text'
             value={this.props.value}
             onChange={(e) => this.props.onChange(e.target.value)}
             onKeyDown={(e) => {
@@ -47,8 +44,8 @@ export default class EditableSpan extends Component {
         </span>
       )
       : (
-        <span className='editable-span'>
-          <span className='editable'>
+        <span className='editable-span off'>
+          <span className='text'>
             {this.props.value}
           </span>
           <i
