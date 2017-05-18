@@ -4,15 +4,15 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var exec = require('child_process').exec;
-var uuid = require('uuid');
 var fs = require('fs');
-var multer = require('multer');
 var favicon = require('serve-favicon');
 var app = express();
-
+var multer = require('multer');
 var webpackMiddleware = require('webpack-dev-middleware');
+
+var converter = require('./converter');
 var webpackConfigs = require('../webpack.config.js');
+
 var compiler = webpack(webpackConfigs);
 
 var webpackConfiguration = {
@@ -74,32 +74,8 @@ app.get('/admin/upload', function (req, res) {
   res.redirect('/upload');
 });
 
-// Convert puz file
-
-let convertPuzFile = (puzPath, callerCb) => {
-  exec(`python ./convert.py ${puzPath}`, (err, stdout, stderr) => {
-    if (err) {
-      return callerCb(err);
-    }
-    return callerCb(null, stdout);
-  });
-};
-
-let convertPuzBuffer = (puzBuffer, callerCb) => {
-  const path = `/tmp/${uuid.v4()}`;
-  fs.writeFile(path, puzBuffer, (err) => {
-    if (err) {
-      return callerCb(err);
-    }
-    convertPuzFile(path, (err, result) => {
-      fs.unlink(path);
-      return callerCb(err, result);
-    });
-  });
-};
-
 app.post('/upload', upload.single('puz'), function (req, res) {
-  convertPuzFile(req.file.path, (error, puzzle) => {
+  converter.convertPuzFile(req.file.path, (error, puzzle) => {
     fs.unlink(req.file.path);
     if (error) {
       console.log(error.message);
@@ -124,6 +100,6 @@ app.get('/react/bundle.js', function response(req, res) {
   res.end();
 });
 
-app.listen(4000, function () {
+app.listen(process.env.PORT || 4000, function () {
   console.log('Example app listening on port 4000!')
 })
