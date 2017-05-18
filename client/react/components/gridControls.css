@@ -3,11 +3,11 @@
   position: relative;
 }
 
-.grid-controls:focus .grid--content {
+.grid-controls:focus .grid--content .blurable {
   opacity: 1;
 }
 
-.grid-controls .grid--content {
+.grid-controls .grid--content .blurable {
   opacity: 0.5;
 }
 
@@ -15,8 +15,8 @@
   z-index: 3;
   opacity: 1;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 3px;
+  left: 0;
   padding: 10px 10px 0px 10px;
   color: #444;
   font-weight: bold;

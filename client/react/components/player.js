@@ -210,7 +210,7 @@ export default class Player extends Component {
               </div>
 
               <div
-                className={'player--main--left--grid' + (this.props.frozen ? ' frozen' : '')}
+                className={'player--main--left--grid' + (this.props.frozen ? ' frozen' : '') + ' blurable'}
               >
                 <Grid
                   ref='grid'

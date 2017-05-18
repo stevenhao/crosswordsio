@@ -4,9 +4,20 @@ import React, { Component } from 'react';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
 
+function safe_while(condition, step, cap = 500) {
+  while (condition() && cap >= 0) {
+    step();
+    cap -= 1;
+  }
+}
+
 export default class GridControls extends Component {
   getSelectedClueNumber() {
     return getParent(this.props.grid, this.props.selected.r, this.props.selected.c, this.props.direction);
+  }
+
+  componentDidMount() {
+    this.focus();
   }
 
   isWordFilled(direction, number) {
@@ -28,12 +39,11 @@ export default class GridControls extends Component {
       }
     };
     const ok = () => {
-      return this.props.clues[direction][clueNumber] && (this.isGridFilled() || !this.isWordFilled(direction, clueNumber));
+      return this.props.clues[direction][clueNumber] !== undefined && (this.isGridFilled() || !this.isWordFilled(direction, clueNumber));
     };
     step();
-    while (!ok()) {
-      step();
-    }
+
+    safe_while(() => !ok(), step);
     this.selectClue(direction, clueNumber);
   }
 
@@ -45,6 +55,11 @@ export default class GridControls extends Component {
   }
 
   handleKeyDown(ev) {
+    console.log('handleKeyDown', ev.target);
+    if (ev.target.tagName === 'INPUT') {
+      console.log('return');
+      return;
+    }
     const moveSelectedBy = (dr, dc) => () => {
       const { grid } = this.props;
       const { selected, direction } = this.props;
@@ -54,10 +69,10 @@ export default class GridControls extends Component {
         c += dc;
       };
       step();
-      while (isInBounds(grid, r, c)
-        && !isWhite(grid, r, c)) {
-          step();
-      }
+      safe_while(() => (
+        isInBounds(grid, r, c)
+        && !isWhite(grid, r, c)
+      ), step);
       if (isInBounds(grid, r, c)) {
         this.setSelected({ r, c });
       }
@@ -135,9 +150,9 @@ export default class GridControls extends Component {
       return isInBounds(grid, r, c) && isWhite(grid, r, c);
     };
     step();
-    while (isInBounds(grid, r, c) && !ok()) {
-      step();
-    }
+    safe_while(() => (
+      isInBounds(grid, r, c) && !ok()
+    ), step);
     if (ok()) {
       this.setSelected({ r, c });
       return { r, c };
