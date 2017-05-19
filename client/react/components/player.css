@@ -5,7 +5,6 @@
 }
 
 .player--main {
-  margin-top: 20px;
   display: flex;
 }
 
@@ -14,8 +13,8 @@
   padding: 10px 20px 10px 20px;
   display: flex;
   font-size: 15px;
-  width: 495px;
-  height: 70px;
+  width: 486px;
+  height: 40px;
   align-items: center;
 }
 
@@ -34,7 +33,6 @@
 .player--main--left--grid {
   margin-top: 10px;
   position: relative;
-  border: 4px solid black;
   color: #444;
 }
 
@@ -65,7 +63,7 @@
 
 .player--main--clues--list--scroll {
   position: relative;
-  height: 595px;
+  height: 570px;
   overflow-y: scroll;
   border-top: 1px solid #e2e2e2;
   margin-top: 5px;
