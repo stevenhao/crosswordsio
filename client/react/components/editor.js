@@ -226,6 +226,7 @@ export default class Editor extends Component {
               ref='clue'
               value={this.state.clues[this.state.direction][this.getSelectedClueNumber()]}
               onChange={value => this.props.updateClues(this.state.direction, this.getSelectedClueNumber(), value)}
+              onBlur={() => this.focusGrid()}
             />
           </div>
         </div>

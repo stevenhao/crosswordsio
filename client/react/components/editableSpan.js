@@ -18,6 +18,7 @@ export default class EditableSpan extends Component {
 
   stopEditing() {
     this.setState({ editing: false});
+    this.props.onBlur && this.props.onBlur();
   }
 
   render() {
