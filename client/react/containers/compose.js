@@ -34,6 +34,7 @@ export default class Compose extends Component {
     this.pid = pid;
     console.log('selecting', pid);
     this.puzzleRef = db.ref('puzzle/' + pid);
+    this.puzzleListRef = db.ref('puzzlelist/' + pid);
     this.puzzleRef.on('value', puzzle => {
       this.setState({
         puzzle: puzzle.val()
@@ -109,7 +110,13 @@ export default class Compose extends Component {
   }
 
   updateTitle(title) {
-    this.transaction(puzzle => Object.assign(puzzle, {
+    this.puzzleRef.transaction(puzzle => Object.assign(puzzle, {
+      info: Object.assign(puzzle.info, {
+        title: title
+      })
+    }));
+    this.puzzleListRef.transaction(puzzle => puzzle && Object.assign({}, puzzle, {
+      title: title,
       info: Object.assign(puzzle.info, {
         title: title
       })
@@ -130,10 +137,28 @@ export default class Compose extends Component {
         author: author
       })
     }));
+    this.puzzleListRef.transaction(puzzle => puzzle && Object.assign(puzzle, {
+      author: author,
+      info: Object.assign(puzzle.info, {
+        author: author
+      })
+    }));
   }
 
   setPrivate(isPrivate) {
     this.transaction(puzzle => Object.assign(puzzle, {
+      private: isPrivate
+    }))
+    this.myPuzzlesRef.transaction(lst => {
+      if (!lst) return lst;
+      lst.forEach(entry => {
+        if (entry.pid === this.pid) {
+          entry.private = isPrivate;
+        }
+      });
+      return lst;
+    });
+    this.puzzleListRef.transaction(puzzle => puzzle && Object.assign(puzzle, {
       private: isPrivate
     }));
   }
