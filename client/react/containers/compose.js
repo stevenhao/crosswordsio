@@ -132,9 +132,9 @@ export default class Compose extends Component {
     }));
   }
 
-  togglePrivate() {
+  setPrivate(isPrivate) {
     this.transaction(puzzle => Object.assign(puzzle, {
-      private: !puzzle.private
+      private: isPrivate
     }));
   }
 
@@ -183,6 +183,10 @@ export default class Compose extends Component {
             onFlipColor={this.flipColor.bind(this)}
             pid={this.pid}
           />
+        </div>
+        <div className='compose--main--options'>
+          <label>Private: </label>
+          <input type='checkbox' checked={this.state.puzzle.private} onChange={e => this.setPrivate(e.target.checked)}/>
         </div>
       </div>
     );
@@ -243,7 +247,6 @@ export default class Compose extends Component {
             </div>
           </div>
         </div>
-        
       </div>
     );
   }

@@ -48,6 +48,7 @@
 
 /* Main panel styles */
 .compose--main {
+  position: relative;
   flex: 3;
   padding: 20px;
   border: 1px solid #E2E2E2;
@@ -96,8 +97,6 @@
 }
 
 .compose--main--info--subtitle .text {
-  display: inline-block;
-  width: 100px;
   padding: 1px;
   font-family: avenir, "helvetica neue", "Helvetica", "arial", sans-serif;
   font-size: 16px;
@@ -107,8 +106,6 @@
 }
 
 .compose--main--info--subtitle .off .text {
-  display: inline-block;
-  width: 100px;
   padding: 3px;
   font-family: avenir, "helvetica neue", "Helvetica", "arial", sans-serif;
   font-size: 16px;
@@ -119,6 +116,13 @@
 
 
 .compose--main--editor {
+}
+
+.compose--main--options {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
 }
 
 /* Right panel styles */
