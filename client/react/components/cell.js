@@ -76,8 +76,8 @@ export default class Cell extends Component {
           ) + (this.props.good
             ? 'good '
             : ''
-          ) + (this.props.helped
-            ? 'helped '
+          ) + (this.props.revealed
+            ? 'revealed '
             : ''
           ) + 'cell'
         }

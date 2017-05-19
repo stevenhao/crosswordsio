@@ -39,6 +39,9 @@
   color: blue;
 }
 
+.cell.revealed .cell--value {
+  color: green;
+}
 
 .cell--number {
   font-size: 150%;

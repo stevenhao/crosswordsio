@@ -72,11 +72,13 @@ export default class Room extends Component {
       ));
       return true;
     } else {
-      /*this.transaction(game => (
-        Object.assign(game, {
-          solved: false
-        })
-      ));*/
+      if (this.state.game.solved) {
+        this.transaction(game => (
+          Object.assign(game, {
+            solved: false
+          })
+        ));
+      }
       return false;
     }
   }
@@ -84,6 +86,9 @@ export default class Room extends Component {
   updateGrid(r, c, value) {
     if (this.checkIsSolved()) {
       return;
+    }
+    if (this.state.game.grid[r][c].good) {
+      return; // good squares are locked
     }
 
     function takeLast(num, ar) {
@@ -173,57 +178,60 @@ export default class Room extends Component {
     }
   }
 
-  _checkSquare(r, c) {
-    const solution = this.state.game.solution;
-    this.cellTransaction(r, c, cell => (
-      Object.assign(cell, {
-        good: cell.value !== '' && cell.value === solution[r][c],
-        bad: cell.value !== '' && cell.value !== solution[r][c],
-        helped: cell.value !== '' && cell.vaule !== solution[r][c]
-      })
-    ));
+  _checkSquare(cell, answer) {
+    return Object.assign({}, cell, {
+      good: cell.value !== '' && cell.value === answer,
+      bad: cell.value !== '' && cell.value !== answer,
+    });
   }
 
   check(scopeString) {
-    this.scope(scopeString).forEach(({r, c}) => {
-      this._checkSquare(r, c);
+    this.transaction(game => {
+      this.scope(scopeString).forEach(({r, c}) => {
+        game.grid[r][c] = this._checkSquare(game.grid[r][c], game.solution[r][c]);
+      });
+      return game;
+    }, () => {
     });
   }
 
-  _revealSquare(r, c) {
-    const solution = this.state.game.solution;
-    this.cellTransaction(r, c, cell => (
-      Object.assign(cell, {
-        value: solution[r][c],
-        good: cell.value !== '',
-        helped: cell.value !== '' && cell.vaule !== solution[r][c]
-      })
-    ));
+  _revealSquare(cell, answer) {
+    return Object.assign({}, cell, {
+      value: answer,
+      good: true,
+      revealed: true,
+    });
   }
 
   reveal(scopeString) {
-    this.scope(scopeString).forEach(({r, c}) => {
-      this._revealSquare(r, c);
+    this.transaction(game => {
+      this.scope(scopeString).forEach(({r, c}) => {
+        game.grid[r][c] = this._revealSquare(game.grid[r][c], game.solution[r][c]);
+      });
+      return game;
+    }, () => {
+      this.checkIsSolved();
     });
-    this.checkIsSolved();
   }
 
-  _resetSquare(r, c) {
-    this.cellTransaction(r, c, cell => (
-      Object.assign(cell, {
-        value: '',
-        good: false,
-        bad: false,
-        helped: false
-      })
-    ));
+  _resetSquare(cell) {
+    return Object.assign({}, cell, {
+      value: '',
+      good: false,
+      bad: false,
+      revealed: false
+    });
   }
 
   reset(scopeString) {
-    this.scope(scopeString).forEach(({r, c}) => {
-      this._resetSquare(r, c);
+    this.transaction(game => {
+      this.scope(scopeString).forEach(({r, c}) => {
+        game.grid[r][c] = this._resetSquare(game.grid[r][c], game.solution[r][c]);
+      });
+      return game;
+    }, () => {
+      this.checkIsSolved();
     });
-    this.checkIsSolved();
   }
 
   renderChat() {
