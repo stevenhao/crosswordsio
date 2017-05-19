@@ -55,9 +55,7 @@ export default class GridControls extends Component {
   }
 
   handleKeyDown(ev) {
-    console.log('handleKeyDown', ev.target);
     if (ev.target.tagName === 'INPUT') {
-      console.log('return');
       return;
     }
     const moveSelectedBy = (dr, dc) => () => {
@@ -163,11 +161,9 @@ export default class GridControls extends Component {
   typeLetter(letter, isRebus) {
     const { r, c } = this.props.selected;
     const value = this.props.grid[r][c].value;
-    console.log('updategrid');
     this.props.updateGrid(r, c, isRebus ? ((value || '').substr(0, 10) + letter) : letter);
     if (!isRebus) {
-      console.log('nextcell');
-      console.log(this.goToNextEmptyCell());
+      this.goToNextEmptyCell();
     }
   }
 

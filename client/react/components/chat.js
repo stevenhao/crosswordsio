@@ -38,7 +38,6 @@ export default class Chat extends Component {
   }
 
   onChange(ev) {
-    console.log('onChange', ev.target.value);
     this.setState({message: ev.target.value});
   }
 
