@@ -42,4 +42,8 @@ export default class Solo extends Room {
       return game;
     }, cbk);
   }
+
+  renderChat() { // solo games don't have chat
+    return null;
+  }
 };

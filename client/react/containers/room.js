@@ -72,7 +72,7 @@ export default class Room extends Component {
       ));
       return true;
     } else {
-        /*this.transaction(game => (
+      /*this.transaction(game => (
         Object.assign(game, {
           solved: false
         })
@@ -226,6 +226,15 @@ export default class Room extends Component {
     this.checkIsSolved();
   }
 
+  renderChat() {
+    return (
+      <Chat
+        chat={this.state.game.chat || {messages: [], users: []}}
+        onSendChatMessage={this.sendChatMessage.bind(this)} />
+    );
+  }
+
+
   render() {
     const size = 35 * 15 / this.state.game.grid.length;
     return (
@@ -282,14 +291,11 @@ export default class Room extends Component {
               down: toArr(this.state.game.clues.down)
             }}
             frozen={this.state.game.solved}
-            updateGrid={this.updateGrid.bind(this)}
-          />
+            updateGrid={this.updateGrid.bind(this)} />
 
-        <Chat
-          chat={this.state.game.chat || {messages: [], users: []}}
-          onSendChatMessage={this.sendChatMessage.bind(this)} />
+          {this.renderChat()}
+        </div>
       </div>
-    </div>
     );
   }
 };
