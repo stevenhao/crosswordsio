@@ -8,7 +8,6 @@ import Hints from '../components/hints';
 
 import me from '../localAuth'
 
-
 export default class Compose extends Component {
   constructor() {
     super();
