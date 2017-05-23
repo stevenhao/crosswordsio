@@ -135,7 +135,9 @@ export default class Editor extends Component {
   }
 
   changeDirection() {
-    this.setDirection(getOppositeDirection(this.state.direction));
+    if (getParent(this.state.grid, this.state.selected.r, this.state.selected.c, getOppositeDirection(this.state.direction))) {
+      this.setDirection(getOppositeDirection(this.state.direction));
+    }
   }
 
   selectClue(direction, number) {

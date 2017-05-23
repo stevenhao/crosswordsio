@@ -78,7 +78,11 @@ export default class GridControls extends Component {
 
     const setDirection = (direction, cbk) => () => {
       if (this.props.direction !== direction) {
-        this.setDirection(direction);
+        if (this.canSetDirection(direction)) {
+          this.setDirection(direction);
+        } else {
+          cbk();
+        }
       } else {
         cbk();
       }
@@ -189,6 +193,9 @@ export default class GridControls extends Component {
     this.props.onSetDirection(direction);
   }
 
+  canSetDirection(direction) {
+    return this.props.canSetDirection(direction);
+  }
 
   setSelected(selected) {
     this.props.onSetSelected(selected);

@@ -134,9 +134,24 @@ function isWhite(grid, r, c) {
 function isStartOfClue(grid, r, c, dir) {
   if (!isWhite(grid, r, c)) return false;
   if (dir === 'across') {
-    return !isInBounds(grid, r, c - 1) || !isWhite(grid, r, c - 1);
+    return (!isInBounds(grid, r, c - 1) || !isWhite(grid, r, c - 1)) &&
+      (isInBounds(grid, r, c + 1) && isWhite(grid, r, c + 1));
   } else if (dir === 'down') {
-    return !isInBounds(grid, r - 1, c) || !isWhite(grid, r - 1, c);
+    return (!isInBounds(grid, r - 1, c) || !isWhite(grid, r - 1, c))
+      && (isInBounds(grid, r + 1, c) && isWhite(grid, r + 1, c));
+  } else {
+    throw new Error('invalid dir', dir);
+  }
+}
+
+function isSqueezedSquare(grid, r, c, dir) {
+  if (!isWhite(grid, r, c)) return false;
+  if (dir === 'across') {
+    return (!isInBounds(grid, r, c - 1) || !isWhite(grid, r, c - 1)) &&
+      (!isInBounds(grid, r, c + 1) || !isWhite(grid, r, c + 1));
+  } else if (dir === 'down') {
+    return (!isInBounds(grid, r - 1, c) || !isWhite(grid, r - 1, c))
+      && (!isInBounds(grid, r + 1, c) || !isWhite(grid, r + 1, c));
   } else {
     throw new Error('invalid dir', dir);
   }
@@ -155,8 +170,16 @@ function assignNumbers(grid) {
       }
 
       cell.parents = {
-        across: isStartOfClue(grid, r, c, 'across') ? cell.number : grid[r][c - 1].parents.across,
-        down: isStartOfClue(grid, r, c, 'down') ? cell.number : grid[r - 1][c].parents.down,
+        across: (isStartOfClue(grid, r, c, 'across')
+          ? cell.number
+          : (isSqueezedSquare(grid, r, c, 'across')
+            ? 0
+            : grid[r][c - 1].parents.across)),
+        down: (isStartOfClue(grid, r, c, 'down')
+          ? cell.number
+          : (isSqueezedSquare(grid, r, c, 'down')
+            ? 0
+            : grid[r - 1][c].parents.down)),
       };
     });
   });

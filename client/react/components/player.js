@@ -67,32 +67,51 @@ export default class Player extends Component {
   }
 
   componentWillReceiveProps(props) {
+    this.props = props;
     let { r, c } = this.state.selected;
-    if (!isWhite(props.grid, r, c)) {
-      while (!isWhite(props.grid, r, c)) {
-        if (c < props.grid[0].length) {
+    if (!isWhite(this.props.grid, r, c)) {
+      while (!isWhite(this.props.grid, r, c)) {
+        if (c < this.props.grid[0].length) {
           c += 1;
         } else {
           r += 1;
           c = 0;
         }
       }
+
       this.setSelected({r, c});
     }
   }
 
   /* Callback fns, to be passed to child components */
 
+  isValidDirection(direction, selected) {
+    return getParent(this.props.grid, selected.r, selected.c, direction) !== 0;
+  }
+
+  canSetDirection(direction) {
+    return this.isValidDirection(direction, this.state.selected);
+  }
+
   setDirection(direction) {
-    this.setState({
-      direction: direction
-    });
+    if (this.isValidDirection(direction, this.state.selected)) {
+      this.setState({
+        direction: direction
+      });
+    }
   }
 
   setSelected(selected) {
-    this.setState({
-      selected: selected
-    });
+    if (this.isValidDirection(this.state.direction, selected)) {
+      this.setState({
+        selected: selected,
+      });
+    } else if (this.isValidDirection(getOppositeDirection(this.state.direction), selected)) {
+      this.setState({
+        selected: selected,
+        direction: getOppositeDirection(this.state.direction)
+      });
+    }
   }
 
   changeDirection() {
@@ -193,6 +212,7 @@ export default class Player extends Component {
           selected={this.state.selected}
           direction={this.state.direction}
           onSetDirection={this.setDirection.bind(this)}
+          canSetDirection={this.canSetDirection.bind(this)}
           onSetSelected={this.setSelected.bind(this)}
           updateGrid={this.props.updateGrid}
           grid={this.props.grid}

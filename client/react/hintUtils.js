@@ -116,8 +116,12 @@ function getPatterns(grid) {
     row.forEach((cell, c) => {
       const ch = (!cell.value || cell.value === '') ? '.' : cell.value;
       if (!cell.black) {
-        across[cell.parents.across] = (across[cell.parents.across] || '') + ch;
-        down[cell.parents.down] = (down[cell.parents.down] || '') + ch;
+        if (cell.parents.across) {
+          across[cell.parents.across] = (across[cell.parents.across] || '') + ch;
+        }
+        if (cell.parents.down) {
+          down[cell.parents.down] = (down[cell.parents.down] || '') + ch;
+        }
       }
     });
   });

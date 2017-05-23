@@ -1,4 +1,5 @@
 import './puzzle.css';
+import {Helmet} from "react-helmet";
 import actions, { db } from '../actions';
 import React, { Component } from 'react';
 
@@ -60,9 +61,19 @@ export default class Puzzle extends Component {
     return `${height} x ${height}`;
   }
 
+  getPuzzleURL() {
+    return 'www.downforacross.com/puzzle/' + this.pid;
+  }
+
   render() {
     return (
       <div className='puzzle'>
+        <Helmet>
+          <title>{this.getPuzzleTitle()}</title>
+          <meta property="og:title" content={this.getPuzzleTitle()} />
+          <meta property="og:url" content={this.getPuzzleURL()} />
+          <meta property="og:type" content='restaurant.menu' />
+        </Helmet>
         <div className='puzzle--info'>
           <div className='puzzle--info--title'>
             {this.getPuzzleTitle()}
