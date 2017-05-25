@@ -6,7 +6,7 @@ import React, { Component } from 'react';
  * Summary of Cell component
  *
  * Props: { black, selected, highlighted, bad, good, helped,
- *          value, onClick }
+ *          value, onClick, cursor }
  *  - edits is not currently used, except for backwards compat.
  *
  * State: {}
@@ -23,7 +23,25 @@ export default class Cell extends Component {
     if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'value', 'number'].some(attr => this.props[attr] !== nextProps[attr])) {
       return true;
     }
+    if (nextProps.cursors.length !== this.props.cursors.length) {
+      return true;
+    }
     return false;
+  }
+
+  renderCursors() {
+    return (
+      <div className='cursors'>
+        {this.props.cursors.map(({color}, i) => (
+          <div key={i} className='cursor' style={{
+            borderColor: color,
+            zIndex: 5 + 1. / (i + 1),
+            borderWidth: 2 * (i + 1)
+          }}>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   renderFlipButton() {
@@ -86,6 +104,7 @@ export default class Cell extends Component {
           { this.props.number }
         </div>
         { this.renderFlipButton() }
+        { this.renderCursors() }
         <div className='cell--value'
           style={{
             fontSize: 350 / Math.sqrt(l) + '%',

@@ -4,10 +4,11 @@ import Player from '../components/player';
 import Chat from '../components/chat';
 import Toolbar from '../components/toolbar';
 import { isSolved } from '../gameUtils';
-import { toArr } from '../jsUtils';
+import { toArr, lazy, rand_int, rand_color } from '../jsUtils';
 
 import React, { Component } from 'react';
 
+const CURSOR_EXPIRE = 1000 * 20; // 20 seconds
 export default class Room extends Component {
   constructor() {
     super();
@@ -43,9 +44,20 @@ export default class Room extends Component {
   }
 
   componentDidMount() {
+    this.color = rand_color();
+    this.id = rand_int(1, 1000000000);
     db.ref('game/' + this.props.match.params.gid).on('value', game => {
-      this.setState({
-        game: game.val()
+      lazy('updateGame', () => {
+        this.setState({
+          game: game.val()
+        });
+      });
+    });
+    db.ref('cursors/' + this.props.match.params.gid).on('value', cursors => {
+      lazy('updateCursors', () => {
+        this.setState({
+          cursors: cursors.val()
+        });
       });
     });
   }
@@ -60,6 +72,10 @@ export default class Room extends Component {
 
   cellTransaction(r, c, fn, cbk) {
     db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn, cbk);
+  }
+
+  cursorTransaction(fn, cbk) {
+    db.ref('cursors/' + this.props.match.params.gid).transaction(fn, cbk);
   }
 
   checkIsSolved() {
@@ -81,6 +97,31 @@ export default class Room extends Component {
       }
       return false;
     }
+  }
+
+  updateCursor({r, c}) {
+    if (!this.color || !this.id) return;
+    let updateFn = cursors => {
+      let updatedAt = new Date().getTime();
+      cursors = cursors || [];
+      cursors = cursors.filter(({id}) => id !== this.id);
+      cursors.push({
+        id: this.id,
+        color: this.color,
+        r: r,
+        c: c,
+        updatedAt: updatedAt
+      });
+      cursors = cursors.filter(({updatedAt}) => updatedAt >= new Date().getTime() - CURSOR_EXPIRE);
+      return cursors;
+    };
+      /*this.setState({
+      cursors: updateFn(this.state.cursors)
+    });*/
+    this.setState({
+      cursors: updateFn(this.state.cursors)
+    });
+    this.cursorTransaction(updateFn);
   }
 
   updateGrid(r, c, value) {
@@ -298,8 +339,10 @@ export default class Room extends Component {
               across: toArr(this.state.game.clues.across),
               down: toArr(this.state.game.clues.down)
             }}
+            cursors={this.state.cursors}
             frozen={this.state.game.solved}
-            updateGrid={this.updateGrid.bind(this)} />
+            updateGrid={this.updateGrid.bind(this)}
+            updateCursor={this.updateCursor.bind(this)} />
 
           {this.renderChat()}
         </div>

@@ -3,29 +3,9 @@ import './player.css';
 import Grid from './grid';
 import GridControls from './gridControls';
 import React, { Component } from 'react';
-
+import { lazy } from '../jsUtils';
 
 import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
-
-window.requestIdleCallback =
-  window.requestIdleCallback ||
-  function (cb) {
-    var start = Date.now();
-    return setTimeout(function () {
-      cb({
-        didTimeout: false,
-        timeRemaining: function () {
-          return Math.max(0, 50 - (Date.now() - start));
-        }
-      });
-    }, 1);
-  };
-
-window.cancelIdleCallback =
-  window.cancelIdleCallback ||
-  function (id) {
-    clearTimeout(id);
-  };
 
 /*
  * Summary of Player component
@@ -105,11 +85,21 @@ export default class Player extends Component {
     if (this.isValidDirection(this.state.direction, selected)) {
       this.setState({
         selected: selected,
+      }, () => {
+        this.props.updateCursor({
+          r: selected.r,
+          c: selected.c
+        });
       });
     } else if (this.isValidDirection(getOppositeDirection(this.state.direction), selected)) {
       this.setState({
         selected: selected,
         direction: getOppositeDirection(this.state.direction)
+      }, () => {
+        this.props.updateCursors({
+          r: selected.r,
+          c: selected.c
+        });
       });
     }
   }
@@ -189,10 +179,7 @@ export default class Player extends Component {
   scrollToClue(dir, num, el) {
     if (el && this.prvNum[dir] !== num) {
       this.prvNum[dir] = num;
-      if (this.prvIdleID[dir]) {
-        cancelIdleCallback(this.prvIdleID[dir]);
-      }
-      this.prvIdleID[dir] = requestIdleCallback(() => {
+      lazy('scrollToClue' + dir, () => {
         if (this.clueScroll === el.offsetTop) return;
         const parent = el.offsetParent;
         parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
@@ -238,6 +225,7 @@ export default class Player extends Component {
                   grid={this.props.grid}
                   selected={this.state.selected}
                   direction={this.state.direction}
+                  cursors={this.props.cursors}
                   onSetSelected={this.setSelected.bind(this)}
                   onChangeDirection={this.changeDirection.bind(this)}/>
               </div>

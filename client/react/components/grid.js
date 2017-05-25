@@ -8,7 +8,7 @@ import Cell from './cell';
 /*
  * Summary of Grid component
  *
- * Props: { grid, size, selected, direction, onSetSelected, onChangeDirection }
+ * Props: { grid, size, selected, direction, cursors, onSetSelected, onChangeDirection }
  *
  * State: {}
  *
@@ -76,6 +76,7 @@ export default class Grid extends Component {
                           this.props.onFlipColor && this.props.onFlipColor(r, c);
                         }}
                         selected={this.isSelected(r, c)}
+                        cursors={(this.props.cursors || []).filter(cursor => cursor.r === r && cursor.c === c)}
                         highlighted={this.isHighlighted(r, c)}
                       />
                     </td>
