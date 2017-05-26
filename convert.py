@@ -13,8 +13,18 @@ def get_sol(i, j):
     else:
         return p.solution[sq]
 
-grid = [[get_sol(i, j) for j in range(p.width)] for i in range(p.height)]
+def get_circles():
+    circles = []
+    if p.has_markup():
+        m = p.markup()
+        for square in m.get_markup_squares():
+            if m.markup[square] == puz.GridMarkup.Circled:
+                circles.append(square)
+    return circles
 
+
+grid = [[get_sol(i, j) for j in range(p.width)] for i in range(p.height)]
+circles = get_circles()
 
 obj = {
     'info': {
@@ -23,6 +33,7 @@ obj = {
         'author': p.author
         },
     'grid': grid,
+    'circles': circles,
     'clues': {
         'across': {
             clue['num']: clue['clue']
@@ -36,4 +47,3 @@ obj = {
     }
 
 print (json.dumps(obj));
-
