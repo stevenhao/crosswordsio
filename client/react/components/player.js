@@ -228,6 +228,7 @@ export default class Player extends Component {
                   direction={this.state.direction}
                   cursors={this.props.cursors}
                   onSetSelected={this.setSelected.bind(this)}
+                  myColor={this.props.myColor}
                   onChangeDirection={this.changeDirection.bind(this)}/>
               </div>
             </div>

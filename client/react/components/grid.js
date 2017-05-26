@@ -85,6 +85,7 @@ export default class Grid extends Component {
                         circled={this.isCircled(r, c)}
                         cursors={(this.props.cursors || []).filter(cursor => cursor.r === r && cursor.c === c)}
                         highlighted={this.isHighlighted(r, c)}
+                        myColor={this.props.myColor}
                       />
                     </td>
                   ))

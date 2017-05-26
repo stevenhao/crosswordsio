@@ -38,7 +38,7 @@ function lazy(id, cbk) {
 }
 
 function rand_int(min, max) {
-  return min + Math.random() * (max - min);
+  return min + Math.floor(Math.random() * (max - min + 1));
 }
 
 function rand_color() {
@@ -48,8 +48,8 @@ function rand_color() {
     (190 <= h && h <= 210)) { // yellow / blue
       h = rand_int(1, 360);
   }
-  let s = rand_int(30, 70);
-  let l = rand_int(30, 60);
+  let s = rand_int(40, 40);
+  let l = rand_int(60, 80);
   return 'hsl(' + h + ',' + s + '%,' + l + '%)';
 }
 

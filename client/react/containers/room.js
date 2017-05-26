@@ -342,8 +342,9 @@ export default class Room extends Component {
               across: toArr(this.state.game.clues.across),
               down: toArr(this.state.game.clues.down)
             }}
-            cursors={this.state.cursors}
+            cursors={(this.state.cursors || []).filter(({id}) => id !== this.id)}
             frozen={this.state.game.solved}
+            myColor={this.color}
             updateGrid={this.updateGrid.bind(this)}
             updateCursor={this.updateCursor.bind(this)} />
 

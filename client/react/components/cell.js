@@ -35,8 +35,8 @@ export default class Cell extends Component {
         {this.props.cursors.map(({color}, i) => (
           <div key={i} className='cell--cursor' style={{
             borderColor: color,
-            zIndex: 5 + this.props.cursors.length - i,
-            borderWidth: 2 * (i + 1)
+            zIndex: Math.min(2 + this.props.cursors.length - i, 9),
+            borderWidth: Math.min(1 + 2 * (i + 1), 16)
           }}>
         </div>
         ))}
@@ -107,6 +107,10 @@ export default class Cell extends Component {
             ? 'revealed '
             : ''
           ) + 'cell'
+        }
+        style={this.props.selected
+            ? { backgroundColor: this.props.myColor }
+            : null
         }
         onClick={this.props.onClick}>
         <div className={'cell--number' + (this.props.number
