@@ -223,6 +223,7 @@ export default class Player extends Component {
                   ref='grid'
                   size={this.props.size}
                   grid={this.props.grid}
+                  circles={this.props.circles}
                   selected={this.state.selected}
                   direction={this.state.direction}
                   cursors={this.props.cursors}

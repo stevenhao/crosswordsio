@@ -8,7 +8,7 @@ import { toArr, lazy, rand_int, rand_color } from '../jsUtils';
 
 import React, { Component } from 'react';
 
-const CURSOR_EXPIRE = 1000 * 20; // 20 seconds
+const CURSOR_EXPIRE = 1000 * 60; // 20 seconds
 export default class Room extends Component {
   constructor() {
     super();
@@ -39,6 +39,7 @@ export default class Room extends Component {
           users: [],
           messages: [],
         },
+        circles: []
       }
     };
   }
@@ -72,6 +73,10 @@ export default class Room extends Component {
 
   cellTransaction(r, c, fn, cbk) {
     db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn, cbk);
+    this.state.game.grid[r][c] = fn(this.state.game.grid[r][c]);
+    this.setState({
+      //game: this.state.game
+    });
   }
 
   cursorTransaction(fn, cbk) {
@@ -115,9 +120,6 @@ export default class Room extends Component {
       cursors = cursors.filter(({updatedAt}) => updatedAt >= new Date().getTime() - CURSOR_EXPIRE);
       return cursors;
     };
-      /*this.setState({
-      cursors: updateFn(this.state.cursors)
-    });*/
     this.setState({
       cursors: updateFn(this.state.cursors)
     });
@@ -335,6 +337,7 @@ export default class Room extends Component {
             ref='game'
             size={size}
             grid={this.state.game.grid}
+            circles={this.state.game.circles}
             clues={{
               across: toArr(this.state.game.clues.across),
               down: toArr(this.state.game.clues.down)

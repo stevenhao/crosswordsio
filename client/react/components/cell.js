@@ -31,14 +31,14 @@ export default class Cell extends Component {
 
   renderCursors() {
     return (
-      <div className='cursors'>
+      <div className='cell--cursors'>
         {this.props.cursors.map(({color}, i) => (
-          <div key={i} className='cursor' style={{
+          <div key={i} className='cell--cursor' style={{
             borderColor: color,
-            zIndex: 5 + 1. / (i + 1),
+            zIndex: 5 + this.props.cursors.length - i,
             borderWidth: 2 * (i + 1)
           }}>
-          </div>
+        </div>
         ))}
       </div>
     );
@@ -54,6 +54,15 @@ export default class Cell extends Component {
             this.props.onFlipColor();
           }}
         />
+      );
+    }
+    return null;
+  }
+
+  renderCircle() {
+    if (this.props.circled) {
+      return (
+        <div className='cell--circle' />
       );
     }
     return null;
@@ -100,20 +109,24 @@ export default class Cell extends Component {
           ) + 'cell'
         }
         onClick={this.props.onClick}>
-        <div className='cell--number'>
-          { this.props.number }
+        <div className={'cell--number' + (this.props.number
+              ?  ' nonempty'
+              : ''
+            )}>
+            { this.props.number }
+          </div>
+          { this.renderFlipButton() }
+          { this.renderCursors() }
+          { this.renderCircle() }
+          <div className='cell--value'
+            style={{
+              fontSize: 350 / Math.sqrt(l) + '%',
+              lineHeight: Math.sqrt(l) * 100 + '%'
+            }}
+          >
+            { val }
+          </div>
         </div>
-        { this.renderFlipButton() }
-        { this.renderCursors() }
-        <div className='cell--value'
-          style={{
-            fontSize: 350 / Math.sqrt(l) + '%',
-            lineHeight: Math.sqrt(l) * 100 + '%'
-          }}
-        >
-          { val }
-        </div>
-      </div>
     );
   }
 }

@@ -222,6 +222,7 @@ function makeGame(gid, name, puzzle) {
     gid: gid,
     name: name,
     info: puzzle.info,
+    circles: puzzle.circles || [],
     clues: clues,
     solution: puzzle.grid,
     pid: puzzle.pid || null,

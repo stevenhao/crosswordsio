@@ -29,6 +29,12 @@ export default class Grid extends Component {
     return r === selected.r && c === selected.c;
   }
 
+  isCircled(r, c) {
+    const { grid, selected, direction, circles } = this.props;
+    const idx = c + r * grid[0].length;
+    return circles.indexOf(idx) !== -1;
+  }
+
   isHighlighted(r, c) {
     const { grid, selected, direction } = this.props;
     return !this.isSelected(r, c) && isWhite(grid, r, c) && (
@@ -76,6 +82,7 @@ export default class Grid extends Component {
                           this.props.onFlipColor && this.props.onFlipColor(r, c);
                         }}
                         selected={this.isSelected(r, c)}
+                        circled={this.isCircled(r, c)}
                         cursors={(this.props.cursors || []).filter(cursor => cursor.r === r && cursor.c === c)}
                         highlighted={this.isHighlighted(r, c)}
                       />
