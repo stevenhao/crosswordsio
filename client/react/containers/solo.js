@@ -10,6 +10,8 @@ export default class Solo extends Room {
   }
 
   componentDidMount() {
+    this.color = 'rgb(118, 226, 118)';
+    this.id = 1;
     db.ref('puzzle/' + this.props.match.params.pid).on('value', puzzle => {
       if (!this.state.loaded) {
         const game = makeGame(-1, '', puzzle.val());

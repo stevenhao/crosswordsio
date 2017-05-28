@@ -32,7 +32,7 @@ export default class Grid extends Component {
   isCircled(r, c) {
     const { grid, selected, direction, circles } = this.props;
     const idx = c + r * grid[0].length;
-    return circles.indexOf(idx) !== -1;
+    return (circles || []).indexOf(idx) !== -1;
   }
 
   isHighlighted(r, c) {
