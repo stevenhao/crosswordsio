@@ -24,6 +24,7 @@ export default class Compose extends Component {
         myPuzzles: (lst.val() || []).reverse()
       });
     });
+    this.color = 'rgb(118, 226, 118)';
   }
 
   selectPuzzle(pid) {
@@ -205,6 +206,7 @@ export default class Compose extends Component {
             updateGrid={this.updateGrid.bind(this)}
             updateClues={this.updateClues.bind(this)}
             onFlipColor={this.flipColor.bind(this)}
+            myColor={this.color}
             pid={this.pid}
           />
         </div>

@@ -31,7 +31,7 @@ import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, has
  **/
 
 export default class Player extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       selected: {
@@ -58,9 +58,8 @@ export default class Player extends Component {
           c = 0;
         }
       }
-
-      this.setSelected({r, c});
     }
+    this.setSelected({r, c});
   }
 
   /* Callback fns, to be passed to child components */
@@ -83,20 +82,22 @@ export default class Player extends Component {
 
   setSelected(selected) {
     if (this.isValidDirection(this.state.direction, selected)) {
-      this.setState({
-        selected: selected,
-      }, () => {
-        this.props.updateCursor({
-          r: selected.r,
-          c: selected.c
+      if (selected.r !== this.state.selected.r || selected.c !== this.state.selected.c) {
+        this.setState({
+          selected: selected,
+        }, () => {
+          this.props.updateCursor({
+            r: selected.r,
+            c: selected.c
+          });
         });
-      });
+      }
     } else if (this.isValidDirection(getOppositeDirection(this.state.direction), selected)) {
       this.setState({
         selected: selected,
         direction: getOppositeDirection(this.state.direction)
       }, () => {
-        this.props.updateCursors({
+        this.props.updateCursor({
           r: selected.r,
           c: selected.c
         });

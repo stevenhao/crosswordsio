@@ -246,6 +246,7 @@ export default class Editor extends Component {
             onChangeDirection={this.changeDirection.bind(this)}
             canFlipColor={true}
             onFlipColor={this.props.onFlipColor.bind(this)}
+            myColor={this.props.myColor}
           />
         </div>
       </div>
@@ -260,6 +261,7 @@ export default class Editor extends Component {
           ignore='input'
           selected={this.state.selected}
           direction={this.state.direction}
+          canSetDirection={() => true}
           onSetDirection={this.setDirection.bind(this)}
           onSetSelected={this.setSelected.bind(this)}
           onEnter={() => this.setState({ editingClue: true }, this.focusClue.bind(this))}
