@@ -181,13 +181,11 @@ export default class Room extends Component {
   }
 
   pauseClock() {
-    if (this.state.game.startTime || this.state.game.stopTime) return;
+    if (this.state.game.stopTime) return;
     this.transaction(game => (
       Object.assign(game, {
-        startTime: game.stopTime
-        ? null
-        : Math.max(game.startTime || 0,
-          new Date().getTime())
+        startTime: null,
+        pausedTime: (game.pausedTime || 0) + new Date().getTime() - (game.startTime || 0)
       }))
     );
   }
