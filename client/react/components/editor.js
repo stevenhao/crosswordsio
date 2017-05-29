@@ -67,6 +67,10 @@ export default class Editor extends Component {
       grid: grid
     };
 
+    if (!this.isValidDirection(this.state.direction, this.state.selected)) {
+      this.state.direction = 'down';
+    }
+
     // for deferring scroll-to-clue actions
     this.prvNum = {};
     this.prvIdleID = {};
@@ -122,6 +126,14 @@ export default class Editor extends Component {
 
   /* Callback fns, to be passed to child components */
 
+  isValidDirection(direction, selected) {
+    return getParent(this.state.grid, selected.r, selected.c, direction) !== 0;
+  }
+
+  canSetDirection(direction) {
+    return this.isValidDirection(direction, this.state.selected);
+  }
+
   setDirection(direction) {
     this.setState({
       direction: direction
@@ -129,9 +141,18 @@ export default class Editor extends Component {
   }
 
   setSelected(selected) {
-    this.setState({
-      selected: selected
-    });
+    if (this.isValidDirection(this.state.direction, selected)) {
+      if (selected.r !== this.state.selected.r || selected.c !== this.state.selected.c) {
+        this.setState({
+          selected: selected,
+        });
+      }
+    } else if (this.isValidDirection(getOppositeDirection(this.state.direction), selected)) {
+      this.setState({
+        selected: selected,
+        direction: getOppositeDirection(this.state.direction)
+      });
+    }
   }
 
   changeDirection() {
@@ -261,7 +282,7 @@ export default class Editor extends Component {
           ignore='input'
           selected={this.state.selected}
           direction={this.state.direction}
-          canSetDirection={() => true}
+          canSetDirection={this.canSetDirection.bind(this)}
           onSetDirection={this.setDirection.bind(this)}
           onSetSelected={this.setSelected.bind(this)}
           onEnter={() => this.setState({ editingClue: true }, this.focusClue.bind(this))}
