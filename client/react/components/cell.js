@@ -125,7 +125,7 @@ export default class Cell extends Component {
           <div className='cell--value'
             style={{
               fontSize: 350 / Math.sqrt(l) + '%',
-              lineHeight: Math.sqrt(l) * 100 + '%'
+              lineHeight: Math.sqrt(l) * 98 + '%'
             }}
           >
             { val }
