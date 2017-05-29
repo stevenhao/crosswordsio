@@ -48,6 +48,10 @@ app.get('/', function (req, res) {
   }
 });
 
+app.get('/games', function (req, res) {
+  renderFile(res, 'index.html');
+});
+
 app.get('/game/:id', function (req, res) {
   renderFile(res, 'index.html');
 });

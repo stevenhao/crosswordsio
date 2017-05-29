@@ -13,56 +13,38 @@ function values(obj) {
   return Object.keys(obj).map(key => obj[key]);
 }
 
-export default class Welcome extends Component {
+export default class Games extends Component {
   constructor() {
     super();
     this.state = {
-      gameList: [],
       puzzleList: [],
+      selected: null, // an element of state.puzzleList
+      // todo: filters, sortby
     };
-    this.gameListRef = db.ref('gamelist');
-    this.puzzleListRef = db.ref('puzzlelist');
   }
 
   componentDidMount() {
-    this.gameListRef.on('value', this.updateGameList.bind(this));
-    this.puzzleListRef.on('value', this.updatePuzzleList.bind(this));
+    this.puzzleListRef = db.ref('puzzlelist');
+    this.puzzleListRef.on('value', v => {
+      this.setState({
+        puzzleList: v.val()
+      })
+    });
   }
 
   componentWillUnmount() {
-    this.gameListRef.off();
-    this.puzzleListRef.off();
   }
 
-  updateGameList(gameList) {
-    this.setState({ gameList: values(gameList.val() || {} )});
-  }
-
-  updatePuzzleList(puzzleList) {
-    this.setState({ puzzleList: values(puzzleList.val() || {}).filter(puzzle => !puzzle.private) }, () => {
-      if (!this.state.pid && this.state.puzzleList.length > 0) {
-        this.setState({ pid: this.state.puzzleList[0].pid });
-      }
+  select(selected) {
+    this.setState({
+      selected: selected
     });
   }
 
-  prevent(ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-  }
-
-  handleStartClick(ev) {
-    if (!this.state.pid) return;
-    const gid = actions.createGame({
-      name: this.state.name,
-      pid: this.state.pid
-    }, gid => {
-      this.props.history.push(`/game/${gid}`);
-    });
-  }
-
-  handleSelectChange(ev) {
-    this.setState({ pid: ev.target.value });
+  get puzzleList() {
+    return this.state.puzzleList.filter(puzzle => (
+      puzzle.private
+    ));
   }
 
   render() {
