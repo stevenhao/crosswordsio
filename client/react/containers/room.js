@@ -285,7 +285,7 @@ export default class Room extends Component {
 
 
   render() {
-    const size = 35 * 15 / this.state.game.grid.length;
+    const size = 35 * 15 / this.state.game.grid[0].length;
     return (
       <div className='room'>
         <div className='room--info'>

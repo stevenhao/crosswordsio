@@ -106,7 +106,7 @@ export default class Compose extends Component {
   }
 
   getCellSize() {
-    return 35 * 15 / this.state.puzzle.grid[0].length;
+    return 30 * 15 / this.state.puzzle.grid[0].length;
   }
 
   updateTitle(title) {

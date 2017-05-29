@@ -24,6 +24,7 @@
   padding: 10px;
   overflow-y: scroll;
   max-height: 70%;
+  flex: 2;
 }
 
 .compose--left--list--entry {
@@ -44,6 +45,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 5;
 }
 
 /* Main panel styles */

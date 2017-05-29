@@ -211,11 +211,11 @@ export default class GridControls extends Component {
       className='grid-controls'
       tabIndex='1'
       onKeyDown={this.handleKeyDown.bind(this)} >
-      <div className='grid--cover'>
-        out of focus
-      </div>
       <div className='grid--content'>
         {this.props.children}
+        <div className='grid--cover'>
+          out of focus
+        </div>
       </div>
     </div>
   }
