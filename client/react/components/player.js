@@ -181,10 +181,8 @@ export default class Player extends Component {
     if (el && this.prvNum[dir] !== num) {
       this.prvNum[dir] = num;
       lazy('scrollToClue' + dir, () => {
-        if (this.clueScroll === el.offsetTop) return;
         const parent = el.offsetParent;
         parent.scrollTop = el.offsetTop - (parent.offsetHeight * .4);
-        this.clueScroll = el.offsetTop;
       });
     }
   }
