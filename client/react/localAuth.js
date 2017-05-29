@@ -18,4 +18,5 @@ function me() {
   }
 }
 
+console.log('your dfac-id is:', me());
 export default me;
