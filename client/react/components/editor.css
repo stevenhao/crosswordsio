@@ -23,8 +23,9 @@
 }
 
 .editor--main--clue-bar--text {
-  flex: 1;
   display: flex;
+  overflow: scroll;
+  max-width: 389px;
   align-items: center;
 }
 
@@ -61,6 +62,12 @@
 
 .editor--main--clue-bar--text .off i {
   margin-left: 20px;
+}
+
+.editor--main--left {
+  display: flex;
+  flex-direction: column;
+  align-items: auto;
 }
 
 .editor--main--left--grid {

@@ -239,7 +239,7 @@ export default class Editor extends Component {
 
   renderLeft() {
     return (
-      <div>
+      <div className='editor--main--left'>
         <div className='editor--main--clue-bar'>
           <div className='editor--main--clue-bar--number'>
             { this.getClueBarAbbreviation() }
@@ -292,9 +292,7 @@ export default class Editor extends Component {
         >
 
         <div className='editor--main'>
-          <div className='editor--main--left'>
-            {this.renderLeft()}
-          </div>
+          {this.renderLeft()}
           <div className='editor--right'>
             <div className='editor--main--clues'>
               {
