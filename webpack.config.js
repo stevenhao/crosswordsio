@@ -3,7 +3,12 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var webpackPlugins = [
-  new ExtractTextPlugin('app.css')
+  new ExtractTextPlugin('app.css'),
+  new webpack.DefinePlugin({
+    "process.env": {
+      NODE_ENV: JSON.stringify("production")
+    }
+  })
 ];
 
 process.noDeprecation = true;
@@ -13,7 +18,7 @@ module.exports = {
   output: { path: path.resolve(__dirname, 'client/react'), filename: 'bundle.js' },
   module: {
     loaders: [
-        { test: /\.css$/, loader: 'style-loader!css-loader' },
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file?name=public/fonts/[name].[ext]'
