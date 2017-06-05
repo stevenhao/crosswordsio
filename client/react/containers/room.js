@@ -74,9 +74,7 @@ export default class Room extends Component {
   cellTransaction(r, c, fn, cbk) {
     db.ref('game/' + this.props.match.params.gid + '/grid/' + r + '/' + c).transaction(fn, cbk);
     this.state.game.grid[r][c] = fn(this.state.game.grid[r][c]);
-    this.setState({
-      //game: this.state.game
-    });
+    //this.forceUpdate();
   }
 
   cursorTransaction(fn, cbk) {
@@ -240,7 +238,7 @@ export default class Room extends Component {
     return Object.assign({}, cell, {
       value: answer,
       good: true,
-      revealed: true,
+      revealed: cell.value !== answer
     });
   }
 

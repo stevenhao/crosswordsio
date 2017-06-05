@@ -20,7 +20,7 @@ import React, { Component } from 'react';
 export default class Cell extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'value', 'number', 'myColor'].some(attr => this.props[attr] !== nextProps[attr])) {
+    if(['black', 'selected', 'highlighted', 'bad', 'good', 'helped', 'revealed', 'value', 'number', 'myColor'].some(attr => this.props[attr] !== nextProps[attr])) {
       return true;
     }
     if (nextProps.cursors.length !== this.props.cursors.length) {
