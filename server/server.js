@@ -38,8 +38,14 @@ function renderFile(res, relPath) {
 
 app.use(favicon(path.resolve('./client/favicon.ico')));
 
+const FB_AGENT_STRINGS = ['facebot', 'facebookexternalhit'];
 app.get('/', function (req, res) {
-  renderFile(res, 'index.html');
+  const agent = req.headers['user-agent'];
+  if (FB_AGENT_STRINGS.filter(str => agent.indexOf(str) !== -1).length > 0) {
+    renderFile(res, 'fb.html');
+  } else {
+    renderFile(res, 'index.html');
+  }
 });
 
 app.get('/game/:id', function (req, res) {
