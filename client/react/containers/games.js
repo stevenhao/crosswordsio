@@ -8,10 +8,7 @@ import {
 } from 'react-router-dom'
 
 import actions, { db } from '../actions';
-
-function values(obj) {
-  return Object.keys(obj).map(key => obj[key]);
-}
+import Upload from '../components/upload'
 
 export default class Games extends Component {
   constructor() {
@@ -30,6 +27,20 @@ export default class Games extends Component {
         puzzleList: v.val()
       })
     });
+    this.setState({
+      puzzleList: [
+        {
+          info: {
+            type: 'Mini Puzzle',
+            author: 'steve',
+            title: 'monday'
+          },
+          pid: 1,
+          private: false,
+        },
+        {},
+      ]
+    });
   }
 
   componentWillUnmount() {
@@ -43,62 +54,75 @@ export default class Games extends Component {
 
   get puzzleList() {
     return this.state.puzzleList.filter(puzzle => (
-      puzzle.private
+      !puzzle.private
     ));
+  }
+
+  renderGameItem(game) {
+    return (
+      <div className='game-item'>
+      </div>
+    );
   }
 
   render() {
     return (
-      <div className='welcome'>
-        <div className='welcome--browse'>
-          <div className='welcome--browse--puzzlelist--wrapper'>
-            <div className='welcome--browse--puzzlelist minis'>
-              <div className='welcome--browse--title'>
-                Mini Puzzles
-              </div>
-              {
-                this.state.puzzleList.slice().reverse()
-                  .filter(entry => (
-                    entry.info && entry.info.type === 'Mini Puzzle'
-                  ))
-                  .map((entry, i) =>
-                    <Link key={i} to={'/puzzle/' + entry.pid} style={{ textDecoration: 'none', color: 'black' }}>
-                      <div className='welcome--browse--puzzlelist--entry'>
-                        <div>
-                          {entry.info.title + (entry.info.author ? (' by ' + entry.info.author) : '') }
-                        </div>
-                      </div>
-                    </Link>
-                  )
-              }
+      <div className='games'>
+        <div className='games--nav'>
+          <div className='games--nav--left'>
+            <div className='games--nav--title'>
+              <Link to='/games'>
+                DownForACross
+              </Link>
             </div>
-            <div className='welcome--browse--puzzlelist dailies'>
-              <div className='welcome--browse--title'>
-                Daily Puzzles
-              </div>
-              {
-                this.state.puzzleList.slice().reverse()
-                  .filter(entry => (
-                    !entry.info || entry.info.type === 'Daily Puzzle'
-                  ))
-                  .map((entry, i) =>
-                    <Link key={i} to={'/puzzle/' + entry.pid} style={{ textDecoration: 'none', color: 'black' }}>
-                      <div className='welcome--browse--puzzlelist--entry'>
-                        <div>
-                          {entry.title + (entry.author ? (' by ' + entry.author) : '') }
-                        </div>
-                      </div>
-                    </Link>
-                  )
-              }
+            <div className='games--nav--play'>
+              <Link to='/games'>
+                Play
+              </Link>
             </div>
+            <div className='games--nav--compose'>
+              <Link to='/compose'>
+                Compose
+              </Link>
+            </div>
+          </div>
+
+          <div className='games--nav--right'>
+            <Link to='/games'>
+              Log in/Sign up
+            </Link>
           </div>
         </div>
-        <div className='welcome--upload'>
-          <div className='welcome--upload--title'>
-            Upload Puzzles
+        <div className='games--toolbar'>
+          <div className='games--toolbar--quick-play'>
+            <button>
+              Quick Play
+            </button>
           </div>
-          <Upload history={this.props.history}/>
+          <div className='games--toolbar--sort-by'>
+            <select>
+              <option>Newest Added</option>
+            </select>
+          </div>
+          <div className='games--toolbar--search'>
+            <input placeholder='Search'>
+            </input>
+          </div>
+        </div>
+        <div className='games--main'>
+          <div className='games--main--left'>
+            <!-- Filters -->
+            <b>Source</b>
+            <b>Size</b>
+            <b>Difficulty</b>
+            <b>Rating</b>
+            <b>Solved?</b>
+          </div>
+          <div className='game--main--right'>
+            { this.state.games.map(game => (
+              this.renderGameItem(game)
+            )) }
+          </div>
         </div>
       </div>
     );
