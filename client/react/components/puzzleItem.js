@@ -1,4 +1,5 @@
-import './gameItem.css';
+import './puzzleItem.css';
+import { Link } from 'react-router-dom'
 
 import React, { Component } from 'react';
 
@@ -35,8 +36,8 @@ class Rating extends Component {
           className='rating--stars'
           onHover={() => this.onHover()}
           onBlur={() => this.onBlur()} >
-          { five.map({i} => (
-            <div key=i className=
+          { five.map(i => (
+            <div key={i} className=
               { 'star' + (
                 rating >= i + 1
                 ? ' filled'
@@ -54,28 +55,26 @@ class Rating extends Component {
   }
 }
 
-export default class GameItem extends Component {
-
-  renderStars() {
-  }
+export default class PuzzleItem extends Component {
 
   update(state) {
     this.props.onUpdate(state);
   }
 
   render() {
+    console.log(this.props);
     return (
-      <div className='game-item'>
-        <div className='game-item--top'>
-          <div className='game-item--top--info'>
+      <div className='puzzle-item'>
+        <div className='puzzle-item--top'>
+          <div className='puzzle-item--top--info'>
             {this.props.dims.height} x {this.props.dims.width}
             |
             {this.props.author}
             |
             {this.props.date}
           </div>
-          <div className='game-item--top--favorite'>
-            <div className={'game-item--top--heart ' + (
+          <div className='puzzle-item--top--favorite'>
+            <div className={'puzzle-item--top--heart ' + (
               this.props.favorited
               ? ' filled'
               : '')
@@ -86,14 +85,16 @@ export default class GameItem extends Component {
           />
         </div>
       </div>
-      <div className='game-item--main'>
-        <div className='game-item--main--title'>
+      <div className='puzzle-item--main'>
+        <div className='puzzle-item--main--title'>
           <Link to={`/puzzle/${this.props.pid}`}>
             { this.props.title }
           </Link>
         </div>
-        <div className='game-item--main--rating'>
-          { this.renderStars() }
+        <div className='puzzle-item--main--rating'>
+          <Rating
+            myRating={this.props.myRating}
+            averageRating={this.props.averageRating}/>
         </div>
       </div>
     </div>

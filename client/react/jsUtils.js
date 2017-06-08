@@ -53,4 +53,9 @@ function rand_color() {
   return 'hsl(' + h + ',' + s + '%,' + l + '%)';
 }
 
-export { toArr, lazy, rand_int, rand_color };
+function valuesOf(obj) {
+  return Object.keys(obj).map(key => obj[key]);
+}
+
+
+export { toArr, lazy, rand_int, rand_color, valuesOf };

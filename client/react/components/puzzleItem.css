@@ -1,0 +1,15 @@
+.puzzle-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #666;
+  border-radius: 3px;
+  padding: 20px;
+}
+
+.puzzle-item--top {
+  display: flex;
+}
+.puzzle-item--main {
+  display: flex;
+}

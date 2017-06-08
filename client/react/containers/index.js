@@ -4,6 +4,6 @@ import Puzzle from './puzzle';
 import Compose from './compose';
 import Upload from './upload';
 import Solo from './solo';
-import Games from './games';
+import Puzzles from './puzzles';
 
-export { Welcome, Room, Puzzle, Compose, Solo, Upload, Games };
+export { Welcome, Room, Puzzle, Compose, Solo, Upload, Puzzles };

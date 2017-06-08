@@ -1,5 +1,5 @@
 import {
-  Welcome, Room, Puzzle, Compose, Solo, Upload, Games
+  Welcome, Room, Puzzle, Compose, Solo, Upload, Puzzles
 } from './containers/index';
 
 import {Helmet} from "react-helmet";
@@ -22,7 +22,7 @@ ReactDOM.render(
         <meta property="og:title" content='Down for Across' />
       </Helmet>
       <Route exact path="/" component={Welcome}/>
-      <Route exact path="/games" component={Games}/>
+      <Route exact path="/puzzles" component={Puzzles}/>
       <Route exact path="/game/:gid" component={Room}/>
       <Route exact path="/game/solo/:pid" component={Solo}/>
       <Route path="/puzzle/:pid" component={Puzzle}/>

@@ -48,7 +48,7 @@ app.get('/', function (req, res) {
   }
 });
 
-app.get('/games', function (req, res) {
+app.get('/puzzles', function (req, res) {
   renderFile(res, 'index.html');
 });
 

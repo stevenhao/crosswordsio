@@ -1,0 +1,11 @@
+.game--main--right {
+  display: flex;
+  flex-direction: row;
+  height: 300px;
+  overflow: scroll;
+}
+
+.game--main--right--puzzles {
+  display: flex;
+  flex-direction: column;
+}
