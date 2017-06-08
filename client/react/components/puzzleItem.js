@@ -62,42 +62,41 @@ export default class PuzzleItem extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className='puzzle-item'>
         <div className='puzzle-item--top'>
           <div className='puzzle-item--top--info'>
             {this.props.dims.height} x {this.props.dims.width}
-            |
+            {' | '}
             {this.props.author}
-            |
+            {' | '}
             {this.props.date}
           </div>
           <div className='puzzle-item--top--favorite'>
-            <div className={'puzzle-item--top--heart ' + (
-              this.props.favorited
-              ? ' filled'
-              : '')
-            }
-            onClick={() => this.update({
-              favorited: !this.props.favorited
-            })}
-          />
+            <span
+              className={ this.props.favorited
+                  ? 'fa fa-heart'
+                  : 'fa fa-heart-o'
+              }
+              onClick={() => this.update({
+                favorited: !this.props.favorited
+              })}>
+            </span>
+          </div>
+        </div>
+        <div className='puzzle-item--main'>
+          <div className='puzzle-item--main--title'>
+            <Link to={`/puzzle/${this.props.pid}`}>
+              { this.props.title }
+            </Link>
+          </div>
+          <div className='puzzle-item--main--rating'>
+            <Rating
+              myRating={this.props.myRating}
+              averageRating={this.props.averageRating}/>
+          </div>
         </div>
       </div>
-      <div className='puzzle-item--main'>
-        <div className='puzzle-item--main--title'>
-          <Link to={`/puzzle/${this.props.pid}`}>
-            { this.props.title }
-          </Link>
-        </div>
-        <div className='puzzle-item--main--rating'>
-          <Rating
-            myRating={this.props.myRating}
-            averageRating={this.props.averageRating}/>
-        </div>
-      </div>
-    </div>
     );
   }
 }

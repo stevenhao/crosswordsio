@@ -1,15 +1,43 @@
 .puzzle-item {
-  flex: 1;
+  width: 500px;
+  height: 80px;
   display: flex;
   flex-direction: column;
   border: 1px solid #666;
   border-radius: 3px;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 10px;
+  font-size: 15px;
 }
 
 .puzzle-item--top {
   display: flex;
+  justify-content: space-between;
 }
+
+.puzzle-item--top--info {
+  font-size: 15px;
+  color: #4A4A4A;
+  font-weight: 400;
+}
+
+.puzzle-item--top--favorite {
+}
+
 .puzzle-item--main {
   display: flex;
+  justify-content: space-between;
+}
+
+.puzzle-item--main--title {
+}
+
+.puzzle-item--main--rating {
+}
+
+.rating {
+}
+
+.rating--label {
+  font-size: 10px;
 }
