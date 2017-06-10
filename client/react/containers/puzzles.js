@@ -78,9 +78,16 @@ export default class Puzzles extends Component {
             width: dims.width,
             height: dims.height
           },
-        }
+        },
+        id: puzzle.id,
       };
     });
+  }
+
+  updatePuzzle(pid, update) {
+    //db.transaction(, puzzle => (
+    //Object.assign(puzzle, update)
+    //));
   }
 
   render() {
@@ -184,8 +191,10 @@ export default class Puzzles extends Component {
           </div>
           <div className='puzzles--main--right'>
             <div className='puzzles--main--right--puzzles'>
-              { this.puzzleList.map(puzzle => (
-                <div className='puzzles--main--right--puzzles--puzzle'>
+              { this.puzzleList.map((puzzle, i) => (
+                <div
+                  key={i}
+                  className='puzzles--main--right--puzzles--puzzle'>
                   <PuzzleItem
                     title={puzzle.info.title}
                     author={puzzle.info.author}
@@ -193,6 +202,7 @@ export default class Puzzles extends Component {
                     dims={puzzle.info.dims}
                     myRating={puzzle.ratings.me}
                     avgRating={puzzle.ratings.avg}
+                    onUpdate={update => this.onUpdate(i, update)}
                   />
                 </div>
               )) }

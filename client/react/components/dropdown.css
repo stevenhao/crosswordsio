@@ -1,0 +1,36 @@
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  position: relative;
+  outline: none;
+  user-select: none;
+}
+
+.dropdown.expanded .dropdown--options {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown--main {
+  display: flex;
+  outline: none;
+  justify-content: space-between;
+}
+
+.dropdown--main--label {
+  padding: 0px 10px 0px 10px;
+}
+
+.dropdown--options--option:hover {
+  background-color: #EEE;
+  width: 100%;
+}
+
+.dropdown--options {
+  position: absolute;
+  top: 0;
+  display: none;
+  z-index: 1;
+  width: 100%;
+}

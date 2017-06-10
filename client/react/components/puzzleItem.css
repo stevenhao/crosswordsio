@@ -22,17 +22,59 @@
 }
 
 .puzzle-item--top--favorite {
+  font-weight: 100;
+  font-size: 19px;
 }
 
 .puzzle-item--main {
   display: flex;
   justify-content: space-between;
+  flex: 1;
 }
 
 .puzzle-item--main--title {
+  align-self: center;
+}
+
+.puzzle-item--main--title a {
+  color: #222;
+  font-size: 20px;
+  text-decoration: none;
 }
 
 .puzzle-item--main--rating {
+  align-self: flex-end;
+}
+
+.rating {
+  display: flex;
+  user-select: none;
+}
+
+.rating--label {
+  cursor: pointer;
+}
+
+.rating--stars {
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.rating--stars .star {
+  width: 13px;
+  height: 13px;
+  background-image: url(/images/star.svg)
+}
+.rating--stars .star-half-o {
+  width: 13px;
+  height: 13px;
+  background-image: url(/images/star-half-o.svg)
+}
+
+.rating--stars .star-o {
+  width: 13px;
+  height: 13px;
+  background-image: url(/images/star-o.svg)
 }
 
 .rating {
@@ -40,4 +82,8 @@
 
 .rating--label {
   font-size: 10px;
+}
+
+.rating--stars {
+  display: flex;
 }

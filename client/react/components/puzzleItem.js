@@ -7,44 +7,66 @@ class Rating extends Component {
   constructor() {
     super();
     this.state = {
-      hovering: false
+      hovering: false,
+      showMyRating: false
     };
   }
 
-  onHover() {
-    this.setState({ hovering: true });
+  onHover(i) {
+    this.setState({
+      hovering: true,
+      hoverTarget: i + 1
+    });
   }
 
   onBlur() {
     this.setState({ hovering: false });
   }
 
+  onClick() {
+    this.setState({ showMyRating: !this.state.showMyRating });
+  }
+
+  update() {
+    this.props.onUpdate && this.props.onUpdate(this.state.hoverTarget);
+  }
+
   render() {
     let five = [0, 1, 2, 3, 4];
     let rating = this.state.hovering
-      ? this.props.myRating
-      : this.props.avgerageRating;
+      ? this.state.hoverTarget
+      : (this.state.showMyRating
+        ? this.props.myRating
+        : this.props.avgerageRating
+      );
     return (
       <div className='rating'>
-        <div className='rating--label'>
-          { this.state.hovering
-              ? 'Average Rating'
-              : 'Your Rating'
+        <div
+          className='rating--label'
+          onClick={() => this.onClick()} >
+          { this.state.showMyRating
+              ? 'Your Rating'
+              : 'Average Rating'
           }
         </div>
         <div
           className='rating--stars'
-          onHover={() => this.onHover()}
+          onMouseEnter={() => this.onHover()}
+          onMouseLeave={() => this.onBlur()}
           onBlur={() => this.onBlur()} >
           { five.map(i => (
-            <div key={i} className=
-              { 'star' + (
-                rating >= i + 1
-                ? ' filled'
-                : ( rating >= i + 0.5
-                  ?  ' half-filled'
-                  : ''))
-              }
+            <div
+              key={i}
+              className=
+              { 'fa ' + (rating >= i + 1
+                  ? 'star'
+                  : ((rating >= i + .5)
+                    ? 'star-half-o'
+                    : 'star-o'
+                  )
+              )}
+
+              onMouseEnter={() => this.onHover(i)}
               onClick={() => this.update({
                 stars: !this.props.favorited
               })} />
@@ -93,7 +115,9 @@ export default class PuzzleItem extends Component {
           <div className='puzzle-item--main--rating'>
             <Rating
               myRating={this.props.myRating}
-              averageRating={this.props.averageRating}/>
+              averageRating={this.props.averageRating}
+              onUpdate={rating => this.onUpdate({myRating: rating})}
+            />
           </div>
         </div>
       </div>

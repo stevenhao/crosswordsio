@@ -101,6 +101,9 @@ app.use('/assets', express.static(path.join(__dirname, '/../client/assets')));
 
 app.use('/js', express.static(path.join(__dirname, '/../client/html/js')));
 
+app.use('/images', express.static(path.join(__dirname, '/../client/html/images')));
+
+
 app.use('/css', express.static(path.join(__dirname, '/../client/html/css')));
 
 app.get('/react/bundle.js', function response(req, res) {

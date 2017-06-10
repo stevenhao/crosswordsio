@@ -126,6 +126,7 @@
 .puzzles--main {
   flex: 1;
   display: flex;
+  align-items: stretch;
 }
 
 .puzzles--main--left {
@@ -192,7 +193,6 @@
 
 .puzzles--main--right {
   flex: 1;
-  height: 300px;
   overflow: scroll;
   padding: 20px;
 }
