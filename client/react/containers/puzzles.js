@@ -140,72 +140,74 @@ export default class Puzzles extends Component {
         </div>
         <div className='puzzles--main'>
           <div className='puzzles--main--left'>
-            {
-              // filters
-            }
-            <div className='puzzles--main--left--header'>Source</div>
-            {['NY Times', 'Custom']
-                .map(source => (
-                  <div className='puzzles--main--left--option'>
-                    <input type="checkbox"/>
-                    <label>{source}</label>
-                  </div>
-                ))
-            }
-            <div className='puzzles--main--left--header'>Size</div>
-            {['Mini', 'Midi', 'Daily']
-                .map(size => (
-                  <div className='puzzles--main--left--option'>
-                    <input type="checkbox"/>
-                    <label>{size}</label>
-                  </div>
-                ))
-            }
-            <div className='puzzles--main--left--header'>Difficulty</div>
-            {['Easy', 'Medium', 'Difficult']
-                .map(difficulty => (
-                  <div className='puzzles--main--left--option'>
-                    <input type="checkbox"/>
-                    <label>{difficulty}</label>
-                  </div>
-                ))
-            }
-            <div className='puzzles--main--left--header'>Rating</div>
+            <div className='puzzles--main--left--list'>
+              {
+                // filters
+              }
+              <div className='puzzles--main--left--header'>Source</div>
+              {['NY Times', 'Custom']
+                  .map(source => (
+                    <div className='puzzles--main--left--option'>
+                      <input type="checkbox"/>
+                      <label>{source}</label>
+                    </div>
+                  ))
+              }
+              <div className='puzzles--main--left--header'>Size</div>
+              {['Mini', 'Midi', 'Daily']
+                  .map(size => (
+                    <div className='puzzles--main--left--option'>
+                      <input type="checkbox"/>
+                      <label>{size}</label>
+                    </div>
+                  ))
+              }
+              <div className='puzzles--main--left--header'>Difficulty</div>
+              {['Easy', 'Medium', 'Difficult']
+                  .map(difficulty => (
+                    <div className='puzzles--main--left--option'>
+                      <input type="checkbox"/>
+                      <label>{difficulty}</label>
+                    </div>
+                  ))
+              }
+              <div className='puzzles--main--left--header'>Rating</div>
 
-            <div className='puzzles--main--left--slider'>
-              <input type="range" value={0}/>
-              <label>
-                1+
-              </label>
+              <div className='puzzles--main--left--slider'>
+                <input type="range" value={0}/>
+                <label>
+                  1+
+                </label>
+              </div>
+
+              <div className='puzzles--main--left--header'>Solved?</div>
+              {['Unsolved', 'Solved']
+                  .map(solved => (
+                    <div className='puzzles--main--left--option'>
+                      <input type="checkbox"/>
+                      <label>{solved}</label>
+                    </div>
+                  ))
+              }
             </div>
-
-            <div className='puzzles--main--left--header'>Solved?</div>
-            {['Unsolved', 'Solved']
-                .map(solved => (
-                  <div className='puzzles--main--left--option'>
-                    <input type="checkbox"/>
-                    <label>{solved}</label>
+              </div>
+            <div className='puzzles--main--right'>
+              <div className='puzzles--main--right--puzzles'>
+                { this.puzzleList.map((puzzle, i) => (
+                  <div
+                    key={i}
+                    className='puzzles--main--right--puzzles--puzzle'>
+                    <PuzzleItem
+                      title={puzzle.info.title}
+                      author={puzzle.info.author}
+                      date={'Sun 5/28/2017'}
+                      dims={puzzle.info.dims}
+                      myRating={puzzle.ratings.me}
+                      avgRating={puzzle.ratings.avg}
+                      onUpdate={update => this.onUpdate(i, update)}
+                    />
                   </div>
-                ))
-            }
-          </div>
-          <div className='puzzles--main--right'>
-            <div className='puzzles--main--right--puzzles'>
-              { this.puzzleList.map((puzzle, i) => (
-                <div
-                  key={i}
-                  className='puzzles--main--right--puzzles--puzzle'>
-                  <PuzzleItem
-                    title={puzzle.info.title}
-                    author={puzzle.info.author}
-                    date={'Sun 5/28/2017'}
-                    dims={puzzle.info.dims}
-                    myRating={puzzle.ratings.me}
-                    avgRating={puzzle.ratings.avg}
-                    onUpdate={update => this.onUpdate(i, update)}
-                  />
-                </div>
-              )) }
+                )) }
             </div>
           </div>
         </div>

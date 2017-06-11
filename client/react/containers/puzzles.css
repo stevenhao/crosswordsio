@@ -46,7 +46,7 @@
 }
 
 .puzzles--toolbar {
-  padding: 20px 40px 20px 40px;
+  padding: 30px 40px 30px 40px;
   border-bottom: 1px solid #9B9B9B;
   display: flex;
   justify-content: space-between;
@@ -60,7 +60,7 @@
 .puzzles--toolbar--quick-play button {
   padding: 10px 30px 10px 30px;
   background-color: #6AA9F4;
-  font-size: 16px;
+  font-size: 15px;
   color: white;
   border: none;
   cursor: pointer;
@@ -77,7 +77,7 @@
 
 .puzzles--toolbar--sort-by .dropdown--main {
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
   background-color: white;
   box-shadow: 0px 0px 4px black;
   border-radius: 3px;
@@ -90,7 +90,7 @@
 }
 .puzzles--toolbar--sort-by .dropdown--options--option {
   padding: 10px;
-  font-size: 16px;
+  font-size: 15px;
   background-color: white;
   border-bottom: 1px solid #666;
   box-sizing: border-box;
@@ -131,7 +131,13 @@
 
 .puzzles--main--left {
   border-right: 1px solid #9B9B9B;
-  padding: 30px;
+  padding: 30px 40px 30px 40px;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.puzzles--main--left--list {
   display: flex;
   flex-direction: column;
 }
@@ -162,6 +168,7 @@
 
 .puzzles--main--left--slider input[type=range] {
   -webkit-appearance: none;
+  width: 100px;
 }
 
 .puzzles--main--left--slider input[type=range]:focus {
@@ -171,16 +178,15 @@
 .puzzles--main--left--slider input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 1px solid #888;
-  height: 26px;
-  width: 26px;
-  margin-top: -13px;
-  border-radius: 13px;
+  height: 20px;
+  width: 20px;
+  margin-top: -10px;
+  border-radius: 10px;
   background: #ffffff;
   cursor: pointer;
 }
 
 .puzzles--main--left--slider input[type=range]::-webkit-slider-runnable-track {
-  width: 260px;
   height: 2px;
   background: #888;
   border: none;

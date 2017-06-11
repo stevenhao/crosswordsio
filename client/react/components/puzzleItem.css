@@ -3,7 +3,7 @@
   height: 80px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #666;
+  border: 1px solid #9B9B9B;
   border-radius: 3px;
   justify-content: space-between;
   padding: 10px;
@@ -22,6 +22,7 @@
 }
 
 .puzzle-item--top--favorite {
+  cursor: pointer;
   font-weight: 100;
   font-size: 19px;
 }
