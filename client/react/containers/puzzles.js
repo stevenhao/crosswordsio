@@ -1,4 +1,5 @@
 import './puzzles.css';
+import './puzzles.styl';
 
 import React, { Component } from 'react';
 import {
