@@ -5,7 +5,7 @@ import GridControls from './gridControls';
 import React, { Component } from 'react';
 import { lazy } from '../jsUtils';
 
-import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue } from '../gameUtils';
+import { isGridFilled, getNextCell, getNextEmptyCell, getNextEmptyCellAfter, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, getReferencedClues } from '../gameUtils';
 
 /*
  * Summary of Player component
@@ -173,6 +173,14 @@ export default class Player extends Component {
     return this.getAllSquares().filter(({r, c}) => this.isSelected(r, c));
   }
 
+  getReferences() {
+    const clueText = this.getClueBarText();
+    return getReferencedClues(clueText);
+  }
+  getReferencedSquares() {
+    return this.getAllSquares().filter(({r, c}) => this.isReferenced(r, c));
+  }
+
   /* Misc functions */
 
   // Interacts directly with the DOM
@@ -224,6 +232,7 @@ export default class Player extends Component {
                   grid={this.props.grid}
                   circles={this.props.circles}
                   selected={this.state.selected}
+                  references={this.getReferences()}
                   direction={this.state.direction}
                   cursors={this.props.cursors}
                   onSetSelected={this.setSelected.bind(this)}

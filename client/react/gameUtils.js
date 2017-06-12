@@ -237,5 +237,39 @@ function makeGame(gid, name, puzzle) {
   return game;
 }
 
-export { isSolved, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame, assignNumbers, makeGrid, fixSelect, alignClues };
+function allNums(str) {
+  let pattern = /\d+/g;
+  return (str.match(pattern) || []).map(x => parseInt(x));
+}
+
+function getReferencedClues(str) {
+  if (!str) return [];
+  str = str.toLowerCase();
+  console.log('getReferencedClues', str);
+  let res = [];
+  while (str.indexOf('across') !== -1 || str.indexOf('down') !== -1) {
+    let a = str.indexOf('across');
+    let b = str.indexOf('down');
+    if ((a < b || b === -1) && a !== -1) {
+      let nums = allNums(str.substring(0, a));
+      res = res.concat(nums.map(num => ({
+        ori: 'across',
+        num: num
+      })));
+      str = str.substr(a + 'across'.length);
+    } else {
+      let nums = allNums(str.substring(0, b));
+      res = res.concat(nums.map(num => ({
+        ori: 'down',
+        num: num
+      })));
+      str = str.substr(b + 'down'.length);
+    }
+  }
+
+  return res;
+}
+
+
+export { isSolved, isGridFilled, getNextCell, getNextEmptyCellAfter, getNextEmptyCell, hasEmptyCells, isFilled, getCellByNumber, getOppositeDirection, getParent, isInBounds, isWhite, isStartOfClue, makeGame, assignNumbers, makeGrid, fixSelect, alignClues, getReferencedClues };
 

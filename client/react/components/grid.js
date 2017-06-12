@@ -42,12 +42,35 @@ export default class Grid extends Component {
       === getParent(grid, r, c, direction));
   }
 
+  isReferenced(r, c) {
+    return this.props.references.some(clue => (
+      this.clueContainsSquare(clue, r, c)
+    ));
+  }
+
   handleClick(r, c) {
     if (this.isSelected(r, c)) {
       this.props.onChangeDirection();
     } else {
       this.props.onSetSelected({r, c});
     }
+  }
+
+  getAllSquares() {
+    let result = [];
+    this.props.grid.forEach((row, r) => {
+      result = result.concat(row.map((cell, c) => ({
+        r: r,
+        c: c
+      })));
+    });
+    return result;
+  }
+
+  clueContainsSquare({ ori, num }, r, c) {
+    const { grid } = this.props;
+    return isWhite(grid, r, c) &&
+      getParent(grid, r, c, ori) === num;
   }
 
   render() {
@@ -82,6 +105,7 @@ export default class Grid extends Component {
                           this.props.onFlipColor && this.props.onFlipColor(r, c);
                         }}
                         selected={this.isSelected(r, c)}
+                        referenced={this.isReferenced(r, c)}
                         circled={this.isCircled(r, c)}
                         cursors={(this.props.cursors || []).filter(cursor => cursor.r === r && cursor.c === c)}
                         highlighted={this.isHighlighted(r, c)}
