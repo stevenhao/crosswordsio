@@ -4,21 +4,31 @@
   flex-direction column
 
   .quickplay--quick
-    display flex
-    flex-direction column
-
-    .quickplay--quick--title
-      // stub
-    .quickplay--quick--title
-    .quickplay--quick--main
-      display flex
-
-      .quickplay--quick--day
-        // stub
-
+    flex 1 0 auto
+    padding 20px
   .quickplay--calendar
     padding 30px
+    padding-top 0px
     // stub
+
+.quick
+  display flex
+  flex-direction column
+  .quick--title
+    text-align center
+    font-size 24px
+    font-weight bold
+    margin-bottom 15px
+    // stub
+  .quick--main
+    flex 1 0 auto
+    // stub
+    display flex
+
+    .quick--day
+      flex 1 0 auto
+      // stub
+
 
 .calendar
   display flex
@@ -37,15 +47,16 @@
     .calendar--subtitle--item
       width 90px
       text-align center
-      font-weight bold
+      // font-weight bold
     // stub
   .calendar--main
+    margin-top 10px
     display flex
     flex-direction column
     .calendar--week
       display flex
       .calendar--day
-        padding 10px 20px 10px 20px
+        padding 6px 20px
     .calendar--week:first-child
       justify-content flex-end
     .calendar--week:last-child
@@ -56,6 +67,7 @@
   display flex
   flex-direction column
   align-items center
+  text-decoration none
   .puzzle-item--icon
     width 50px
     height 50px
@@ -67,8 +79,12 @@
   .puzzle-item--icon.star
     // stub
   .puzzle-item--info
+    text-align center
     margin-top 5px
     color #797987
+  .puzzle-item--info.long
+    .puzzle-item--info--date
+      font-size 12px
 
 
 .puzzle-item.unavailable
@@ -76,3 +92,55 @@
     background-image url(/assets/images/puzzle-icon-unavailable.svg)
   .puzzle-item--info
     color #ccc
+
+
+.controls
+  display flex
+  justify-content space-around
+  align-items stretch
+  padding 20px
+
+  button
+    vertical-align middle
+    font-weight 500
+    font-style normal
+    font-family Helvetica
+    border-radius 3px
+    transition background-color 0.3s
+    display inline-block
+    margin 0
+    border 1px solid #e2e2e2
+    background-color #fff
+    cursor pointer
+    user-select none
+    outline none
+
+  button:hover
+    background-color #f7f7f5
+
+  .controls--month-back
+    font-size 25px
+    padding 3px 11px
+  .controls--selects
+    display flex
+    align-items stretch
+    .controls--month-select
+      padding 8px
+      font-size 15px
+      text-align center
+    .controls--year-select
+      padding 8px
+      margin-left 10px
+      font-size 15px
+      text-align center
+  .controls--right
+    display flex
+    .controls--today
+      padding 10px 12px
+      font-size 15px
+    .controls--month-forward
+      margin-left 15px
+      font-size 25px
+      padding 3px 11px
+
+

@@ -18,6 +18,7 @@ export default class Quickplay extends Component {
 
   getMonthData(month, cbk) {
     if (!this.cache[month]) {
+      console.log('getMonthData', month);
       this.cache[month] = {
         loading: true
       };
@@ -25,7 +26,6 @@ export default class Quickplay extends Component {
       const date_start = moment(month).startOf('month');
       const date_end = moment(month).endOf('month');
 
-      console.log('getMonthData', date_start.format('YYYY-MM-DD'), date_end.format('YYYY-MM-DD'));
       actions.listPuzzles(
         date_start.format('YYYY-MM-DD'),
         date_end.format('YYYY-MM-DD'),
@@ -35,50 +35,66 @@ export default class Quickplay extends Component {
           cbk(this.cache[month]);
         }
       );
-    }
-
-    if (this.cache[month]) {
-      cbk(this.cache[month]);
+    } else {
+      if (this.cache[month]) {
+        cbk(this.cache[month]);
+      }
     }
   }
 
-  setMonth(month) {
-    this.setState({ month: month });
-    this.getMonthData(month, ({loading, data}) => {
-      console.log('getMonthData cbk', {loading, data});
-      if (loading) {
-        this.setState({
-          loading: true
-        });
+  loadMonth(month) {
+    if (typeof month !== 'string') {
+      if (month.format) {
+        month = month.format('YYYY-MM');
       } else {
+        console.error('invalid month', month);
+        return;
+      }
+    }
+
+    this.getMonthData(month, ({loading, data}) => {
+      if (loading) {
+      } else {
+        let changed = false;
         data.forEach(({ print_date, solved, star, author }) => {
           const date = moment(print_date).format('YYYY-MM-DD');
-          console.log('set this.puzzles', date);
+          if (!this.puzzles[date]) changed = true;
           this.puzzles[date] = {
             solved: solved,
             star: star,
             author: author
           };
         });
-
-        this.setState({
-          loading: false
-        });
+        if (changed) {
+          this.forceUpdate();
+        }
       }
     });
   }
 
+  setMonth(month) {
+    if (typeof month !== 'string') {
+      if (month.format) {
+        month = month.format('YYYY-MM');
+      } else {
+        console.error('invalid month', month);
+      }
+    }
+    this.setState({ month: month });
+    this.loadMonth(month);
+  }
+
   componentDidMount() {
-    const month = moment().startOf('month').format('YYYY-MM');
+    const month = moment().startOf('month');
     this.setMonth(month);
   }
 
-  renderPuzzleItem(date) {
+  renderPuzzleItem(date, options = {}) {
     const day = date.format('D');
     const puzzle = this.puzzles[date.format('YYYY-MM-DD')];
     if (puzzle) {
       return (
-        <div className='puzzle-item'>
+        <a className='puzzle-item' href={`/puzzle/nyt/${date.format('YYYYMMDD')}`}>
           <div className={
             'puzzle-item--icon'
               + ( puzzle.solved
@@ -89,10 +105,24 @@ export default class Quickplay extends Component {
                 : '' )
           }>
         </div>
-        <div className='puzzle-item--info'>
-          {day}
-        </div>
-      </div>
+        {options.date
+            ? (
+              <div className='puzzle-item--info long'>
+                <div className='puzzle-item--info--day'>
+                  { date.format('dddd') }
+                </div>
+                <div className='puzzle-item--info--date'>
+                  { date.format('MMMM DD YYYY') }
+                </div>
+              </div>
+            )
+            : (
+              <div className='puzzle-item--info'>
+                {day}
+              </div>
+            )
+        }
+      </a>
       );
     } else {
       return (
@@ -107,16 +137,92 @@ export default class Quickplay extends Component {
     }
   }
 
+  renderCalendarControls(currentMonth) {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const latestYear = moment().year();
+    const years = _.range(latestYear, 1993 - 1, -1);
+    const currentMonthNumber = currentMonth.month();
+    const currentYearNumber = currentMonth.year();
+    return (
+      <div className='controls'>
+        <button
+          className='controls--month-back'
+          onClick={() => this.setMonth(moment(currentMonth).subtract(1, 'months'))}
+          disabled={
+            moment(currentMonth).subtract(1, 'months') < moment('1993-11-01')
+          }
+        >
+          {'<'}
+        </button>
+        <div className='controls--selects'>
+          <select
+            className='controls--month-select'
+            value={currentMonthNumber}
+            onChange={ev => {
+              const month = moment(currentMonth).month(ev.target.value);
+              this.setMonth(month);
+            }}
+          >
+            {months.map((month, i) => (
+              <option
+                key={i} value={i}
+                disabled={
+                  moment(currentMonth).month(i) > moment()
+                } >
+                {month}
+              </option>
+            ))}
+          </select>
+          <select
+            className='controls--year-select'
+            value={currentYearNumber}
+            onChange={ev => {
+              const month = moment(currentMonth).year(ev.target.value);
+              this.setMonth(month);
+            }}
+          >
+            {years.map((year, i) => (
+              <option key={i} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='controls--right'>
+          <button
+            className='controls--today'
+            onClick={() => this.setMonth(moment().startOf('month'))}
+            disabled={
+              moment(currentMonth).add(1, 'months') > moment()
+            }
+          >
+            Today
+          </button>
+          <button
+            className='controls--month-forward'
+            onClick={() => this.setMonth(moment(currentMonth).add(1, 'months'))}
+            disabled={
+              moment(currentMonth).add(1, 'months') > moment()
+            }
+          >
+            {'>'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   renderCalendar(month) {
     if (!month) return null;
-    console.log(month);
     month = moment(month);
     console.log('renderCalendar', month, month.format('MMMM YYYY'));
     const dates = _.range(month.daysInMonth()).map(n => moment(month).add(n, 'days'));
-    console.log(dates);
     const weeks = _.groupBy(dates, day => moment(day).startOf('week'));
     return (
       <div className='calendar'>
+        <div className='calendar--controls'>
+          {this.renderCalendarControls(month)}
+        </div>
         <div className='calendar--title'>
           {month.format('MMMM YYYY')}
         </div>
@@ -143,22 +249,34 @@ export default class Quickplay extends Component {
     );
   }
 
+  renderQuick() {
+    this.loadMonth(moment().subtract(1, 'year').startOf('month'));
+    return (
+      <div className='quick'>
+        <div className='quick--title'>
+          Quick Play
+        </div>
+        <div className='quick--main'>
+          {_.range(7).map(i => (
+            <div className='quick--day'>
+              { this.renderPuzzleItem(moment().subtract(1, 'year').day(i), {
+                date: true
+              })}
+            </div>
+          )) }
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className='quickplay'>
         <div className='quickplay--quick'>
-          <div className='quickplay--quick--title'>
-            Play latest unsolved
-          </div>
-          <div className='quickplay--quick--main'>
-            <div className='quickplay--quick--day'> Monday </div>
-            <div className='quickplay--quick--day'> Tuesday </div>
-            <div className='quickplay--quick--day'> Wednesday </div>
-          </div>
+          {this.renderQuick()}
         </div>
         <div className='quickplay--calendar'>
           {this.renderCalendar(this.state.month)}
-
         </div>
       </div>
     );
