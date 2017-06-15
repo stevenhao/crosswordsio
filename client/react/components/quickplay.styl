@@ -1,0 +1,78 @@
+.quickplay
+  font-family Avenir
+  display flex
+  flex-direction column
+
+  .quickplay--quick
+    display flex
+    flex-direction column
+
+    .quickplay--quick--title
+      // stub
+    .quickplay--quick--title
+    .quickplay--quick--main
+      display flex
+
+      .quickplay--quick--day
+        // stub
+
+  .quickplay--calendar
+    padding 30px
+    // stub
+
+.calendar
+  display flex
+  flex-direction column
+  .calendar--title
+    text-align center
+    font-weight bold
+    font-size 24px
+  .calendar--subtitle
+    border-top 1px solid #CCC
+    border-bottom 1px solid #CCC
+    padding-top 10px
+    padding-bottom 10px
+    margin-top 10px
+    display flex
+    .calendar--subtitle--item
+      width 90px
+      text-align center
+      font-weight bold
+    // stub
+  .calendar--main
+    display flex
+    flex-direction column
+    .calendar--week
+      display flex
+      .calendar--day
+        padding 10px 20px 10px 20px
+    .calendar--week:first-child
+      justify-content flex-end
+    .calendar--week:last-child
+      justify-content flex-start
+
+
+.puzzle-item
+  display flex
+  flex-direction column
+  align-items center
+  .puzzle-item--icon
+    width 50px
+    height 50px
+    background-image url(/assets/images/puzzle-icon-unsolved.svg)
+    background-size cover
+    background-repeat no-repeat
+  .puzzle-item--icon.solved
+    background-image url(/assets/images/puzzle-icon-solved.svg)
+  .puzzle-item--icon.star
+    // stub
+  .puzzle-item--info
+    margin-top 5px
+    color #797987
+
+
+.puzzle-item.unavailable
+  .puzzle-item--icon
+    background-image url(/assets/images/puzzle-icon-unavailable.svg)
+  .puzzle-item--info
+    color #ccc

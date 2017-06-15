@@ -50,10 +50,11 @@ const actions = {
   },
 
   listPuzzles(date_start, date_end, cbk) {
-    request.get('/nyt/puzzles.json').end((err, res) => {
+    request.get(`/nyt/puzzles.json?date_start=${date_start}&date_end=${date_end}`).end((err, res) => {
       if (err || res.body.error) {
         console.error('could not list puzzles', date_start, date_end);
       } else {
+        console.log('done listing puzzles', res.body.puzzles);
         cbk(res.body.puzzles);
       }
     });

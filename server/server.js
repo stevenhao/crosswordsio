@@ -79,7 +79,7 @@ app.get('/nyt/puzzles.json', async function (req, res) {
   const date_end = req.query.date_end;
   await nyt.listPuzzles(null, date_start, date_end)
     .then(results => {
-      res.json({results: results});
+      res.json({puzzles: results});
     });
 });
 

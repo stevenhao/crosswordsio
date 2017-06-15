@@ -10,7 +10,7 @@ export default class Quickplay extends Component {
     super();
     this.state = {
       puzzles: null,
-      loadingPuzzles: true
+      loading: true
     };
     this.cache = {};
     this.puzzles = {};
@@ -22,14 +22,16 @@ export default class Quickplay extends Component {
         loading: true
       };
 
-      const date_start = moment(month);
+      const date_start = moment(month).startOf('month');
       const date_end = moment(month).endOf('month');
 
+      console.log('getMonthData', date_start.format('YYYY-MM-DD'), date_end.format('YYYY-MM-DD'));
       actions.listPuzzles(
         date_start.format('YYYY-MM-DD'),
         date_end.format('YYYY-MM-DD'),
         puzzles => {
           this.cache[month].data = puzzles;
+          this.cache[month].loading = false;
           cbk(this.cache[month]);
         }
       );
@@ -41,16 +43,17 @@ export default class Quickplay extends Component {
   }
 
   setMonth(month) {
-    console.log('setMonth', month);
     this.setState({ month: month });
     this.getMonthData(month, ({loading, data}) => {
+      console.log('getMonthData cbk', {loading, data});
       if (loading) {
         this.setState({
           loading: true
         });
       } else {
-        puzzles.forEach(({ print_date, solved, star, author }) => {
-          date = moment(print_date).format('YYYY-MM-DD');
+        data.forEach(({ print_date, solved, star, author }) => {
+          const date = moment(print_date).format('YYYY-MM-DD');
+          console.log('set this.puzzles', date);
           this.puzzles[date] = {
             solved: solved,
             star: star,
@@ -72,7 +75,7 @@ export default class Quickplay extends Component {
 
   renderPuzzleItem(date) {
     const day = date.format('D');
-    const puzzle = this.puzzles[date.toString()];
+    const puzzle = this.puzzles[date.format('YYYY-MM-DD')];
     if (puzzle) {
       return (
         <div className='puzzle-item'>
@@ -94,7 +97,6 @@ export default class Quickplay extends Component {
     } else {
       return (
         <div className='puzzle-item unavailable'>
-          Unavailable Puzzle
           <div className='puzzle-item--icon'>
           </div>
           <div className='puzzle-item--info'>
@@ -118,11 +120,19 @@ export default class Quickplay extends Component {
         <div className='calendar--title'>
           {month.format('MMMM YYYY')}
         </div>
+        <div className='calendar--subtitle'>
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((text, i) => (
+            <div key={i} className='calendar--subtitle--item'>
+              {text}
+            </div>
+
+          ))}
+        </div>
         <div className='calendar--main'>
-          {Object.keys(weeks).map(week => (
-            <div className='calendar--week'>
-              {weeks[week].map(date => (
-                <div className='calendar--day'>
+          {Object.keys(weeks).map((week, i) => (
+            <div key={i} className='calendar--week'>
+              {weeks[week].map((date, i) => (
+                <div key={i} className='calendar--day'>
                   {this.renderPuzzleItem(date)}
                 </div>
               )) }
