@@ -1,4 +1,5 @@
 import { makeGame } from './gameUtils';
+import request from 'superagent';
 
 // for interfacing with firebase
 
@@ -45,6 +46,16 @@ const actions = {
         db.ref('game/' + gid).set(game);
       });
       cbk && cbk(gid);
+    });
+  },
+
+  listPuzzles(date_start, date_end, cbk) {
+    request.get('/nyt/puzzles.json').end((err, res) => {
+      if (err || res.body.error) {
+        console.error('could not list puzzles', date_start, date_end);
+      } else {
+        cbk(res.body.puzzles);
+      }
     });
   }
 };
