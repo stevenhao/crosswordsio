@@ -11,6 +11,7 @@ var multer = require('multer');
 var webpackMiddleware = require('webpack-dev-middleware');
 
 var converter = require('./converter');
+var nyt = require('./nyt');
 var webpackConfigs = require('../webpack.config.js');
 
 var compiler = webpack(webpackConfigs);
@@ -71,6 +72,15 @@ app.get('/upload', function (req, res) {
 
 app.get('/compose', function (req, res) {
   renderFile(res, 'index.html');
+});
+
+app.get('/nyt/puzzles.json', async function (req, res) {
+  const date_start = req.query.date_start;
+  const date_end = req.query.date_end;
+  await nyt.listPuzzles(null, date_start, date_end)
+    .then(results => {
+      res.json({results: results});
+    });
 });
 
 
