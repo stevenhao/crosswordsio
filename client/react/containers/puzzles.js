@@ -8,11 +8,14 @@ import {
   Link
 } from 'react-router-dom'
 
+import Modal from 'react-modal';
+
 import actions, { db } from '../actions';
 import { valuesOf, toArr } from '../jsUtils';
 import Upload from '../components/upload'
 import PuzzleItem from '../components/puzzleItem'
 import Dropdown from '../components/dropdown';
+import Quickplay from '../components/quickplay';
 import me from '../localAuth';
 
 export default class Puzzles extends Component {
@@ -94,6 +97,17 @@ export default class Puzzles extends Component {
   render() {
     return (
       <div className='puzzles'>
+        <Modal
+          isOpen={this.state.showingModal}
+          onAfterOpen={() => {}}
+          onRequestClose={() => {this.setState({showingModal: false});}}
+          closeTimeoutMS={1000}
+          style={{
+          }}
+          contentLabel="Modal"
+        >
+          <Quickplay/>
+        </Modal>
         <div className='puzzles--nav'>
           <div className='puzzles--nav--left'>
             <div className='puzzles--nav--title'>
@@ -121,7 +135,7 @@ export default class Puzzles extends Component {
         </div>
         <div className='puzzles--toolbar'>
           <div className='puzzles--toolbar--quick-play'>
-            <button>
+            <button onClick={() => this.setState({showingModal: true})}>
               Quick Play
             </button>
           </div>

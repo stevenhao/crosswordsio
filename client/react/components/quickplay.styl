@@ -11,136 +11,136 @@
     padding-top 0px
     // stub
 
-.quick
-  display flex
-  flex-direction column
-  .quick--title
-    text-align center
-    font-size 24px
-    font-weight bold
-    margin-bottom 15px
-    // stub
-  .quick--main
-    flex 1 0 auto
-    // stub
-    display flex
-
-    .quick--day
-      flex 1 0 auto
-      // stub
-
-
-.calendar
-  display flex
-  flex-direction column
-  .calendar--title
-    text-align center
-    font-weight bold
-    font-size 24px
-  .calendar--subtitle
-    border-top 1px solid #CCC
-    border-bottom 1px solid #CCC
-    padding-top 10px
-    padding-bottom 10px
-    margin-top 10px
-    display flex
-    .calendar--subtitle--item
-      width 90px
-      text-align center
-      // font-weight bold
-    // stub
-  .calendar--main
-    margin-top 10px
+  .quick
     display flex
     flex-direction column
-    .calendar--week
+    .quick--title
+      text-align center
+      font-size 24px
+      font-weight bold
+      margin-bottom 15px
+      // stub
+    .quick--main
+      flex 1 0 auto
+      // stub
       display flex
-      .calendar--day
-        padding 6px 20px
-    .calendar--week:first-child
-      justify-content flex-end
-    .calendar--week:last-child
-      justify-content flex-start
+
+      .quick--day
+        flex 1 0 auto
+        // stub
 
 
-.puzzle-item
-  display flex
-  flex-direction column
-  align-items center
-  text-decoration none
-  .puzzle-item--icon
-    width 50px
-    height 50px
-    background-image url(/assets/images/puzzle-icon-unsolved.svg)
-    background-size cover
-    background-repeat no-repeat
-  .puzzle-item--icon.solved
-    background-image url(/assets/images/puzzle-icon-solved.svg)
-  .puzzle-item--icon.star
-    // stub
-  .puzzle-item--info
-    text-align center
-    margin-top 5px
-    color #797987
-  .puzzle-item--info.long
-    .puzzle-item--info--date
-      font-size 12px
-
-
-.puzzle-item.unavailable
-  .puzzle-item--icon
-    background-image url(/assets/images/puzzle-icon-unavailable.svg)
-  .puzzle-item--info
-    color #ccc
-
-
-.controls
-  display flex
-  justify-content space-around
-  align-items stretch
-  padding 20px
-
-  button
-    vertical-align middle
-    font-weight 500
-    font-style normal
-    font-family Helvetica
-    border-radius 3px
-    transition background-color 0.3s
-    display inline-block
-    margin 0
-    border 1px solid #e2e2e2
-    background-color #fff
-    cursor pointer
-    user-select none
-    outline none
-
-  button:hover
-    background-color #f7f7f5
-
-  .controls--month-back
-    font-size 25px
-    padding 3px 11px
-  .controls--selects
+  .calendar
     display flex
+    flex-direction column
+    .calendar--title
+      text-align center
+      font-weight bold
+      font-size 24px
+    .calendar--subtitle
+      border-top 1px solid #CCC
+      border-bottom 1px solid #CCC
+      padding-top 10px
+      padding-bottom 10px
+      margin-top 10px
+      display flex
+      .calendar--subtitle--item
+        width 90px
+        text-align center
+        // font-weight bold
+      // stub
+    .calendar--main
+      margin-top 10px
+      display flex
+      flex-direction column
+      .calendar--week
+        display flex
+        .calendar--day
+          padding 6px 20px
+      .calendar--week:first-child
+        justify-content flex-end
+      .calendar--week:last-child
+        justify-content flex-start
+
+
+  .puzzle-square
+    display flex
+    flex-direction column
+    align-items center
+    text-decoration none
+    .puzzle-square--icon
+      width 50px
+      height 50px
+      background-image url(/assets/images/puzzle-icon-unsolved.svg)
+      background-size cover
+      background-repeat no-repeat
+    .puzzle-square--icon.solved
+      background-image url(/assets/images/puzzle-icon-solved.svg)
+    .puzzle-square--icon.star
+      // stub
+    .puzzle-square--info
+      text-align center
+      margin-top 5px
+      color #797987
+    .puzzle-square--info.long
+      .puzzle-square--info--date
+        font-size 12px
+
+
+  .puzzle-square.unavailable
+    .puzzle-square--icon
+      background-image url(/assets/images/puzzle-icon-unavailable.svg)
+    .puzzle-square--info
+      color #ccc
+
+
+  .controls
+    display flex
+    justify-content space-around
     align-items stretch
-    .controls--month-select
-      padding 8px
-      font-size 15px
-      text-align center
-    .controls--year-select
-      padding 8px
-      margin-left 10px
-      font-size 15px
-      text-align center
-  .controls--right
-    display flex
-    .controls--today
-      padding 10px 12px
-      font-size 15px
-    .controls--month-forward
-      margin-left 15px
+    padding 20px
+
+    button
+      vertical-align middle
+      font-weight 500
+      font-style normal
+      font-family Helvetica
+      border-radius 3px
+      transition background-color 0.3s
+      display inline-block
+      margin 0
+      border 1px solid #e2e2e2
+      background-color #fff
+      cursor pointer
+      user-select none
+      outline none
+
+    button:hover
+      background-color #f7f7f5
+
+    .controls--month-back
       font-size 25px
       padding 3px 11px
+    .controls--selects
+      display flex
+      align-items stretch
+      .controls--month-select
+        padding 8px
+        font-size 15px
+        text-align center
+      .controls--year-select
+        padding 8px
+        margin-left 10px
+        font-size 15px
+        text-align center
+    .controls--right
+      display flex
+      .controls--today
+        padding 10px 12px
+        font-size 15px
+      .controls--month-forward
+        margin-left 15px
+        font-size 25px
+        padding 3px 11px
 
 

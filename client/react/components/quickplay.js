@@ -89,14 +89,14 @@ export default class Quickplay extends Component {
     this.setMonth(month);
   }
 
-  renderPuzzleItem(date, options = {}) {
+  renderPuzzleSquare(date, options = {}) {
     const day = date.format('D');
     const puzzle = this.puzzles[date.format('YYYY-MM-DD')];
     if (puzzle) {
       return (
-        <a className='puzzle-item' href={`/puzzle/nyt/${date.format('YYYYMMDD')}`}>
+        <a className='puzzle-square' href={`/puzzle/nyt/${date.format('YYYYMMDD')}`}>
           <div className={
-            'puzzle-item--icon'
+            'puzzle-square--icon'
               + ( puzzle.solved
                 ? ' solved'
                 : '' )
@@ -107,17 +107,17 @@ export default class Quickplay extends Component {
         </div>
         {options.date
             ? (
-              <div className='puzzle-item--info long'>
-                <div className='puzzle-item--info--day'>
+              <div className='puzzle-square--info long'>
+                <div className='puzzle-square--info--day'>
                   { date.format('dddd') }
                 </div>
-                <div className='puzzle-item--info--date'>
+                <div className='puzzle-square--info--date'>
                   { date.format('MMMM DD YYYY') }
                 </div>
               </div>
             )
             : (
-              <div className='puzzle-item--info'>
+              <div className='puzzle-square--info'>
                 {day}
               </div>
             )
@@ -126,10 +126,10 @@ export default class Quickplay extends Component {
       );
     } else {
       return (
-        <div className='puzzle-item unavailable'>
-          <div className='puzzle-item--icon'>
+        <div className='puzzle-square unavailable'>
+          <div className='puzzle-square--icon'>
           </div>
-          <div className='puzzle-item--info'>
+          <div className='puzzle-square--info'>
             {day}
           </div>
         </div>
@@ -239,7 +239,7 @@ export default class Quickplay extends Component {
             <div key={i} className='calendar--week'>
               {weeks[week].map((date, i) => (
                 <div key={i} className='calendar--day'>
-                  {this.renderPuzzleItem(date)}
+                  {this.renderPuzzleSquare(date)}
                 </div>
               )) }
             </div>
@@ -259,7 +259,7 @@ export default class Quickplay extends Component {
         <div className='quick--main'>
           {_.range(7).map(i => (
             <div className='quick--day'>
-              { this.renderPuzzleItem(moment().subtract(1, 'year').day(i), {
+              { this.renderPuzzleSquare(moment().subtract(1, 'year').day(i), {
                 date: true
               })}
             </div>

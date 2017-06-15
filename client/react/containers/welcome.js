@@ -1,6 +1,5 @@
 import './welcome.css';
 import Upload from '../components/upload'
-import Quickplay from '../components/quickplay'
 
 import React, { Component } from 'react';
 import {
@@ -68,11 +67,6 @@ export default class Welcome extends Component {
   }
 
   render() {
-    if (true) {
-      return (
-        <Quickplay/>
-      );
-    }
     return (
       <div className='welcome'>
         <div className='welcome--browse'>
