@@ -268,6 +268,7 @@ export default class Editor extends Component {
             canFlipColor={true}
             onFlipColor={this.props.onFlipColor.bind(this)}
             myColor={this.props.myColor}
+            references={[]}
           />
         </div>
       </div>
