@@ -101,7 +101,7 @@ export default class Puzzles extends Component {
           isOpen={this.state.showingModal}
           onAfterOpen={() => {}}
           onRequestClose={() => {this.setState({showingModal: false});}}
-          closeTimeoutMS={1000}
+          closeTimeoutMS={100}
           style={{
           }}
           contentLabel="Modal"
