@@ -81,42 +81,42 @@ export default class PuzzleItem extends Component {
 
   render() {
     return (
-      <div className='puzzle-item'>
-        <div className='puzzle-item--top'>
-          <div className='puzzle-item--top--info'>
-            {this.props.dims.height} x {this.props.dims.width}
-            {' | '}
-            {this.props.author}
-            {' | '}
-            {this.props.date}
+      <Link to={`/puzzle/${this.props.pid}`}>
+        <div className='puzzle-item'>
+          <div className='puzzle-item--top'>
+            <div className='puzzle-item--top--info'>
+              {this.props.dims.height} x {this.props.dims.width}
+              {' | '}
+              {this.props.author}
+              {' | '}
+              {this.props.date}
+            </div>
+            <div className='puzzle-item--top--favorite'>
+              <span
+                className={ this.props.favorited
+                    ? 'fa fa-heart'
+                    : 'fa fa-heart-o'
+                }
+                onClick={() => this.update({
+                  favorited: !this.props.favorited
+                })}>
+              </span>
+            </div>
           </div>
-          <div className='puzzle-item--top--favorite'>
-            <span
-              className={ this.props.favorited
-                  ? 'fa fa-heart'
-                  : 'fa fa-heart-o'
-              }
-              onClick={() => this.update({
-                favorited: !this.props.favorited
-              })}>
-            </span>
-          </div>
-        </div>
-        <div className='puzzle-item--main'>
-          <div className='puzzle-item--main--title'>
-            <Link to={`/puzzle/${this.props.pid}`}>
+          <div className='puzzle-item--main'>
+            <div className='puzzle-item--main--title'>
               { this.props.title }
-            </Link>
-          </div>
-          <div className='puzzle-item--main--rating'>
-            <Rating
-              myRating={this.props.myRating}
-              averageRating={this.props.averageRating}
-              onUpdate={rating => this.onUpdate({myRating: rating})}
-            />
+            </div>
+            <div className='puzzle-item--main--rating'>
+              <Rating
+                myRating={this.props.myRating}
+                averageRating={this.props.averageRating}
+                onUpdate={rating => this.onUpdate({myRating: rating})}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 }
