@@ -37,17 +37,13 @@ class Rating extends Component {
       ? this.state.hoverTarget
       : (this.state.showMyRating
         ? this.props.myRating
-        : this.props.avgerageRating
+        : this.props.averageRating
       );
     return (
       <div className='rating'>
         <div
           className='rating--label'
           onClick={() => this.onClick()} >
-          { this.state.showMyRating
-              ? 'Your Rating'
-              : 'Average Rating'
-          }
         </div>
         <div
           className='rating--stars'
