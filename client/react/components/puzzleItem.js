@@ -81,8 +81,8 @@ export default class PuzzleItem extends Component {
 
   render() {
     return (
-      <Link to={`/puzzle/${this.props.pid}`}>
-        <div className='puzzle-item'>
+      <div className='puzzle-item'>
+        <Link to={`/puzzle/${this.props.pid}`}>
           <div className='puzzle-item--top'>
             <div className='puzzle-item--top--info'>
               {this.props.dims.height} x {this.props.dims.width}
@@ -115,8 +115,8 @@ export default class PuzzleItem extends Component {
               />
             </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
     );
   }
 }

@@ -37,7 +37,7 @@
   align-self: center;
 }
 
-.puzzle-item--main--title a {
+.puzzle-item a {
   color: #222;
   font-size: 20px;
   text-decoration: none;
