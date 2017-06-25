@@ -28,6 +28,7 @@
 }
 
 .puzzle-item--main {
+  padding-top: 10px;
   display: flex;
   justify-content: space-between;
   flex: 1;
@@ -37,9 +38,8 @@
   align-self: center;
 }
 
-.puzzle-item a {
+a {
   color: #222;
-  font-size: 16px;
   text-decoration: none;
 }
 

@@ -81,14 +81,14 @@ export default class PuzzleItem extends Component {
 
   render() {
     return (
-      <div className='puzzle-item'>
-        <Link to={`/puzzle/${this.props.pid}`}>
+      <Link to={`/puzzle/${this.props.pid}`}>
+        <div className='puzzle-item'>
           <div className='puzzle-item--top'>
             <div className='puzzle-item--top--info'>
               {this.props.dims.height} x {this.props.dims.width}
-              {' | '}
+              {'  |  '}
               {this.props.author}
-              {' | '}
+              {'  |  '}
               {this.props.date}
             </div>
             <div className='puzzle-item--top--favorite'>
@@ -115,8 +115,8 @@ export default class PuzzleItem extends Component {
               />
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     );
   }
 }
