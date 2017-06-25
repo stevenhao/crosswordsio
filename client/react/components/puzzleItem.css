@@ -1,5 +1,5 @@
 .puzzle-item {
-  width: 500px;
+  width: 400px;
   height: 80px;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
 .puzzle-item--top--favorite {
   cursor: pointer;
   font-weight: 100;
-  font-size: 19px;
+  font-size: 16px;
 }
 
 .puzzle-item--main {
@@ -39,7 +39,7 @@
 
 .puzzle-item a {
   color: #222;
-  font-size: 20px;
+  font-size: 16px;
   text-decoration: none;
 }
 
